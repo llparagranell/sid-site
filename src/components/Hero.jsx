@@ -1,58 +1,53 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useRef } from "react";
+import video from "../assets/video.mp4";
 
 const particles = Array.from({ length: 10 });
 
 export default function Hero() {
-    return (
-        <section className="relative h-screen w-full overflow-hidden bg-[#FBF8F3]">
+    const videoRef = useRef(null);
 
-            {/* ================= CSS PAPER GRID ================= */}
+    const handleEnter = () => {
+        videoRef.current?.play();
+    };
+
+    const handleLeave = () => {
+        if (videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+        }
+    };
+
+    return (
+        <section className="relative min-h-screen w-full overflow-hidden bg-[#f7fbff] text-[#0b1b2b]">
+
+            {/* Subtle grid */}
             <div
-                className="absolute inset-0 z-0"
+                className="absolute inset-0 z-0 opacity-[0.07]"
                 style={{
                     backgroundImage: `
-            linear-gradient(to right, rgba(200, 32, 32, 0.06) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)
+            linear-gradient(to right, rgba(0,127,255,0.12) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0,127,255,0.12) 1px, transparent 1px)
           `,
-                    backgroundSize: "40px 40px",
-                    opacity: 0.15,
+                    backgroundSize: "48px 48px",
                 }}
             />
 
-            {/* ================= SOFT LARGE BLOBS ================= */}
+            {/* Soft blobs */}
             <motion.div
                 animate={{ x: [0, 80, 0], y: [0, -60, 0] }}
                 transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-1/3 left-1/4 z-[1] h-[520px] w-[520px] rounded-full bg-white/60 blur-[120px]"
+                className="absolute -top-1/3 left-1/4 z-[1] h-[520px] w-[520px] rounded-full bg-[#007fff]/20 blur-[140px]"
             />
 
-            <motion.div
-                animate={{ x: [0, -60, 0], y: [0, 70, 0] }}
-                transition={{ duration: 36, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/4 right-1/4 z-[1] h-[460px] w-[460px] rounded-full bg-white/50 blur-[140px]"
-            />
-
-            <motion.div
-                animate={{ x: [0, 40, 0], y: [0, 40, 0] }}
-                transition={{ duration: 42, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute bottom-1/4 left-1/2 z-[1] -translate-x-1/2 h-[380px] w-[380px] rounded-full bg-white/40 blur-[160px]"
-            />
-
-            {/* ================= FLOATING PARTICLES ================= */}
+            {/* Floating particles */}
             {particles.map((_, i) => (
                 <motion.span
                     key={i}
-                    animate={{
-                        y: [0, -40, 0],
-                        x: [0, i % 2 === 0 ? 20 : -20, 0],
-                    }}
-                    transition={{
-                        duration: 14 + i * 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
-                    className="absolute z-[2] h-2 w-2 rounded-full bg-gray-400/30"
+                    animate={{ y: [0, -40, 0], x: [0, i % 2 ? -20 : 20, 0] }}
+                    transition={{ duration: 16 + i * 2, repeat: Infinity }}
+                    className="absolute z-[2] h-2 w-2 rounded-full bg-[#007fff]/25"
                     style={{
                         top: `${10 + i * 7}%`,
                         left: `${15 + (i % 5) * 15}%`,
@@ -60,34 +55,36 @@ export default function Hero() {
                 />
             ))}
 
-            {/* ================= CONTENT ================= */}
-            <div className="relative z-10 flex h-full items-center justify-center px-6 text-center">
+            {/* Layout */}
+            <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl items-center gap-16 px-6 py-20 lg:grid-cols-2">
+
+                {/* LEFT CONTENT */}
                 <motion.div
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="max-w-4xl"
+                    transition={{ duration: 1 }}
                 >
-                    <span className="inline-block rounded-full border border-[#E7DDC8] bg-white/80 px-4 py-1 text-sm text-gray-700 backdrop-blur">
+                    <span className="inline-block rounded-full border border-[#007fff]/20 bg-[#007fff]/10 px-4 py-1 text-sm text-[#0b1b2b]/80 backdrop-blur">
                         Digital Design & Development Studio
                     </span>
 
-                    <h1 className="mt-8 text-5xl md:text-6xl xl:text-7xl font-semibold leading-tight text-gray-900">
+                    <h1 className="mt-8 text-5xl md:text-6xl xl:text-7xl font-semibold leading-[1.05] text-[#0b1b2b]">
                         We create{" "}
-                        <span className="font-light text-gray-500">meaningful</span>{" "}
-                        digital
-                        experiences
+                        <span className="font-light text-[#007fff]">
+                            meaningful
+                        </span>{" "}
+                        digital experiences
                     </h1>
 
-                    <p className="mt-8 mx-auto max-w-2xl text-lg text-gray-600">
+                    <p className="mt-8 max-w-xl text-lg text-[#0b1b2b]/70 leading-relaxed">
                         A creative web development agency focused on thoughtful design,
                         scalable technology, and long-term partnerships.
                     </p>
 
-                    <div className="mt-12 flex justify-center">
+                    <div className="mt-12">
                         <a
                             href="#contact"
-                            className="group inline-flex items-center gap-2 rounded-xl bg-black px-8 py-4 text-sm font-medium text-white shadow-lg transition hover:bg-gray-900"
+                            className="group inline-flex items-center gap-2 rounded-xl bg-[#007fff] px-8 py-4 text-sm font-medium text-white transition hover:bg-[#0066cc]"
                         >
                             Start a project
                             <ArrowRight
@@ -97,7 +94,31 @@ export default function Hero() {
                         </a>
                     </div>
                 </motion.div>
+
+                {/* RIGHT VIDEO */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1 }}
+                    className="relative mx-auto w-full max-w-xl"
+                    onMouseEnter={handleEnter}
+                    onMouseLeave={handleLeave}
+                >
+                    <div className="overflow-hidden rounded-2xl border border-[#007fff]/20 bg-white shadow-2xl shadow-[#007fff]/20">
+                        <video
+                            ref={videoRef}
+                            src={video}
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover transition duration-500 hover:scale-[1.03]"
+                        />
+                    </div>
+                </motion.div>
+
             </div>
         </section>
     );
 }
+
+

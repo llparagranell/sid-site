@@ -21,12 +21,12 @@ const faqs = [
     {
         question: "How fast will my website be ready?",
         answer:
-            "Timelines depend on scope, but most websites are completed within 2–4 weeks. MVPs and landing pages can be delivered even faster.",
+            "Timelines depend on scope, but most websites are completed within 2-4 weeks. MVPs and landing pages can be delivered even faster.",
     },
     {
         question: "What if I need my website done urgently?",
         answer:
-            "We offer priority delivery for urgent projects. Let us know your timeline and we’ll evaluate feasibility without compromising quality.",
+            "We offer priority delivery for urgent projects. Let us know your timeline and we'll evaluate feasibility without compromising quality.",
     },
 ];
 
@@ -34,24 +34,24 @@ export default function FAQ() {
     const [activeIndex, setActiveIndex] = useState(null);
 
     return (
-        <section className="relative py-32 bg-[#FBF8F3] overflow-hidden">
+        <section className="relative py-32 bg-[#f7fbff] overflow-hidden">
 
             {/* Soft background glow */}
             <div className="absolute inset-0 flex justify-center">
-                <div className="h-[500px] w-[500px] rounded-full bg-white opacity-60 blur-3xl" />
+                <div className="h-[500px] w-[500px] rounded-full bg-[#007fff]/15 blur-3xl" />
             </div>
 
             <div className="relative z-10 mx-auto max-w-3xl px-6">
 
                 {/* Heading */}
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-semibold text-gray-900">
+                    <h2 className="text-4xl md:text-5xl font-semibold text-[#0b1b2b]">
                         Common Questions <br />
-                        <span className="font-light text-gray-700">
+                        <span className="font-light text-[#007fff]">
                             Answered
                         </span>
                     </h2>
-                    <p className="mt-6 text-lg text-gray-600">
+                    <p className="mt-6 text-lg text-[#0b1b2b]/70">
                         Find answers to frequently asked questions about our services,
                         process, and how we can help your business.
                     </p>
@@ -65,7 +65,7 @@ export default function FAQ() {
                         return (
                             <div
                                 key={index}
-                                className="rounded-2xl border border-[#E7DDC8] bg-[#FFFDF8]"
+                                className="rounded-2xl border border-[#007fff]/20 bg-white"
                             >
                                 <button
                                     onClick={() =>
@@ -73,7 +73,7 @@ export default function FAQ() {
                                     }
                                     className="flex w-full items-center justify-between px-6 py-5 text-left"
                                 >
-                                    <span className="text-base font-medium text-gray-900">
+                                    <span className="text-base font-medium text-[#0b1b2b]">
                                         {faq.question}
                                     </span>
 
@@ -93,7 +93,7 @@ export default function FAQ() {
                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                             className="overflow-hidden"
                                         >
-                                            <p className="px-6 pb-6 text-gray-600 leading-relaxed">
+                                            <p className="px-6 pb-6 text-[#0b1b2b]/70 leading-relaxed">
                                                 {faq.answer}
                                             </p>
                                         </motion.div>
@@ -107,3 +107,5 @@ export default function FAQ() {
         </section>
     );
 }
+
+

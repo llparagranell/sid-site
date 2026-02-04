@@ -30,16 +30,16 @@ const steps = [
 
 export default function ProcessSection() {
     return (
-        <section className="bg-[#FBF8F3] py-40">
+        <section className="bg-[#f7fbff] py-40">
             <div className="mx-auto max-w-4xl px-8 sm:px-16 text-center">
 
                 {/* Badge */}
-                <span className="inline-block mb-4 rounded-full bg-black text-white px-4 py-1 text-sm">
+                <span className="inline-block mb-4 rounded-full border border-[#007fff]/20 bg-[#007fff]/10 px-4 py-1 text-sm text-[#0b1b2b]/80">
                     How it starts?
                 </span>
 
                 {/* Heading */}
-                <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-gray-900">
+                <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-[#0b1b2b]">
                     See what you can expect.
                 </h2>
 
@@ -54,17 +54,17 @@ export default function ProcessSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                                className="flex items-start gap-6 rounded-2xl border border-[#E7DDC8] bg-white px-8 py-6 text-left"
+                                className="flex items-start gap-6 rounded-2xl border border-[#007fff]/20 bg-white px-8 py-6 text-left shadow-sm shadow-[#007fff]/10"
                             >
-                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F3ECDD]">
-                                    <Icon size={22} className="text-gray-800" />
+                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#007fff]/10">
+                                    <Icon size={22} className="text-[#007fff]" />
                                 </div>
 
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-900">
+                                    <h3 className="text-lg font-semibold text-[#0b1b2b]">
                                         {step.title}
                                     </h3>
-                                    <p className="mt-2 text-gray-600">
+                                    <p className="mt-2 text-[#0b1b2b]/70">
                                         {step.description}
                                     </p>
                                 </div>
@@ -76,3 +76,5 @@ export default function ProcessSection() {
         </section>
     );
 }
+
+

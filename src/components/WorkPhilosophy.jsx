@@ -6,7 +6,7 @@ const items = [
         id: "clients",
         title: "Putting Clients First",
         description: [
-            "Our mission goes beyond simply delivering IT solutions — we focus on creating real business impact.",
+            "Our mission goes beyond simply delivering IT solutions -- we focus on creating real business impact.",
             "Every project begins with listening: understanding your goals, challenges, users, and long-term vision.",
             "We take a consultative approach, helping you make informed technical and design decisions.",
             "By aligning strategy, design, and development, we ensure solutions that scale with your growth.",
@@ -21,7 +21,7 @@ const items = [
         description: [
             "Technology evolves rapidly, and we make it our responsibility to stay ahead of the curve.",
             "Our team continuously experiments with modern frameworks, tools, and workflows.",
-            "Innovation for us isn’t about trends — it’s about choosing the right solutions for the right problems.",
+            "Innovation for us isn't about trends -- it's about choosing the right solutions for the right problems.",
             "We combine creativity with engineering excellence to build future-ready digital products.",
             "This mindset allows us to deliver solutions that remain relevant long after launch.",
         ],
@@ -33,7 +33,7 @@ const items = [
         title: "Partners, Not Vendors",
         description: [
             "We believe great products are built through strong collaboration, not transactional relationships.",
-            "Our role extends beyond execution — we think, plan, and solve problems alongside your team.",
+            "Our role extends beyond execution -- we think, plan, and solve problems alongside your team.",
             "Transparency, communication, and shared ownership are central to how we work.",
             "We integrate seamlessly into your workflow, acting as an extension of your internal team.",
             "This partnership-driven approach leads to better decisions and stronger outcomes.",
@@ -47,7 +47,7 @@ const items = [
         description: [
             "Trust is earned through consistency, honesty, and delivering on promises.",
             "We maintain high standards across design, development, testing, and deployment.",
-            "Every detail matters — from performance and accessibility to maintainability and security.",
+            "Every detail matters -- from performance and accessibility to maintainability and security.",
             "We believe quality is not a phase, but a mindset applied throughout the project lifecycle.",
             "Our long-term client relationships are built on reliability and mutual respect.",
         ],
@@ -82,16 +82,16 @@ export default function WorkPhilosophy() {
     }, []);
 
     return (
-        <section className="bg-[#FBF8F3] py-32">
+        <section className="bg-[#f7fbff] py-32">
             <div className="mx-auto max-w-7xl px-8 sm:px-16">
 
                 {/* ================= STICKY HEADER ================= */}
-                <div className="sticky top-10 z-30 bg-[#FBF8F3] border-b pb-6 mb-20">
+                <div className="sticky top-10 z-30 bg-[#f7fbff] border-b border-[#007fff]/20 pb-6 mb-20">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-3xl font-semibold text-gray-900">
+                        <h2 className="text-3xl font-semibold text-[#0b1b2b]">
                             Our Work Philosophy
                         </h2>
-                        <span className="text-3xl font-light text-gray-400">
+                        <span className="text-3xl font-light text-[#007fff]">
                             {String(items.indexOf(active) + 1).padStart(2, "0")}
                         </span>
                     </div>
@@ -107,8 +107,8 @@ export default function WorkPhilosophy() {
                                 <li key={item.id}>
                                     <span
                                         className={`block border-b pb-2 text-sm transition ${active.id === item.id
-                                            ? "text-black border-black"
-                                            : "text-gray-400 border-gray-200"
+                                            ? "text-[#007fff] border-[#007fff]"
+                                            : "text-[#0b1b2b]/50 border-[#007fff]/10"
                                             }`}
                                     >
                                         {item.title}
@@ -126,14 +126,14 @@ export default function WorkPhilosophy() {
                                 data-section={item.id}
                                 className="min-h-[70vh]"
                             >
-                                <h3 className="text-3xl font-semibold text-gray-900 mb-6">
+                                <h3 className="text-3xl font-semibold text-[#0b1b2b] mb-6">
                                     {item.title}
                                 </h3>
 
                                 {item.description.map((text, i) => (
                                     <p
                                         key={i}
-                                        className="text-gray-600 leading-relaxed mb-4"
+                                        className="text-[#0b1b2b]/70 leading-relaxed mb-4"
                                     >
                                         {text}
                                     </p>
@@ -162,3 +162,6 @@ export default function WorkPhilosophy() {
         </section>
     );
 }
+
+
+

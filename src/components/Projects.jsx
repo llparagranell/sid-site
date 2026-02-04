@@ -10,7 +10,7 @@ export default function Projects() {
                         <img
                             key={i}
                             src={`https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop`}
-                            className="rounded-xl border border-secondary shadow-sm"
+                            className="rounded-xl border border-secondary/30 shadow-sm shadow-[#007fff]/10"
                             alt="Project"
                         />
                     ))}
@@ -19,3 +19,5 @@ export default function Projects() {
         </section>
     );
 }
+
+
