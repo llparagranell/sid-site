@@ -63,57 +63,79 @@ const services = [
 
 const container = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.12 } },
+    show: {
+        transition: {
+            staggerChildren: 0.12,
+            delayChildren: 0.15,
+        },
+    },
 };
 
 const card = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: {
+        opacity: 0,
+        y: 40,
+        scale: 0.96,
+        filter: "blur(6px)",
+    },
+    show: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        transition: {
+            duration: 0.55,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
 };
 
 export default function Services() {
     return (
-        <section id="services" className="py-28 bg-[#f7fbff]">
+        <section id="services" className="py-28 bg-[#0b0f14]">
 
             <div className="max-w-7xl mx-auto px-6">
 
-                {/* LIGHT GLASS PANEL */}
-                <div className="bg-white rounded-[40px] p-10 md:p-14 border border-[#007fff]/20 shadow-2xl shadow-[#007fff]/10">
+                {/* Light Panel with entrance animation */}
+                <motion.div
+                    initial={{ opacity: 0, y: 60 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.8 }}
+                    className="bg-[#0e1520] rounded-[40px] p-10 md:p-14 border border-[#4da3ff]/20 shadow-2xl shadow-[#4da3ff]/10"
+                >
 
                     {/* Heading */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
                         className="text-center max-w-3xl mx-auto mb-16"
                     >
-                        {/* softer badge */}
-                        <span className="inline-block mb-4 rounded-full border border-[#007fff]/20 bg-[#007fff]/10 px-4 py-1 text-sm text-[#0b1b2b]/80">
+                        <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
                             Our Services
                         </span>
 
-                        {/* softer headline */}
-                        <h2 className="text-4xl md:text-5xl font-semibold text-[#0b1b2b]">
+                        <h2 className="text-4xl md:text-5xl font-semibold text-[#e6eefb]">
                             Comprehensive <br />
-                            <span className="font-light text-[#007fff]">
+                            <span className="font-light text-[#4da3ff]">
                                 Digital Solutions
                             </span>
                         </h2>
 
-                        {/* softer paragraph */}
-                        <p className="mt-4 text-[#0b1b2b]/70 leading-relaxed">
+                        <p className="mt-4 text-[#e6eefb]/70 leading-relaxed">
                             From concept to deployment, we provide end-to-end technology
                             services tailored to your business goals.
                         </p>
                     </motion.div>
 
-                    {/* Cards */}
+                    {/* Cards Grid */}
                     <motion.div
                         variants={container}
                         initial="hidden"
                         whileInView="show"
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-60px" }}
                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
                     >
                         {services.map((service, i) => {
@@ -126,7 +148,7 @@ export default function Services() {
                                     initial="rest"
                                     whileHover="hover"
                                     animate="rest"
-                                    className="rounded-2xl bg-white text-[#0b1b2b] border border-[#007fff]/15 p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#007fff]/20 cursor-pointer"
+                                    className="group rounded-2xl bg-[#0e1520] text-[#e6eefb] border border-[#4da3ff]/15 p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#4da3ff]/25 hover:bg-[#4da3ff] cursor-pointer"
                                 >
 
                                     {/* Icon */}
@@ -143,26 +165,23 @@ export default function Services() {
                                                 },
                                             },
                                         }}
-                                        className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#007fff]/10 text-[#007fff]"
+                                        className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#4da3ff]/10 text-[#4da3ff] transition-colors duration-300 group-hover:bg-[#0e1520]/20 group-hover:text-white"
                                     >
                                         <Icon size={20} />
                                     </motion.div>
 
-                                    {/* softer card title */}
-                                    <h3 className="font-semibold text-lg text-[#0b1b2b]">
+                                    <h3 className="font-semibold text-lg transition-colors duration-300 group-hover:text-white">
                                         {service.title}
                                     </h3>
 
-                                    {/* softer card desc */}
-                                    <p className="mt-2 text-sm text-[#0b1b2b]/70 leading-relaxed">
+                                    <p className="mt-2 text-sm text-[#e6eefb]/70 leading-relaxed transition-colors duration-300 group-hover:text-white/90">
                                         {service.desc}
                                     </p>
 
-                                    {/* softer bullet list */}
-                                    <ul className="mt-4 space-y-2 text-sm text-[#0b1b2b]/70">
+                                    <ul className="mt-4 space-y-2 text-sm text-[#e6eefb]/70 transition-colors duration-300 group-hover:text-white/85">
                                         {service.points.map((point, idx) => (
                                             <li key={idx} className="flex items-center gap-2">
-                                                <span className="h-1.5 w-1.5 rounded-full bg-[#007fff]/60" />
+                                                <span className="h-1.5 w-1.5 rounded-full bg-[#4da3ff]/60 transition-colors duration-300 group-hover:bg-[#0e1520]/80" />
                                                 {point}
                                             </li>
                                         ))}
@@ -173,10 +192,9 @@ export default function Services() {
                         })}
                     </motion.div>
 
-                </div>
+                </motion.div>
             </div>
         </section>
     );
 }
-
 

@@ -34,24 +34,24 @@ export default function FAQ() {
     const [activeIndex, setActiveIndex] = useState(null);
 
     return (
-        <section className="relative py-32 bg-[#f7fbff] overflow-hidden">
+        <section className="relative py-32 bg-[#0b0f14] overflow-hidden">
 
             {/* Soft background glow */}
             <div className="absolute inset-0 flex justify-center">
-                <div className="h-[500px] w-[500px] rounded-full bg-[#007fff]/15 blur-3xl" />
+                <div className="h-[500px] w-[500px] rounded-full bg-[#4da3ff]/15 blur-3xl" />
             </div>
 
             <div className="relative z-10 mx-auto max-w-3xl px-6">
 
                 {/* Heading */}
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-semibold text-[#0b1b2b]">
+                    <h2 className="text-4xl md:text-5xl font-semibold text-[#e6eefb]">
                         Common Questions <br />
-                        <span className="font-light text-[#007fff]">
+                        <span className="font-light text-[#4da3ff]">
                             Answered
                         </span>
                     </h2>
-                    <p className="mt-6 text-lg text-[#0b1b2b]/70">
+                    <p className="mt-6 text-lg text-[#e6eefb]/70">
                         Find answers to frequently asked questions about our services,
                         process, and how we can help your business.
                     </p>
@@ -65,7 +65,7 @@ export default function FAQ() {
                         return (
                             <div
                                 key={index}
-                                className="rounded-2xl border border-[#007fff]/20 bg-white"
+                                className="rounded-2xl border border-[#4da3ff]/20 bg-[#0e1520]"
                             >
                                 <button
                                     onClick={() =>
@@ -73,7 +73,7 @@ export default function FAQ() {
                                     }
                                     className="flex w-full items-center justify-between px-6 py-5 text-left"
                                 >
-                                    <span className="text-base font-medium text-[#0b1b2b]">
+                                    <span className="text-base font-medium text-[#e6eefb]">
                                         {faq.question}
                                     </span>
 
@@ -93,7 +93,7 @@ export default function FAQ() {
                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                             className="overflow-hidden"
                                         >
-                                            <p className="px-6 pb-6 text-[#0b1b2b]/70 leading-relaxed">
+                                            <p className="px-6 pb-6 text-[#e6eefb]/70 leading-relaxed">
                                                 {faq.answer}
                                             </p>
                                         </motion.div>
@@ -107,5 +107,6 @@ export default function FAQ() {
         </section>
     );
 }
+
 
 

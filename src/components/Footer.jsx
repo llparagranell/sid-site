@@ -12,25 +12,25 @@ import {
 
 export default function Footer() {
     return (
-        <footer className="bg-[#f7fbff] text-[#0b1b2b]/80 pt-32">
+        <footer className="bg-[#0b0f14] text-[#e6eefb]/80 pt-32">
             <div className="mx-auto max-w-7xl px-8 sm:px-16">
 
                 {/* Top divider */}
-                <div className="border-t border-[#007fff]/20 mb-16" />
+                <div className="border-t border-[#4da3ff]/20 mb-16" />
 
                 {/* Footer grid */}
                 <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
 
                     {/* Brand + Contact */}
                     <div className="lg:col-span-2 space-y-6">
-                        <h3 className="text-2xl font-semibold text-[#0b1b2b]">
+                        <h3 className="text-2xl font-semibold text-[#e6eefb]">
                             YourAgency
                         </h3>
 
                         <div className="space-y-3 text-sm">
                             <p className="flex items-start gap-3">
                                 <Phone size={16} />
-                                +91 79094 61009
+                                +91 62600 45626
                             </p>
                             <p className="flex items-start gap-3">
                                 <Mail size={16} />
@@ -45,7 +45,7 @@ export default function Footer() {
 
                     {/* Services */}
                     <div>
-                        <h4 className="text-[#007fff] font-medium mb-4">Services</h4>
+                        <h4 className="text-[#4da3ff] font-medium mb-4">Services</h4>
                         <ul className="space-y-2 text-sm">
                             <li>Web Development</li>
                             <li>Mobile Development</li>
@@ -57,7 +57,7 @@ export default function Footer() {
 
                     {/* Company */}
                     <div>
-                        <h4 className="text-[#007fff] font-medium mb-4">Company</h4>
+                        <h4 className="text-[#4da3ff] font-medium mb-4">Company</h4>
                         <ul className="space-y-2 text-sm">
                             <li>About</li>
                             <li>How we work</li>
@@ -68,7 +68,7 @@ export default function Footer() {
 
                     {/* Social */}
                     <div>
-                        <h4 className="text-[#007fff] font-medium mb-4">Social Links</h4>
+                        <h4 className="text-[#4da3ff] font-medium mb-4">Social Links</h4>
                         <ul className="space-y-3 text-sm">
                             <li className="flex items-center gap-3">
                                 <FaInstagram /> Instagram
@@ -87,13 +87,14 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom */}
-                <div className="mt-20 border-t border-[#007fff]/20 py-6 text-sm text-center text-[#0b1b2b]/60">
+                <div className="mt-20 border-t border-[#4da3ff]/20 py-6 text-sm text-center text-[#e6eefb]/60">
                     (c) {new Date().getFullYear()} YourAgency. All rights reserved.
                 </div>
             </div>
         </footer>
     );
 }
+
 
 
 

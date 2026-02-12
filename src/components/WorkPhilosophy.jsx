@@ -82,16 +82,16 @@ export default function WorkPhilosophy() {
     }, []);
 
     return (
-        <section className="bg-[#f7fbff] py-32">
+        <section className="bg-[#0b0f14] py-32">
             <div className="mx-auto max-w-7xl px-8 sm:px-16">
 
                 {/* ================= STICKY HEADER ================= */}
-                <div className="sticky top-10 z-30 bg-[#f7fbff] border-b border-[#007fff]/20 pb-6 mb-20">
+                <div className="sticky top-10 z-30 bg-[#0b0f14] border-b border-[#4da3ff]/20 pb-6 mb-20">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-3xl font-semibold text-[#0b1b2b]">
+                        <h2 className="text-3xl font-semibold text-[#e6eefb]">
                             Our Work Philosophy
                         </h2>
-                        <span className="text-3xl font-light text-[#007fff]">
+                        <span className="text-3xl font-light text-[#4da3ff]">
                             {String(items.indexOf(active) + 1).padStart(2, "0")}
                         </span>
                     </div>
@@ -107,8 +107,8 @@ export default function WorkPhilosophy() {
                                 <li key={item.id}>
                                     <span
                                         className={`block border-b pb-2 text-sm transition ${active.id === item.id
-                                            ? "text-[#007fff] border-[#007fff]"
-                                            : "text-[#0b1b2b]/50 border-[#007fff]/10"
+                                            ? "text-[#4da3ff] border-[#4da3ff]"
+                                            : "text-[#e6eefb]/50 border-[#4da3ff]/10"
                                             }`}
                                     >
                                         {item.title}
@@ -126,14 +126,14 @@ export default function WorkPhilosophy() {
                                 data-section={item.id}
                                 className="min-h-[70vh]"
                             >
-                                <h3 className="text-3xl font-semibold text-[#0b1b2b] mb-6">
+                                <h3 className="text-3xl font-semibold text-[#e6eefb] mb-6">
                                     {item.title}
                                 </h3>
 
                                 {item.description.map((text, i) => (
                                     <p
                                         key={i}
-                                        className="text-[#0b1b2b]/70 leading-relaxed mb-4"
+                                        className="text-[#e6eefb]/70 leading-relaxed mb-4"
                                     >
                                         {text}
                                     </p>
@@ -162,6 +162,7 @@ export default function WorkPhilosophy() {
         </section>
     );
 }
+
 
 
 

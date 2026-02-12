@@ -48,28 +48,28 @@ const withoutUs = [
 
 export default function ComparisonSection() {
     return (
-        <section className="bg-[#f7fbff] py-40">
-            <div className="mx-auto max-w-6xl px-8 sm:px-16">
+        <section className="bg-[#0b0f14] py-24 sm:py-32 lg:py-40">
+            <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
 
                 {/* ================= HEADER ================= */}
                 <div className="mx-auto mb-20 max-w-3xl text-center">
-                    <span className="inline-block mb-4 rounded-full border border-[#007fff]/20 bg-[#007fff]/10 px-4 py-1 text-sm text-[#0b1b2b]/80">
+                    <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
                         Why Choose Us
                     </span>
 
-                    <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-[#0b1b2b]">
+                    <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-[#e6eefb]">
                         What makes us{" "}
-                        <span className="font-light text-[#007fff]">unique?</span>
+                        <span className="font-light text-[#4da3ff]">unique?</span>
                     </h2>
 
-                    <p className="mt-6 text-lg text-[#0b1b2b]/70">
+                    <p className="mt-6 text-lg text-[#e6eefb]/70">
                         See the difference between working with industry experts versus
                         settling for less.
                     </p>
 
                     <a
                         href="#contact"
-                        className="group inline-flex mt-10 items-center gap-2 rounded-xl bg-[#007fff] px-8 py-4 text-sm font-medium text-white shadow-lg transition hover:bg-[#0066cc]"
+                        className="group inline-flex mt-10 items-center gap-2 rounded-xl bg-[#4da3ff] px-8 py-4 text-sm font-medium text-white shadow-lg transition hover:bg-[#2f7fe6]"
                     >
                         Book Your Free Consultation
                         <ArrowRight
@@ -80,14 +80,14 @@ export default function ComparisonSection() {
                 </div>
 
                 {/* ================= COMPARISON CARD ================= */}
-                <div className="overflow-hidden rounded-[32px] border border-[#007fff]/20 bg-white shadow-2xl shadow-[#007fff]/10">
+                <div className="overflow-hidden rounded-[32px] border border-[#4da3ff]/20 bg-[#0e1520] shadow-2xl shadow-[#4da3ff]/10">
                     <div className="grid grid-cols-1 lg:grid-cols-2">
 
                         {/* ================= WITH YOU ================= */}
-                        <div className="bg-[#007fff]/5 p-12">
+                        <div className="bg-[#4da3ff]/5 p-8 sm:p-10 md:p-12">
                             <div className="mb-10 flex items-center gap-3">
-                                <CheckCircle2 className="text-[#007fff]" />
-                                <h3 className="text-xl font-semibold text-[#007fff]">
+                                <CheckCircle2 className="text-[#4da3ff]" />
+                                <h3 className="text-xl font-semibold text-[#4da3ff]">
                                     With YourAgency
                                 </h3>
                             </div>
@@ -95,12 +95,12 @@ export default function ComparisonSection() {
                             <ul className="space-y-8">
                                 {withUs.map((item, i) => (
                                     <li key={i} className="flex gap-4">
-                                        <CheckCircle2 className="mt-1 text-[#007fff]" size={20} />
+                                        <CheckCircle2 className="mt-1 text-[#4da3ff]" size={20} />
                                         <div>
-                                            <h4 className="font-semibold text-[#0b1b2b]">
+                                            <h4 className="font-semibold text-[#e6eefb]">
                                                 {item.title}
                                             </h4>
-                                            <p className="mt-1 text-[#0b1b2b]/70">
+                                            <p className="mt-1 text-[#e6eefb]/70">
                                                 {item.desc}
                                             </p>
                                         </div>
@@ -110,10 +110,10 @@ export default function ComparisonSection() {
                         </div>
 
                         {/* ================= WITHOUT YOU ================= */}
-                        <div className="bg-white p-12">
+                        <div className="bg-[#0e1520] p-8 sm:p-10 md:p-12">
                             <div className="mb-10 flex items-center gap-3">
-                                <XCircle className="text-[#0b1b2b]/60" />
-                                <h3 className="text-xl font-semibold text-[#0b1b2b]/70">
+                                <XCircle className="text-[#e6eefb]/60" />
+                                <h3 className="text-xl font-semibold text-[#e6eefb]/70">
                                     Without YourAgency
                                 </h3>
                             </div>
@@ -121,12 +121,12 @@ export default function ComparisonSection() {
                             <ul className="space-y-8">
                                 {withoutUs.map((item, i) => (
                                     <li key={i} className="flex gap-4">
-                                        <XCircle className="mt-1 text-[#0b1b2b]/60" size={20} />
+                                        <XCircle className="mt-1 text-[#e6eefb]/60" size={20} />
                                         <div>
-                                            <h4 className="font-semibold text-[#0b1b2b]">
+                                            <h4 className="font-semibold text-[#e6eefb]">
                                                 {item.title}
                                             </h4>
-                                            <p className="mt-1 text-[#0b1b2b]/70">
+                                            <p className="mt-1 text-[#e6eefb]/70">
                                                 {item.desc}
                                             </p>
                                         </div>
@@ -141,5 +141,6 @@ export default function ComparisonSection() {
         </section>
     );
 }
+
 
 

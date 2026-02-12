@@ -3,16 +3,17 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: "#f7fbff",
-                secondary: "#007FFF",
-                accent: "#007FFF",
-                "main-text": "#0B1B2B",
-                "sub-text": "#0B1B2B",
+                primary: "#0b0f14",
+                secondary: "#4da3ff",
+                accent: "#4da3ff",
+                "main-text": "#e6eefb",
+                "sub-text": "#e6eefb",
             },
         },
     },
     plugins: [],
 };
+
 
 
 
