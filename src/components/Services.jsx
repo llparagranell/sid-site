@@ -102,7 +102,7 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8 }}
-                    className="bg-[#0e1520] rounded-[40px] p-10 md:p-14 border border-[#4da3ff]/20 shadow-2xl shadow-[#4da3ff]/10"
+                    className="bg-[#0e1520] rounded-[40px] p-10 md:p-14 "
                 >
 
                     {/* Heading */}

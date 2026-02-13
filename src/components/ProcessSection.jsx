@@ -54,7 +54,7 @@ export default function ProcessSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                                className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 rounded-2xl border border-[#4da3ff]/20 bg-[#0e1520] px-6 sm:px-8 py-6 text-left shadow-sm shadow-[#4da3ff]/10"
+                                className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 rounded-2xl  bg-[#0e1520] px-6 sm:px-8 py-6 text-left"
                             >
                                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#4da3ff]/10">
                                     <Icon size={22} className="text-[#4da3ff]" />

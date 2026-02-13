@@ -52,11 +52,10 @@ export default function ContactSection() {
                         className="
               w-full
               rounded-[28px]
-              border border-[#4da3ff]/20
+              
               bg-[#0e1520]
               p-10 sm:p-12
               shadow-2xl
-              shadow-[#4da3ff]/10
             "
                     >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

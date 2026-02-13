@@ -37,9 +37,9 @@ export default function FAQ() {
         <section className="relative py-32 bg-[#0b0f14] overflow-hidden">
 
             {/* Soft background glow */}
-            <div className="absolute inset-0 flex justify-center">
+            {/* <div className="absolute inset-0 flex justify-center">
                 <div className="h-[500px] w-[500px] rounded-full bg-[#4da3ff]/15 blur-3xl" />
-            </div>
+            </div> */}
 
             <div className="relative z-10 mx-auto max-w-3xl px-6">
 

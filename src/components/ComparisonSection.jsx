@@ -80,7 +80,7 @@ export default function ComparisonSection() {
                 </div>
 
                 {/* ================= COMPARISON CARD ================= */}
-                <div className="overflow-hidden rounded-[32px] border border-[#4da3ff]/20 bg-[#0e1520] shadow-2xl shadow-[#4da3ff]/10">
+                <div className="overflow-hidden rounded-[32px]  bg-[#0e1520] ">
                     <div className="grid grid-cols-1 lg:grid-cols-2">
 
                         {/* ================= WITH YOU ================= */}

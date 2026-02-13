@@ -23,8 +23,8 @@ export default function App() {
       <ComparisonSection />
       {/* <WorkPhilosophy /> */}
 
-      {/* <Projects />
-      <Testimonials /> */}
+      <Projects />
+      {/* <Testimonials />  */}
       <FAQ />
       <ContactSection />
       {/* <ContactCTA /> */}
