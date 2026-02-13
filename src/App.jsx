@@ -14,22 +14,19 @@ import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <>
+    <div className="bg-[#0b0f14] min-h-screen overflow-x-hidden">
       <Navbar />
       <Hero />
       <Services />
       <TechStack />
       <ProcessSection />
       <ComparisonSection />
-      {/* <WorkPhilosophy /> */}
 
       <Projects />
-      {/* <Testimonials />  */}
       <FAQ />
       <ContactSection />
-      {/* <ContactCTA /> */}
       <Footer />
-    </>
+    </div>
   );
 }
 

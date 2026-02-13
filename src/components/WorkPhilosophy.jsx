@@ -82,7 +82,7 @@ export default function WorkPhilosophy() {
     }, []);
 
     return (
-        <section className="bg-[#0b0f14] py-32">
+        <section id="about" className="bg-[#0b0f14] py-20 sm:py-32">
             <div className="mx-auto max-w-7xl px-8 sm:px-16">
 
                 {/* ================= STICKY HEADER ================= */}

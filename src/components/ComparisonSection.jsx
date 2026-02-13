@@ -1,4 +1,5 @@
 import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const withUs = [
     {
@@ -46,13 +47,40 @@ const withoutUs = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+};
+
+const itemVariantsRight = {
+    hidden: { opacity: 0, x: 20 },
+    show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+};
+
 export default function ComparisonSection() {
     return (
-        <section className="bg-[#0b0f14] py-24 sm:py-32 lg:py-40">
+        <section className="bg-[#0b0f14] py-24 sm:py-32 lg:py-40 overflow-hidden">
             <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
 
                 {/* ================= HEADER ================= */}
-                <div className="mx-auto mb-20 max-w-3xl text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="mx-auto mb-20 max-w-3xl text-center"
+                >
                     <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
                         Why Choose Us
                     </span>
@@ -67,8 +95,10 @@ export default function ComparisonSection() {
                         settling for less.
                     </p>
 
-                    <a
+                    <motion.a
                         href="#contact"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         className="group inline-flex mt-10 items-center gap-2 rounded-xl bg-[#4da3ff] px-8 py-4 text-sm font-medium text-white shadow-lg transition hover:bg-[#2f7fe6]"
                     >
                         Book Your Free Consultation
@@ -76,67 +106,85 @@ export default function ComparisonSection() {
                             size={16}
                             className="transition-transform group-hover:translate-x-1"
                         />
-                    </a>
-                </div>
+                    </motion.a>
+                </motion.div>
 
                 {/* ================= COMPARISON CARD ================= */}
-                <div className="overflow-hidden rounded-[32px]  bg-[#0e1520] ">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="overflow-hidden rounded-[32px] border border-white/5 bg-[#0e1520] shadow-2xl"
+                >
                     <div className="grid grid-cols-1 lg:grid-cols-2">
 
                         {/* ================= WITH YOU ================= */}
-                        <div className="bg-[#4da3ff]/5 p-8 sm:p-10 md:p-12">
+                        <motion.div
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={{ once: true }}
+                            className="bg-[#4da3ff]/5 p-8 sm:p-10 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5"
+                        >
                             <div className="mb-10 flex items-center gap-3">
                                 <CheckCircle2 className="text-[#4da3ff]" />
                                 <h3 className="text-xl font-semibold text-[#4da3ff]">
-                                    With YourAgency
+                                    With DevGrowth
                                 </h3>
                             </div>
 
                             <ul className="space-y-8">
                                 {withUs.map((item, i) => (
-                                    <li key={i} className="flex gap-4">
+                                    <motion.li key={i} variants={itemVariants} className="flex gap-4">
                                         <CheckCircle2 className="mt-1 text-[#4da3ff]" size={20} />
                                         <div>
                                             <h4 className="font-semibold text-[#e6eefb]">
                                                 {item.title}
                                             </h4>
-                                            <p className="mt-1 text-[#e6eefb]/70">
+                                            <p className="mt-1 text-[#e6eefb]/70 text-sm">
                                                 {item.desc}
                                             </p>
                                         </div>
-                                    </li>
+                                    </motion.li>
                                 ))}
                             </ul>
-                        </div>
+                        </motion.div>
 
                         {/* ================= WITHOUT YOU ================= */}
-                        <div className="bg-[#0e1520] p-8 sm:p-10 md:p-12">
+                        <motion.div
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={{ once: true }}
+                            className="bg-[#0e1520] p-8 sm:p-10 md:p-12"
+                        >
                             <div className="mb-10 flex items-center gap-3">
                                 <XCircle className="text-[#e6eefb]/60" />
                                 <h3 className="text-xl font-semibold text-[#e6eefb]/70">
-                                    Without YourAgency
+                                    Without DevGrowth
                                 </h3>
                             </div>
 
                             <ul className="space-y-8">
                                 {withoutUs.map((item, i) => (
-                                    <li key={i} className="flex gap-4">
+                                    <motion.li key={i} variants={itemVariantsRight} className="flex gap-4">
                                         <XCircle className="mt-1 text-[#e6eefb]/60" size={20} />
                                         <div>
                                             <h4 className="font-semibold text-[#e6eefb]">
                                                 {item.title}
                                             </h4>
-                                            <p className="mt-1 text-[#e6eefb]/70">
+                                            <p className="mt-1 text-[#e6eefb]/70 text-sm">
                                                 {item.desc}
                                             </p>
                                         </div>
-                                    </li>
+                                    </motion.li>
                                 ))}
                             </ul>
-                        </div>
+                        </motion.div>
 
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
