@@ -4,7 +4,7 @@ export default function ContactSection() {
     return (
         <section
             id="contact"
-            className="bg-[#0b0f14] py-24 sm:py-32 lg:py-40"
+            className="bg-[#0b0f14] py-16 sm:py-32 lg:py-40"
         >
             <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 
@@ -23,7 +23,7 @@ export default function ContactSection() {
                             Let's connect
                         </span>
 
-                        <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-[#e6eefb] leading-tight">
+                        <h2 className="mt-6 text-3xl md:text-5xl font-semibold text-[#e6eefb] leading-tight">
                             Let's build something{" "}
                             <span className="font-light text-[#4da3ff]">
                                 meaningful?
@@ -54,7 +54,7 @@ export default function ContactSection() {
               rounded-[28px]
               
               bg-[#0e1520]
-              p-10 sm:p-12
+              p-6 sm:p-12
               shadow-2xl
             "
                     >

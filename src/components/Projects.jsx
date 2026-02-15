@@ -59,7 +59,7 @@ const card = {
 
 export default function Projects() {
     return (
-        <section id="projects" className="py-28 bg-[#0b0f14]">
+        <section id="projects" className="py-16 md:py-28 bg-[#0b0f14]">
             <div className="max-w-7xl mx-auto px-6">
 
                 {/* Panel */}
@@ -77,7 +77,7 @@ export default function Projects() {
                             Our Work
                         </span>
 
-                        <h2 className="text-4xl md:text-5xl font-semibold text-[#e6eefb]">
+                        <h2 className="text-3xl md:text-5xl font-semibold text-[#e6eefb]">
                             Featured <br />
                             <span className="font-light text-[#4da3ff]">
                                 Projects

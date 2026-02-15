@@ -41,7 +41,7 @@ export default function TechStack() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#e6eefb] tracking-tight">
+                    <h2 className="text-2xl md:text-5xl font-bold text-[#e6eefb] tracking-tight">
                         Technologies we work with
                     </h2>
                     <p className="mt-4 text-[#e6eefb]/60 text-lg">

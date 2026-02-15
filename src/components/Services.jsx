@@ -8,6 +8,7 @@ import {
     Palette,
     Database,
     Code2,
+    ArrowRight,
 } from "lucide-react";
 
 const services = [
@@ -92,106 +93,95 @@ const card = {
 
 export default function Services() {
     return (
-        <section id="services" className="py-28 bg-[#0b0f14]">
+        <section id="services" className="py-16 md:py-24 lg:py-32 bg-[#0b0f14] relative overflow-hidden">
 
-            <div className="max-w-7xl mx-auto px-6">
+            {/* Background Decorations */}
+            <div className="absolute top-0 right-0 h-96 w-96 bg-blue-600/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 h-96 w-96 bg-blue-500/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
-                {/* Light Panel with entrance animation */}
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
+
+                {/* Heading */}
                 <motion.div
-                    initial={{ opacity: 0, y: 60 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="bg-[#0e1520] rounded-[40px] p-10 md:p-14 "
+                    className="text-center max-w-3xl mx-auto mb-20"
                 >
+                    <span className="inline-block mb-4 rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400">
+                        Our Expertise
+                    </span>
 
-                    {/* Heading */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 24 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-center max-w-3xl mx-auto mb-16"
-                    >
-                        <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
-                            Our Services
+                    <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+                        We build the <br className="hidden sm:block" />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+                            Future of Digital
                         </span>
+                    </h2>
 
-                        <h2 className="text-4xl md:text-5xl font-semibold text-[#e6eefb]">
-                            Comprehensive <br />
-                            <span className="font-light text-[#4da3ff]">
-                                Digital Solutions
-                            </span>
-                        </h2>
+                    <p className="mt-6 text-white/60 text-lg leading-relaxed">
+                        From rapid MVP development to enterprise-level architecture,
+                        we deliver high-performance solutions tailored for growth.
+                    </p>
+                </motion.div>
 
-                        <p className="mt-4 text-[#e6eefb]/70 leading-relaxed">
-                            From concept to deployment, we provide end-to-end technology
-                            services tailored to your business goals.
-                        </p>
-                    </motion.div>
+                {/* Cards Grid */}
+                <motion.div
+                    variants={container}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+                >
+                    {services.map((service, i) => {
+                        const Icon = service.icon;
 
-                    {/* Cards Grid */}
-                    <motion.div
-                        variants={container}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true, margin: "-60px" }}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-                    >
-                        {services.map((service, i) => {
-                            const Icon = service.icon;
+                        return (
+                            <motion.div
+                                key={i}
+                                variants={card}
+                                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                                className="group relative rounded-3xl bg-white/[0.03] backdrop-blur-sm border border-white/10 px-8 py-4 hover:bg-white/[0.06] hover:border-blue-500/30 transition-all duration-300"
+                            >
+                                {/* Active State Background Glow */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/0 group-hover:from-blue-600/5 group-hover:to-transparent rounded-3xl transition-all duration-500" />
 
-                            return (
-                                <motion.div
-                                    key={i}
-                                    variants={card}
-                                    initial="rest"
-                                    whileHover="hover"
-                                    animate="rest"
-                                    className="group rounded-2xl bg-[#0e1520] text-[#e6eefb] border border-[#4da3ff]/15 p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#4da3ff]/25 hover:bg-[#4da3ff] cursor-pointer"
-                                >
+                                {/* Icon Container */}
+                                <div className="mb-6 relative">
+                                    <div className="h-14 w-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-inner">
+                                        <Icon size={28} />
+                                    </div>
+                                    {/* Small floating detail */}
+                                    <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </div>
 
-                                    {/* Icon */}
-                                    <motion.div
-                                        variants={{
-                                            rest: { scale: 1, rotate: 0 },
-                                            hover: {
-                                                scale: 1.15,
-                                                rotate: 4,
-                                                transition: {
-                                                    type: "spring",
-                                                    stiffness: 260,
-                                                    damping: 12,
-                                                },
-                                            },
-                                        }}
-                                        className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#4da3ff]/10 text-[#4da3ff] transition-colors duration-300 group-hover:bg-[#0e1520]/20 group-hover:text-white"
-                                    >
-                                        <Icon size={20} />
-                                    </motion.div>
+                                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                    {service.title}
+                                </h3>
 
-                                    <h3 className="font-semibold text-lg transition-colors duration-300 group-hover:text-white">
-                                        {service.title}
-                                    </h3>
+                                <p className="text-white/50 text-sm leading-relaxed mb-6 group-hover:text-white/70 transition-colors">
+                                    {service.desc}
+                                </p>
 
-                                    <p className="mt-2 text-sm text-[#e6eefb]/70 leading-relaxed transition-colors duration-300 group-hover:text-white/90">
-                                        {service.desc}
-                                    </p>
+                                <ul className="space-y-3">
+                                    {service.points.map((point, idx) => (
+                                        <li key={idx} className="flex items-center gap-3 text-xs font-medium text-white/40 group-hover:text-white/60 transition-colors">
+                                            <div className="h-1 w-1 rounded-full bg-blue-500/50 group-hover:bg-blue-500" />
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
 
-                                    <ul className="mt-4 space-y-2 text-sm text-[#e6eefb]/70 transition-colors duration-300 group-hover:text-white/85">
-                                        {service.points.map((point, idx) => (
-                                            <li key={idx} className="flex items-center gap-2">
-                                                <span className="h-1.5 w-1.5 rounded-full bg-[#4da3ff]/60 transition-colors duration-300 group-hover:bg-[#0e1520]/80" />
-                                                {point}
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                </motion.div>
-                            );
-                        })}
-                    </motion.div>
-
+                                {/* Bottom corner button / arrow */}
+                                <div className="mt-8 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="h-8 w-8 rounded-full border border-blue-500/30 flex items-center justify-center text-blue-400">
+                                        <ArrowRight size={14} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </motion.div>
             </div>
         </section>

@@ -70,7 +70,7 @@ const itemVariantsRight = {
 
 export default function ComparisonSection() {
     return (
-        <section className="bg-[#0b0f14] py-24 sm:py-32 lg:py-40 overflow-hidden">
+        <section className="bg-[#0b0f14] py-16 sm:py-32 lg:py-40 overflow-hidden">
             <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
 
                 {/* ================= HEADER ================= */}
@@ -81,29 +81,24 @@ export default function ComparisonSection() {
                     transition={{ duration: 0.8 }}
                     className="mx-auto mb-20 max-w-3xl text-center"
                 >
-                    <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
-                        Why Choose Us
+                    <span className="inline-block mb-4 rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400">
+                        What Makes Us Unique
                     </span>
 
-                    <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-[#e6eefb]">
-                        What makes us{" "}
-                        <span className="font-light text-[#4da3ff]">unique?</span>
+                    <h2 className="mt-6 text-3xl md:text-5xl font-bold text-white">
+                        Experience the <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">DevGrowth Difference</span>
                     </h2>
-
-                    <p className="mt-6 text-lg text-[#e6eefb]/70">
-                        See the difference between working with industry experts versus
-                        settling for less.
-                    </p>
 
                     <motion.a
                         href="#contact"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="group inline-flex mt-10 items-center gap-2 rounded-xl bg-[#4da3ff] px-8 py-4 text-sm font-medium text-white shadow-lg transition hover:bg-[#2f7fe6]"
+                        className="group inline-flex mt-10 items-center gap-3 rounded-xl bg-blue-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-500"
                     >
                         Book Your Free Consultation
                         <ArrowRight
-                            size={16}
+                            size={18}
                             className="transition-transform group-hover:translate-x-1"
                         />
                     </motion.a>
@@ -111,38 +106,38 @@ export default function ComparisonSection() {
 
                 {/* ================= COMPARISON CARD ================= */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
-                    className="overflow-hidden rounded-[32px] border border-white/5 bg-[#0e1520] shadow-2xl"
+                    className="overflow-hidden rounded-[32px] border border-white/10 bg-[#0e1520] shadow-2xl"
                 >
                     <div className="grid grid-cols-1 lg:grid-cols-2">
 
-                        {/* ================= WITH YOU ================= */}
+                        {/* ================= WITHOUT YOU (LEFT) ================= */}
                         <motion.div
                             variants={containerVariants}
                             initial="hidden"
                             whileInView="show"
                             viewport={{ once: true }}
-                            className="bg-[#4da3ff]/5 p-8 sm:p-10 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5"
+                            className="bg-white/5 p-8 sm:p-10 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5"
                         >
-                            <div className="mb-10 flex items-center gap-3">
-                                <CheckCircle2 className="text-[#4da3ff]" />
-                                <h3 className="text-xl font-semibold text-[#4da3ff]">
-                                    With DevGrowth
+                            <div className="mb-10 flex items-center gap-3 opacity-60">
+                                <XCircle className="text-white/60" size={24} />
+                                <h3 className="text-2xl font-bold text-white/70">
+                                    Without DevGrowth
                                 </h3>
                             </div>
 
                             <ul className="space-y-8">
-                                {withUs.map((item, i) => (
+                                {withoutUs.map((item, i) => (
                                     <motion.li key={i} variants={itemVariants} className="flex gap-4">
-                                        <CheckCircle2 className="mt-1 text-[#4da3ff]" size={20} />
+                                        <XCircle className="mt-1 text-red-500/50" size={20} />
                                         <div>
-                                            <h4 className="font-semibold text-[#e6eefb]">
+                                            <h4 className="font-bold text-white/50">
                                                 {item.title}
                                             </h4>
-                                            <p className="mt-1 text-[#e6eefb]/70 text-sm">
+                                            <p className="mt-1 text-white/30 text-sm">
                                                 {item.desc}
                                             </p>
                                         </div>
@@ -151,30 +146,30 @@ export default function ComparisonSection() {
                             </ul>
                         </motion.div>
 
-                        {/* ================= WITHOUT YOU ================= */}
+                        {/* ================= WITH YOU (RIGHT) ================= */}
                         <motion.div
                             variants={containerVariants}
                             initial="hidden"
                             whileInView="show"
                             viewport={{ once: true }}
-                            className="bg-[#0e1520] p-8 sm:p-10 md:p-12"
+                            className="bg-blue-600/[0.03] p-8 sm:p-10 md:p-12"
                         >
                             <div className="mb-10 flex items-center gap-3">
-                                <XCircle className="text-[#e6eefb]/60" />
-                                <h3 className="text-xl font-semibold text-[#e6eefb]/70">
-                                    Without DevGrowth
+                                <CheckCircle2 className="text-blue-400" size={24} />
+                                <h3 className="text-2xl font-bold text-blue-400">
+                                    With DevGrowth
                                 </h3>
                             </div>
 
                             <ul className="space-y-8">
-                                {withoutUs.map((item, i) => (
+                                {withUs.map((item, i) => (
                                     <motion.li key={i} variants={itemVariantsRight} className="flex gap-4">
-                                        <XCircle className="mt-1 text-[#e6eefb]/60" size={20} />
+                                        <CheckCircle2 className="mt-1 text-blue-400" size={20} />
                                         <div>
-                                            <h4 className="font-semibold text-[#e6eefb]">
+                                            <h4 className="font-bold text-white">
                                                 {item.title}
                                             </h4>
-                                            <p className="mt-1 text-[#e6eefb]/70 text-sm">
+                                            <p className="mt-1 text-white/60 text-sm">
                                                 {item.desc}
                                             </p>
                                         </div>

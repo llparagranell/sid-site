@@ -14,14 +14,25 @@ import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <div className="bg-[#0b0f14] min-h-screen overflow-x-hidden">
+    <div className="bg-[#0b0f14] min-h-screen relative selection:bg-blue-500/30">
+
+      {/* Global Background Elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-10" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full" />
+      </div>
+
       <Navbar />
       <Hero />
-      <Services />
-      <TechStack />
-      <ProcessSection />
-      <ComparisonSection />
+      <WorkPhilosophy />
 
+
+      <Services />
+      <ComparisonSection />
+      <TechStack />
+
+      <ProcessSection />
       <Projects />
       <FAQ />
       <ContactSection />

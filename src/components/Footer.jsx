@@ -11,10 +11,12 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+import logo from "../assets/logo.png";
+
 export default function Footer() {
     return (
-        <footer className="bg-[#0b0f14] text-[#e6eefb]/80 pt-32 overflow-hidden">
-            <div className="mx-auto max-w-7xl px-8 sm:px-16">
+        <footer className="bg-[#0b0f14] text-[#e6eefb]/80 pt-16 md:pt-32 overflow-hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-16">
 
                 {/* Top divider */}
                 <motion.div
@@ -31,14 +33,21 @@ export default function Footer() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="grid gap-12 md:grid-cols-2 lg:grid-cols-5"
+                    className="grid gap-12 sm:grid-cols-2 lg:grid-cols-5"
                 >
 
                     {/* Brand + Contact */}
                     <div className="lg:col-span-2 space-y-6">
-                        <h3 className="text-2xl font-semibold text-[#e6eefb]">
-                            DevGrowth
-                        </h3>
+                        <div className="flex flex-col gap-4">
+                            <img
+                                src={logo}
+                                alt="Logo"
+                                className="h-12 w-auto object-contain self-start"
+                            />
+                            {/* <h3 className="text-2xl font-bold text-[#e6eefb]">
+                                DevGrowth <span className="text-blue-400 font-light">Solutions</span>
+                            </h3> */}
+                        </div>
 
                         <div className="space-y-3 text-sm">
                             <p className="flex items-start gap-3">

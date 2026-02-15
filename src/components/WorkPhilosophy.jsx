@@ -6,24 +6,18 @@ const items = [
         id: "clients",
         title: "Putting Clients First",
         description: [
-            "Our mission goes beyond simply delivering IT solutions -- we focus on creating real business impact.",
-            "Every project begins with listening: understanding your goals, challenges, users, and long-term vision.",
-            "We take a consultative approach, helping you make informed technical and design decisions.",
-            "By aligning strategy, design, and development, we ensure solutions that scale with your growth.",
-            "Your success is the benchmark by which we measure our own performance.",
+            "We begin every project by deeply understanding your business goals, users, and challenges.",
+            "This ensures the solutions we build are not just technically strong but strategically aligned with your growth and long-term success.",
         ],
         image:
             "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80",
     },
     {
         id: "innovation",
-        title: "Innovation is Our Middle Name",
+        title: "Innovation Drives Us",
         description: [
-            "Technology evolves rapidly, and we make it our responsibility to stay ahead of the curve.",
-            "Our team continuously experiments with modern frameworks, tools, and workflows.",
-            "Innovation for us isn't about trends -- it's about choosing the right solutions for the right problems.",
-            "We combine creativity with engineering excellence to build future-ready digital products.",
-            "This mindset allows us to deliver solutions that remain relevant long after launch.",
+            "We adopt modern technologies, efficient development practices, and creative design approaches to deliver future-ready digital products.",
+            "Innovation helps us build solutions that remain scalable, competitive, and adaptable.",
         ],
         image:
             "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80",
@@ -32,30 +26,33 @@ const items = [
         id: "partners",
         title: "Partners, Not Vendors",
         description: [
-            "We believe great products are built through strong collaboration, not transactional relationships.",
-            "Our role extends beyond execution -- we think, plan, and solve problems alongside your team.",
-            "Transparency, communication, and shared ownership are central to how we work.",
-            "We integrate seamlessly into your workflow, acting as an extension of your internal team.",
-            "This partnership-driven approach leads to better decisions and stronger outcomes.",
+            "We work alongside our clients as technology partners.",
+            "Our focus is on building lasting relationships.",
         ],
         image:
             "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=900&q=80",
     },
     {
-        id: "trust",
-        title: "Trust & Quality Are Our Foundation",
+        id: "quality",
+        title: "Quality & Trust First",
         description: [
-            "Trust is earned through consistency, honesty, and delivering on promises.",
-            "We maintain high standards across design, development, testing, and deployment.",
-            "Every detail matters -- from performance and accessibility to maintainability and security.",
-            "We believe quality is not a phase, but a mindset applied throughout the project lifecycle.",
-            "Our long-term client relationships are built on reliability and mutual respect.",
+            "From clean code architecture to transparent communication.",
+            "Reliability and performance come first.",
         ],
         image:
             "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
     },
+    {
+        id: "learning",
+        title: "Continuous Learning",
+        description: [
+            "We stay updated with new tools and frameworks.",
+            "Modern, efficient solutions always.",
+        ],
+        image:
+            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+    },
 ];
-
 
 export default function WorkPhilosophy() {
     const [active, setActive] = useState(items[0]);
@@ -77,16 +74,16 @@ export default function WorkPhilosophy() {
             { threshold: 0.45 }
         );
 
-        sections.forEach((section) => observer.observe(section));
+        sections.forEach((s) => observer.observe(s));
         return () => observer.disconnect();
     }, []);
 
     return (
-        <section id="about" className="bg-[#0b0f14] py-20 sm:py-32">
-            <div className="mx-auto max-w-7xl px-8 sm:px-16">
+        <section id="about" className="bg-[#0b0f14] py-16 sm:py-32">
+            <div className="mx-auto max-w-7xl px-6 sm:px-16">
 
-                {/* ================= STICKY HEADER ================= */}
-                <div className="sticky top-10 z-30 bg-[#0b0f14] border-b border-[#4da3ff]/20 pb-6 mb-20">
+                {/* ===== Header (Sticky) ===== */}
+                <div className="sticky top-24 z-30 bg-[#0b0f14] border-b border-[#4da3ff]/20 pb-6 mb-16">
                     <div className="flex items-center justify-between">
                         <h2 className="text-3xl font-semibold text-[#e6eefb]">
                             Our Work Philosophy
@@ -97,54 +94,63 @@ export default function WorkPhilosophy() {
                     </div>
                 </div>
 
-                {/* ================= LAYOUT ================= */}
+                {/* ===== Grid ===== */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-20">
 
-                    {/* LEFT: STICKY NAV */}
-                    <div className="lg:col-span-1">
-                        <ul className="sticky top-32 space-y-6">
-                            {items.map((item) => (
-                                <li key={item.id}>
-                                    <span
-                                        className={`block border-b pb-2 text-sm transition ${active.id === item.id
-                                            ? "text-[#4da3ff] border-[#4da3ff]"
-                                            : "text-[#e6eefb]/50 border-[#4da3ff]/10"
-                                            }`}
-                                    >
-                                        {item.title}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
+                    {/* ===== LEFT SIDEBAR (STICKY on Desktop) ===== */}
+                    <div className="lg:col-span-1 hidden lg:block">
+                        <div className="sticky top-52">
+                            <ul className="space-y-6">
+                                {items.map((item) => (
+                                    <li key={item.id}>
+                                        <span
+                                            className={`block border-b pb-2 text-sm transition ${active.id === item.id
+                                                ? "text-[#4da3ff] border-[#4da3ff]"
+                                                : "text-[#e6eefb]/50 border-[#4da3ff]/10"
+                                                }`}
+                                        >
+                                            {item.title}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
-                    {/* CENTER: SCROLLING CONTENT */}
-                    <div className="lg:col-span-2 space-y-40">
+                    {/* ===== CENTER CONTENT (SCROLLS) ===== */}
+                    <div className="lg:col-span-3 lg:pl-10 space-y-24 md:space-y-32 lg:space-y-40">
                         {items.map((item) => (
-                            <div
-                                key={item.id}
-                                data-section={item.id}
-                                className="min-h-[70vh]"
-                            >
-                                <h3 className="text-3xl font-semibold text-[#e6eefb] mb-6">
+                            <div key={item.id} data-section={item.id} className="min-h-[50vh] lg:min-h-[75vh]">
+                                <h3 className="text-2xl md:text-3xl font-semibold text-[#e6eefb] mb-6">
                                     {item.title}
                                 </h3>
 
-                                {item.description.map((text, i) => (
-                                    <p
-                                        key={i}
-                                        className="text-[#e6eefb]/70 leading-relaxed mb-4"
-                                    >
-                                        {text}
-                                    </p>
-                                ))}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:block">
+                                    <div>
+                                        {item.description.map((text, i) => (
+                                            <p
+                                                key={i}
+                                                className="text-[#e6eefb]/70 leading-relaxed mb-4 text-sm md:text-base"
+                                            >
+                                                {text}
+                                            </p>
+                                        ))}
+                                    </div>
+                                    <div className="lg:hidden">
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="h-48 w-full rounded-2xl object-cover mb-10"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* RIGHT: STICKY IMAGE (CROPPED 50%) */}
+                    {/* ===== RIGHT IMAGE (STICKY) ===== */}
                     <div className="lg:col-span-1 hidden lg:block">
-                        <div className="sticky top-32">
+                        <div className="sticky top-52">
                             <motion.img
                                 key={active.image}
                                 src={active.image}
@@ -162,7 +168,3 @@ export default function WorkPhilosophy() {
         </section>
     );
 }
-
-
-
-
