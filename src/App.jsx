@@ -14,21 +14,28 @@ import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <div className="bg-[#0b0f14] min-h-screen relative selection:bg-blue-500/30">
+    <div className="relative min-h-screen bg-brand-bg font-sans selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
 
       {/* Global Background Elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-10" />
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full" />
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-[0.03]" />
+        {/* Subtle Grid Pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.4]"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(30, 27, 75, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 75, 0.05) 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
+          }}
+        />
       </div>
 
       <Navbar />
       <Hero />
-      <WorkPhilosophy />
-
-
       <Services />
+
+      {/* <WorkPhilosophy /> */}
+
+
       <ComparisonSection />
       <TechStack />
 

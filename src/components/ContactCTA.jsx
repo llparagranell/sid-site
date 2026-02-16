@@ -12,17 +12,17 @@ export default function ContactCTA() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7 }}
-                    className="relative rounded-3xl border border-[#4da3ff]/20 bg-[#0e1520] px-6 py-14 sm:px-10 sm:py-16 md:px-12 md:py-20 text-center shadow-xl shadow-[#4da3ff]/10"
+                    className="relative rounded-3xl border border-brand-accent/20 bg-brand-dark/40 backdrop-blur-md px-6 py-14 sm:px-10 sm:py-16 md:px-12 md:py-20 text-center shadow-xl shadow-brand-accent/5"
                 >
                     {/* Badge */}
-                    <span className="inline-flex items-center gap-2 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
                         Let's connect
                     </span>
 
                     {/* Heading */}
                     <h2 className="mt-8 text-4xl md:text-5xl font-semibold text-[#e6eefb]">
                         Let's connect{" "}
-                        <span className="text-[#4da3ff] font-light">
+                        <span className="text-brand-accent font-light italic">
                             today?
                         </span>
                     </h2>
@@ -36,7 +36,7 @@ export default function ContactCTA() {
                     {/* CTA */}
                     <a
                         href="#contact"
-                        className="group inline-flex mt-10 items-center gap-2 rounded-xl bg-[#4da3ff] px-8 py-4 text-sm font-medium text-white shadow-lg transition hover:bg-[#2f7fe6]"
+                        className="group inline-flex mt-10 items-center gap-2 rounded-xl bg-brand-dark px-10 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-brand-dark/90 border border-brand-accent/20"
                     >
                         Book Your Free Consultation
                         <ArrowRight

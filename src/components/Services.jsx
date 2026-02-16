@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import {
-    Globe,
-    Smartphone,
-    Brain,
-    Cloud,
+    Layers,
+    PenTool,
+    Sparkles,
+    Zap,
     ShoppingCart,
     Palette,
     Database,
@@ -13,28 +13,32 @@ import {
 
 const services = [
     {
-        icon: Globe,
+        icon: Layers,
         title: "Web Development",
         desc: "Custom websites and web applications built with modern technologies.",
         points: ["Responsive websites", "SPA & SSR", "Performance optimization"],
+        layoutId: "icon-Layers"
     },
     {
-        icon: Smartphone,
+        icon: PenTool,
         title: "Mobile App Development",
         desc: "Native mobile solutions for iOS and Android.",
         points: ["iOS & Android", "React Native / Flutter", "App Store deployment"],
+        layoutId: "icon-PenTool"
     },
     {
-        icon: Brain,
+        icon: Sparkles,
         title: "AI & Machine Learning",
         desc: "Intelligent solutions powered by artificial intelligence and ML.",
         points: ["Predictive models", "NLP & CV", "Model deployment"],
+        layoutId: "icon-Sparkles"
     },
     {
-        icon: Cloud,
+        icon: Zap,
         title: "Cloud Solutions",
         desc: "Scalable cloud infrastructure and migration services.",
         points: ["Cloud migration", "Serverless", "Cost optimization"],
+        layoutId: "icon-Zap"
     },
     {
         icon: ShoppingCart,
@@ -93,13 +97,23 @@ const card = {
 
 export default function Services() {
     return (
-        <section id="services" className="py-16 md:py-24 lg:py-32 bg-[#0b0f14] relative overflow-hidden">
+        <section id="services" className="py-20 md:py-32 bg-brand-bg relative overflow-hidden">
 
-            {/* Background Decorations */}
-            <div className="absolute top-0 right-0 h-96 w-96 bg-blue-600/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 h-96 w-96 bg-blue-500/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2" />
+            {/* Background Transitions / Grids */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 121, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 121, 0.05) 1px, transparent 1px)`,
+                    backgroundSize: '30px 30px'
+                }}
+            />
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="max-w-7xl mx-auto px-6 relative z-10"
+                style={{
+
+                    backgroundColor: ' #d3d8d52b',
+                    borderRadius: '50px',
+                    padding: '50px'
+                }}>
 
                 {/* Heading */}
                 <motion.div
@@ -109,18 +123,18 @@ export default function Services() {
                     transition={{ duration: 0.8 }}
                     className="text-center max-w-3xl mx-auto mb-20"
                 >
-                    <span className="inline-block mb-4 rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400">
+                    <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
                         Our Expertise
                     </span>
 
-                    <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+                    <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
                         We build the <br className="hidden sm:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+                        <span className="text-brand-dark italic font-light">
                             Future of Digital
                         </span>
                     </h2>
 
-                    <p className="mt-6 text-white/60 text-lg leading-relaxed">
+                    <p className="mt-6 text-brand-dark/70 text-lg leading-relaxed">
                         From rapid MVP development to enterprise-level architecture,
                         we deliver high-performance solutions tailored for growth.
                     </p>
@@ -142,42 +156,44 @@ export default function Services() {
                                 key={i}
                                 variants={card}
                                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                                className="group relative rounded-3xl bg-white/[0.03] backdrop-blur-sm border border-white/10 px-8 py-4 hover:bg-white/[0.06] hover:border-blue-500/30 transition-all duration-300"
+                                className="group relative rounded-3xl bg-brand-bg border border-brand-dark/10 px-8 py-10 hover:shadow-[0_20px_50px_rgba(48,54,79,0.08)] hover:border-brand-dark/20 transition-all duration-500"
                             >
                                 {/* Active State Background Glow */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/0 group-hover:from-blue-600/5 group-hover:to-transparent rounded-3xl transition-all duration-500" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/30 to-transparent opacity-100 group-hover:opacity-0 rounded-3xl transition-all duration-500" />
 
                                 {/* Icon Container */}
                                 <div className="mb-6 relative">
-                                    <div className="h-14 w-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-inner">
+                                    <motion.div
+                                        layoutId={service.layoutId}
+                                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                                        className="h-16 w-16 rounded-2xl bg-brand-dark text-white flex items-center justify-center  transition-all duration-500 shadow-sm border border-brand-dark/10"
+                                    >
                                         <Icon size={28} />
-                                    </div>
+                                    </motion.div>
                                     {/* Small floating detail */}
-                                    <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    {/* <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-brand-muted blur-[2px] opacity-100 group-hover:opacity-0 transition-opacity" /> */}
                                 </div>
 
-                                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                <h3 className="text-xl font-bold text-brand-dark mb-3">
                                     {service.title}
                                 </h3>
 
-                                <p className="text-white/50 text-sm leading-relaxed mb-6 group-hover:text-white/70 transition-colors">
+                                <p className="text-brand-dark/60 text-sm leading-relaxed mb-6 group-hover:text-brand-dark/80 transition-colors">
                                     {service.desc}
                                 </p>
 
                                 <ul className="space-y-3">
                                     {service.points.map((point, idx) => (
-                                        <li key={idx} className="flex items-center gap-3 text-xs font-medium text-white/40 group-hover:text-white/60 transition-colors">
-                                            <div className="h-1 w-1 rounded-full bg-blue-500/50 group-hover:bg-blue-500" />
+                                        <li key={idx} className="flex items-center gap-3 text-xs font-bold text-brand-muted group-hover:text-brand-dark/70 transition-colors">
+                                            <div className="h-1 w-1 rounded-full bg-brand-muted group-hover:bg-brand-dark" />
                                             {point}
                                         </li>
                                     ))}
                                 </ul>
 
-                                {/* Bottom corner button / arrow */}
-                                <div className="mt-8 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <div className="h-8 w-8 rounded-full border border-blue-500/30 flex items-center justify-center text-blue-400">
-                                        <ArrowRight size={14} />
-                                    </div>
+                                {/* Bottom corner arrow */}
+                                <div className="mt-8 flex justify-end opacity-100 group-hover:opacity-0 transition-opacity">
+
                                 </div>
                             </motion.div>
                         );
@@ -187,4 +203,3 @@ export default function Services() {
         </section>
     );
 }
-

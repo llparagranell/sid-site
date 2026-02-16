@@ -37,22 +37,28 @@ export default function FAQ() {
     const [activeIndex, setActiveIndex] = useState(null);
 
     return (
-        <section id="faq" className="relative py-16 md:py-32 bg-[#0b0f14] overflow-hidden">
+        <section id="faq" className="py-24 md:py-32 bg-brand-bg relative overflow-hidden">
+
+            {/* Background Pattern */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.3]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 75, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 75, 0.05) 1px, transparent 1px)`,
+                    backgroundSize: '40px 40px'
+                }}
+            />
 
             <div className="relative z-10 mx-auto max-w-4xl px-6">
 
                 {/* Heading */}
                 <div className="text-center mb-20">
-                    <span className="inline-block mb-4 rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400">
-                        Got Questions?
+                    <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
+                        Common Questions
                     </span>
-                    <h2 className="text-4xl md:text-6xl font-bold text-white">
-                        Common
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 block sm:inline sm:ml-4">
-                            Questions
-                        </span>
+                    <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
+                        You ask, <br />
+                        <span className="italic font-light text-brand-dark">We answer.</span>
                     </h2>
-                    <p className="mt-8 text-xl text-white/50 max-w-2xl mx-auto font-light">
+                    <p className="mt-8 text-xl text-brand-dark/60 max-w-2xl mx-auto font-medium">
                         Find answers to frequently asked questions about our services.
                     </p>
                 </div>
@@ -65,9 +71,9 @@ export default function FAQ() {
                         return (
                             <div
                                 key={index}
-                                className={`rounded-2xl border transition-all duration-300 ${isOpen
-                                    ? "border-blue-500/30 bg-blue-500/[0.05]"
-                                    : "border-white/5 bg-[#0e1520] hover:border-white/10"
+                                className={`rounded-3xl border transition-all duration-500 overflow-hidden ${isOpen
+                                    ? "border-brand-dark/20 bg-brand-accent/30 shadow-sm"
+                                    : "border-brand-dark/10 bg-brand-bg hover:border-brand-dark/20"
                                     }`}
                             >
                                 <button
@@ -76,11 +82,11 @@ export default function FAQ() {
                                     }
                                     className="flex w-full items-center justify-between px-8 py-6 text-left"
                                 >
-                                    <span className={`text-base md:text-lg font-semibold transition-colors ${isOpen ? "text-blue-400" : "text-white/80"}`}>
+                                    <span className={`text-base md:text-lg font-bold transition-colors ${isOpen ? "text-brand-dark" : "text-brand-dark/80"}`}>
                                         {faq.question}
                                     </span>
 
-                                    <div className={`p-2 rounded-full transition-all duration-300 ${isOpen ? "bg-blue-500 text-white rotate-180" : "bg-white/5 text-white/40"}`}>
+                                    <div className={`p-2 rounded-full transition-all duration-300 ${isOpen ? "bg-brand-dark text-white rotate-180" : "bg-brand-accent text-brand-dark/40"}`}>
                                         <ChevronDown size={18} />
                                     </div>
                                 </button>
@@ -94,7 +100,7 @@ export default function FAQ() {
                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                             className="overflow-hidden"
                                         >
-                                            <p className="px-8 pb-8 text-white/50 text-base leading-relaxed border-t border-white/5 pt-4">
+                                            <p className="px-8 pb-8 text-brand-dark/70 text-base leading-relaxed border-t border-brand-dark/10 pt-4 font-medium">
                                                 {faq.answer}
                                             </p>
                                         </motion.div>

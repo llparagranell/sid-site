@@ -30,17 +30,27 @@ const steps = [
 
 export default function ProcessSection() {
     return (
-        <section className="bg-[#0b0f14] py-24 sm:py-32 lg:py-40">
-            <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center">
+        <section className="bg-brand-bg relative overflow-hidden py-24 sm:py-32 lg:py-40 border-y border-brand-dark/5">
+
+            {/* Background Transitions / Grids */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 75, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 75, 0.05) 1px, transparent 1px)`,
+                    backgroundSize: '40px 40px'
+                }}
+            />
+
+            <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center relative z-10">
 
                 {/* Badge */}
-                <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
+                <span className="inline-block mb-4 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1 text-sm text-brand-dark font-bold uppercase tracking-widest text-xs">
                     How it starts?
                 </span>
 
                 {/* Heading */}
-                <h2 className="mt-6 text-4xl md:text-5xl font-semibold text-[#e6eefb]">
-                    See what you can expect.
+                <h2 className="mt-6 text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
+                    See what you <br />
+                    <span className="italic font-light text-brand-dark">can expect.</span>
                 </h2>
 
                 {/* Steps */}
@@ -54,17 +64,17 @@ export default function ProcessSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                                className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 rounded-2xl  bg-[#0e1520] px-6 sm:px-8 py-6 text-left"
+                                className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 rounded-3xl bg-brand-accent/20 backdrop-blur-sm px-6 sm:px-8 py-8 text-left border border-brand-dark/5 hover:border-brand-dark/20 transition-all"
                             >
-                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#4da3ff]/10">
-                                    <Icon size={22} className="text-[#4da3ff]" />
+                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-dark text-white shadow-lg">
+                                    <Icon size={22} />
                                 </div>
 
                                 <div>
-                                    <h3 className="text-lg font-semibold text-[#e6eefb]">
+                                    <h3 className="text-xl font-bold text-brand-dark">
                                         {step.title}
                                     </h3>
-                                    <p className="mt-2 text-[#e6eefb]/70">
+                                    <p className="mt-2 text-brand-dark/70 text-base leading-relaxed font-medium">
                                         {step.description}
                                     </p>
                                 </div>

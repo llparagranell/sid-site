@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 export default {
     content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
@@ -6,17 +7,17 @@ export default {
                 sans: ["Outfit", "sans-serif"],
             },
             colors: {
-                primary: "#0b0f14",
-                secondary: "#4da3ff",
-                accent: "#4da3ff",
-                "main-text": "#e6eefb",
-                "sub-text": "#e6eefb",
+                "brand-dark": "#1e1b4b",
+                "brand-muted": "#64748b",
+                "brand-accent": "#4f46e5",
+                "brand-bg": "#f8fafc",
+                primary: "#1e1b4b",
+                secondary: "#4f46e5",
+                accent: "#818cf8",
+                "main-text": "#0f172a",
+                "sub-text": "#475569",
             },
         },
     },
     plugins: [],
 };
-
-
-
-

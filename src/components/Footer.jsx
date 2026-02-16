@@ -15,8 +15,17 @@ import logo from "../assets/logo.png";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#0b0f14] text-[#e6eefb]/80 pt-16 md:pt-32 overflow-hidden">
-            <div className="mx-auto max-w-7xl px-6 sm:px-16">
+        <footer className="bg-brand-bg text-brand-dark/60 pt-24 md:pt-32 relative overflow-hidden border-t border-brand-dark/10">
+
+            {/* Background Pattern */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.2]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
+                    backgroundSize: '100px 100px'
+                }}
+            />
+
+            <div className="mx-auto max-w-7xl px-6 sm:px-16 relative z-10">
 
                 {/* Top divider */}
                 <motion.div
@@ -24,7 +33,7 @@ export default function Footer() {
                     whileInView={{ opacity: 1, scaleX: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: "circOut" }}
-                    className="border-t border-[#4da3ff]/20 mb-16"
+                    className="border-t border-brand-dark/10 mb-16"
                 />
 
                 {/* Footer grid */}
@@ -39,27 +48,22 @@ export default function Footer() {
                     {/* Brand + Contact */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="flex flex-col gap-4">
-                            <img
-                                src={logo}
-                                alt="Logo"
-                                className="h-12 w-auto object-contain self-start"
-                            />
-                            {/* <h3 className="text-2xl font-bold text-[#e6eefb]">
-                                DevGrowth <span className="text-blue-400 font-light">Solutions</span>
-                            </h3> */}
+                            <span className="text-2xl font-black text-brand-dark tracking-tighter">
+                                Devgrowthsolutions
+                            </span>
                         </div>
 
-                        <div className="space-y-3 text-sm">
-                            <p className="flex items-start gap-3">
-                                <Phone size={16} className="text-[#4da3ff]" />
+                        <div className="space-y-4 text-sm font-bold">
+                            <p className="flex items-center gap-4 text-brand-dark/80">
+                                <Phone size={18} className="text-brand-dark" />
                                 +91 62600 45626
                             </p>
-                            <p className="flex items-start gap-3">
-                                <Mail size={16} className="text-[#4da3ff]" />
+                            <p className="flex items-center gap-4 text-brand-dark/80">
+                                <Mail size={18} className="text-brand-dark" />
                                 contact@devgrowth.com
                             </p>
-                            <p className="flex items-start gap-3 max-w-sm">
-                                <MapPin size={16} className="text-[#4da3ff]" />
+                            <p className="flex items-start gap-4 text-brand-dark/80">
+                                <MapPin size={18} className="text-brand-dark" />
                                 3rd Floor, Wright Town, Jabalpur (M.P.), India
                             </p>
                         </div>
@@ -67,42 +71,42 @@ export default function Footer() {
 
                     {/* Services */}
                     <div>
-                        <h4 className="text-[#4da3ff] font-medium mb-4">Services</h4>
-                        <ul className="space-y-2 text-sm">
-                            <li className="hover:text-white transition-colors cursor-pointer">Web Development</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">Mobile Development</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">MVP Development</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">UI / UX Design</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">Marketing</li>
+                        <h4 className="text-brand-dark font-black mb-6 uppercase tracking-widest text-xs">Services</h4>
+                        <ul className="space-y-3 text-sm font-bold">
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">Web Development</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">Mobile Development</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">MVP Development</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">UI / UX Design</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">Marketing</li>
                         </ul>
                     </div>
 
                     {/* Company */}
                     <div>
-                        <h4 className="text-[#4da3ff] font-medium mb-4">Company</h4>
-                        <ul className="space-y-2 text-sm">
-                            <li className="hover:text-white transition-colors cursor-pointer">About</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">How we work</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">Career</li>
-                            <li className="hover:text-white transition-colors cursor-pointer">Join us</li>
+                        <h4 className="text-brand-dark font-black mb-6 uppercase tracking-widest text-xs">Company</h4>
+                        <ul className="space-y-3 text-sm font-bold">
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">About Us</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">How we work</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">Careers</li>
+                            <li className="hover:text-brand-dark transition-all cursor-pointer">Join us</li>
                         </ul>
                     </div>
 
                     {/* Social */}
                     <div>
-                        <h4 className="text-[#4da3ff] font-medium mb-4">Social Links</h4>
-                        <ul className="space-y-3 text-sm">
-                            <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                                <FaInstagram className="text-[#4da3ff]" /> Instagram
+                        <h4 className="text-brand-dark font-black mb-8 uppercase tracking-widest text-xs">Social Links</h4>
+                        <ul className="space-y-4 text-sm font-bold text-brand-dark/60">
+                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
+                                <FaInstagram className="text-brand-dark" /> Instagram
                             </li>
-                            <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                                <FaFacebookF className="text-[#4da3ff]" /> Facebook
+                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
+                                <FaFacebookF className="text-brand-dark" /> Facebook
                             </li>
-                            <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                                <FaLinkedinIn className="text-[#4da3ff]" /> LinkedIn
+                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
+                                <FaLinkedinIn className="text-brand-dark" /> LinkedIn
                             </li>
-                            <li className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
-                                <FaYoutube className="text-[#4da3ff]" /> YouTube
+                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
+                                <FaYoutube className="text-brand-dark" /> YouTube
                             </li>
                         </ul>
                     </div>
@@ -114,7 +118,7 @@ export default function Footer() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6 }}
-                    className="mt-20 border-t border-white/5 py-6 text-sm text-center text-[#e6eefb]/40"
+                    className="mt-20 border-t border-brand-dark/10 py-6 text-sm text-center text-brand-dark/40 font-bold"
                 >
                     (c) {new Date().getFullYear()} DevGrowth. All rights reserved.
                 </motion.div>

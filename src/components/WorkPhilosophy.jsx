@@ -79,34 +79,43 @@ export default function WorkPhilosophy() {
     }, []);
 
     return (
-        <section id="about" className="bg-[#0b0f14] py-16 sm:py-32">
-            <div className="mx-auto max-w-7xl px-6 sm:px-16">
+        <section id="about" className="bg-brand-bg relative py-16 sm:py-32">
+
+            {/* Background Pattern */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
+                    backgroundSize: '40px 40px'
+                }}
+            />
+
+            <div className="mx-auto max-w-7xl px-6 sm:px-16 relative z-10">
 
                 {/* ===== Header (Sticky) ===== */}
-                <div className="sticky top-24 z-30 bg-[#0b0f14] border-b border-[#4da3ff]/20 pb-6 mb-16">
+                <div className="sticky top-24 z-30 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-dark/10 pb-6 mb-16">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-3xl font-semibold text-[#e6eefb]">
+                        <h2 className="text-3xl font-black text-brand-dark uppercase tracking-widest text-xs">
                             Our Work Philosophy
                         </h2>
-                        <span className="text-3xl font-light text-[#4da3ff]">
+                        <span className="text-4xl font-light text-brand-dark italic">
                             {String(items.indexOf(active) + 1).padStart(2, "0")}
                         </span>
                     </div>
                 </div>
 
                 {/* ===== Grid ===== */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-20">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
 
                     {/* ===== LEFT SIDEBAR (STICKY on Desktop) ===== */}
-                    <div className="lg:col-span-1 hidden lg:block">
+                    <div className="lg:col-span-2 hidden lg:block">
                         <div className="sticky top-52">
                             <ul className="space-y-6">
                                 {items.map((item) => (
                                     <li key={item.id}>
                                         <span
-                                            className={`block border-b pb-2 text-sm transition ${active.id === item.id
-                                                ? "text-[#4da3ff] border-[#4da3ff]"
-                                                : "text-[#e6eefb]/50 border-[#4da3ff]/10"
+                                            className={`block border-b pb-2 text-sm font-bold transition-all ${active.id === item.id
+                                                ? "text-brand-dark border-brand-dark translate-x-1"
+                                                : "text-brand-muted border-brand-dark/10 hover:text-brand-dark/60"
                                                 }`}
                                         >
                                             {item.title}
@@ -118,10 +127,10 @@ export default function WorkPhilosophy() {
                     </div>
 
                     {/* ===== CENTER CONTENT (SCROLLS) ===== */}
-                    <div className="lg:col-span-3 lg:pl-10 space-y-24 md:space-y-32 lg:space-y-40">
+                    <div className="lg:col-span-6 space-y-24 md:space-y-32 lg:space-y-40">
                         {items.map((item) => (
                             <div key={item.id} data-section={item.id} className="min-h-[50vh] lg:min-h-[75vh]">
-                                <h3 className="text-2xl md:text-3xl font-semibold text-[#e6eefb] mb-6">
+                                <h3 className="text-3xl md:text-5xl font-black text-brand-dark mb-8 leading-tight">
                                     {item.title}
                                 </h3>
 
@@ -130,7 +139,7 @@ export default function WorkPhilosophy() {
                                         {item.description.map((text, i) => (
                                             <p
                                                 key={i}
-                                                className="text-[#e6eefb]/70 leading-relaxed mb-4 text-sm md:text-base"
+                                                className="text-brand-dark/70 leading-relaxed mb-6 text-lg font-medium"
                                             >
                                                 {text}
                                             </p>
@@ -140,7 +149,7 @@ export default function WorkPhilosophy() {
                                         <img
                                             src={item.image}
                                             alt={item.title}
-                                            className="h-48 w-full rounded-2xl object-cover mb-10"
+                                            className="h-48 w-full rounded-2xl object-cover mb-10 shadow-lg"
                                         />
                                     </div>
                                 </div>
@@ -149,7 +158,7 @@ export default function WorkPhilosophy() {
                     </div>
 
                     {/* ===== RIGHT IMAGE (STICKY) ===== */}
-                    <div className="lg:col-span-1 hidden lg:block">
+                    <div className="lg:col-span-4 hidden lg:block">
                         <div className="sticky top-52">
                             <motion.img
                                 key={active.image}
@@ -158,13 +167,13 @@ export default function WorkPhilosophy() {
                                 initial={{ opacity: 0, scale: 0.96 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.5 }}
-                                className="h-[260px] w-full rounded-2xl object-cover"
+                                className="h-[450px] w-full rounded-[32px] object-cover shadow-2xl shadow-brand-dark/10 grayscale hover:grayscale-0 transition-all duration-700 border border-brand-dark/5"
                             />
                         </div>
                     </div>
 
                 </div>
             </div>
-        </section>
+        </section >
     );
 }

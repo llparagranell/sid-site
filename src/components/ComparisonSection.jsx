@@ -70,8 +70,17 @@ const itemVariantsRight = {
 
 export default function ComparisonSection() {
     return (
-        <section className="bg-[#0b0f14] py-16 sm:py-32 lg:py-40 overflow-hidden">
-            <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
+        <section className="py-24 md:py-32 bg-brand-bg relative overflow-hidden">
+
+            {/* Background Pattern */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.3]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
+                    backgroundSize: '50px 50px'
+                }}
+            />
+
+            <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16 relative z-10">
 
                 {/* ================= HEADER ================= */}
                 <motion.div
@@ -81,20 +90,19 @@ export default function ComparisonSection() {
                     transition={{ duration: 0.8 }}
                     className="mx-auto mb-20 max-w-3xl text-center"
                 >
-                    <span className="inline-block mb-4 rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400">
-                        What Makes Us Unique
+                    <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
+                        Why Choose Us?
                     </span>
-
-                    <h2 className="mt-6 text-3xl md:text-5xl font-bold text-white">
-                        Experience the <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">DevGrowth Difference</span>
+                    <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight mb-6">
+                        The Devgrowth <br />
+                        <span className="italic font-light text-brand-dark">Difference</span>
                     </h2>
 
                     <motion.a
                         href="#contact"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="group inline-flex mt-10 items-center gap-3 rounded-xl bg-blue-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-500"
+                        className="group inline-flex mt-10 items-center gap-3 rounded-xl bg-brand-dark px-8 py-4 text-sm font-bold text-white shadow-xl shadow-brand-dark/10 transition-all hover:bg-brand-dark/90"
                     >
                         Book Your Free Consultation
                         <ArrowRight
@@ -110,80 +118,74 @@ export default function ComparisonSection() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
-                    className="overflow-hidden rounded-[32px] border border-white/10 bg-[#0e1520] shadow-2xl"
+                    className="grid md:grid-cols-2 gap-8 ring-1 ring-brand-dark/10 rounded-[48px] bg-brand-bg p-4 md:p-8 shadow-2xl shadow-brand-dark/5"
                 >
-                    <div className="grid grid-cols-1 lg:grid-cols-2">
 
-                        {/* ================= WITHOUT YOU (LEFT) ================= */}
-                        <motion.div
-                            variants={containerVariants}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true }}
-                            className="bg-white/5 p-8 sm:p-10 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5"
-                        >
-                            <div className="mb-10 flex items-center gap-3 opacity-60">
-                                <XCircle className="text-white/60" size={24} />
-                                <h3 className="text-2xl font-bold text-white/70">
-                                    Without DevGrowth
-                                </h3>
-                            </div>
+                    {/* ================= WITHOUT YOU (LEFT) ================= */}
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true }}
+                        className="p-8 md:p-12 bg-gradient-to-br from-brand-accent/30 via-brand-bg to-brand-bg rounded-[40px] border border-brand-dark/5"
+                    >
+                        <div className="mb-10 flex items-center gap-3 opacity-80">
+                            <XCircle className="text-brand-muted" size={24} />
+                            <h3 className="text-2xl font-bold text-brand-dark/50">
+                                Without Devgrowth
+                            </h3>
+                        </div>
 
-                            <ul className="space-y-8">
-                                {withoutUs.map((item, i) => (
-                                    <motion.li key={i} variants={itemVariants} className="flex gap-4">
-                                        <XCircle className="mt-1 text-red-500/50" size={20} />
-                                        <div>
-                                            <h4 className="font-bold text-white/50">
-                                                {item.title}
-                                            </h4>
-                                            <p className="mt-1 text-white/30 text-sm">
-                                                {item.desc}
-                                            </p>
-                                        </div>
-                                    </motion.li>
-                                ))}
-                            </ul>
-                        </motion.div>
+                        <ul className="space-y-8">
+                            {withoutUs.map((item, i) => (
+                                <motion.li key={i} variants={itemVariants} className="flex gap-4">
+                                    <XCircle className="mt-1 text-brand-muted/60" size={20} />
+                                    <div>
+                                        <h4 className="font-bold text-brand-dark/70">
+                                            {item.title}
+                                        </h4>
+                                        <p className="mt-1 text-brand-muted text-sm">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.div>
 
-                        {/* ================= WITH YOU (RIGHT) ================= */}
-                        <motion.div
-                            variants={containerVariants}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true }}
-                            className="bg-blue-600/[0.03] p-8 sm:p-10 md:p-12"
-                        >
-                            <div className="mb-10 flex items-center gap-3">
-                                <CheckCircle2 className="text-blue-400" size={24} />
-                                <h3 className="text-2xl font-bold text-blue-400">
-                                    With DevGrowth
-                                </h3>
-                            </div>
+                    {/* ================= WITH YOU (RIGHT) ================= */}
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true }}
+                        className="bg-gradient-to-br from-brand-dark via-brand-dark to-[#2a266a] p-8 sm:p-10 md:p-12 rounded-[40px] text-white shadow-xl"
+                    >
+                        <div className="mb-10 flex items-center gap-3">
+                            <CheckCircle2 className="text-brand-accent" size={24} />
+                            <h3 className="text-2xl font-bold text-brand-bg">
+                                With Devgrowth
+                            </h3>
+                        </div>
 
-                            <ul className="space-y-8">
-                                {withUs.map((item, i) => (
-                                    <motion.li key={i} variants={itemVariantsRight} className="flex gap-4">
-                                        <CheckCircle2 className="mt-1 text-blue-400" size={20} />
-                                        <div>
-                                            <h4 className="font-bold text-white">
-                                                {item.title}
-                                            </h4>
-                                            <p className="mt-1 text-white/60 text-sm">
-                                                {item.desc}
-                                            </p>
-                                        </div>
-                                    </motion.li>
-                                ))}
-                            </ul>
-                        </motion.div>
-
-                    </div>
+                        <ul className="space-y-8">
+                            {withUs.map((item, i) => (
+                                <motion.li key={i} variants={itemVariantsRight} className="flex gap-4">
+                                    <CheckCircle2 className="mt-1 text-brand-accent" size={20} />
+                                    <div>
+                                        <h4 className="font-bold text-brand-bg">
+                                            {item.title}
+                                        </h4>
+                                        <p className="mt-1 text-brand-muted text-sm opacity-90">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.div>
                 </motion.div>
             </div>
         </section>
     );
 }
-
-
-

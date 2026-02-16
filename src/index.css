@@ -1,12 +1,35 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-dark: #1e1b4b;
+  --color-brand-muted: #64748b;
+  --color-brand-accent: #d3d8d5;
+  --color-brand-bg: #f8fafc;
+  --color-primary: #1e1b4b;
+  --color-secondary: #4f46e5;
+  --color-accent: #818cf8;
+  --color-main-text: #0f172a;
+  --color-sub-text: #475569;
+}
+
+:root {
+  --primary: #1b4b2b;
+  --primary-hover: #312e81;
+  --bg-main: #c9c9c9;
+  --bg-subtle: #f1f5f9;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-subtle: rgba(30, 27, 75, 0.1);
+}
+
 body {
-  background-color: #0b0f14;
-  color: #e6eefb;
+  background-color: var(--bg-main);
+  color: var(--text-main);
   font-family: 'Outfit', sans-serif;
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 .bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
 }

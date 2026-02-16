@@ -59,8 +59,17 @@ const card = {
 
 export default function Projects() {
     return (
-        <section id="projects" className="py-16 md:py-28 bg-[#0b0f14]">
-            <div className="max-w-7xl mx-auto px-6">
+        <section id="projects" className="py-20 md:py-32 bg-brand-bg relative overflow-hidden">
+
+            {/* Background Pattern */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
+                    backgroundSize: '80px 80px'
+                }}
+            />
+
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
 
                 {/* Panel */}
                 <motion.div
@@ -68,23 +77,23 @@ export default function Projects() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8 }}
-                    className="bg-[#0e1520] rounded-[40px] p-10 md:p-14 "
+                    className="bg-brand-accent/20 backdrop-blur-sm border border-brand-dark/10 rounded-[48px] p-10 md:p-14 shadow-sm"
                 >
 
                     {/* Heading */}
                     <div className="text-center max-w-3xl mx-auto mb-16">
-                        <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
+                        <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
                             Our Work
                         </span>
 
-                        <h2 className="text-3xl md:text-5xl font-semibold text-[#e6eefb]">
+                        <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
                             Featured <br />
-                            <span className="font-light text-[#4da3ff]">
+                            <span className="italic font-light text-brand-dark">
                                 Projects
                             </span>
                         </h2>
 
-                        <p className="mt-4 text-[#e6eefb]/70 leading-relaxed">
+                        <p className="mt-4 text-brand-dark/70 leading-relaxed font-medium">
                             A selection of recent builds showcasing full-stack, cloud, and
                             product engineering capabilities.
                         </p>
@@ -102,7 +111,7 @@ export default function Projects() {
                             <motion.div
                                 key={i}
                                 variants={card}
-                                className="group rounded-2xl overflow-hidden border border-[#4da3ff]/15 bg-[#0e1520] hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl hover:shadow-[#4da3ff]/15"
+                                className="group rounded-[32px] overflow-hidden border border-brand-dark/10 bg-brand-bg hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(48,54,79,0.1)]"
                             >
                                 {/* Image */}
                                 <div className="relative overflow-hidden">
@@ -113,16 +122,16 @@ export default function Projects() {
                                     />
 
                                     {/* Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f14] via-transparent to-transparent opacity-80" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/20 via-transparent to-transparent opacity-80" />
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-6 text-[#e6eefb]">
-                                    <h3 className="text-xl font-semibold">
+                                <div className="p-6 text-brand-dark">
+                                    <h3 className="text-xl font-bold">
                                         {project.title}
                                     </h3>
 
-                                    <p className="mt-2 text-sm text-[#e6eefb]/70 leading-relaxed">
+                                    <p className="mt-2 text-sm text-brand-dark/70 leading-relaxed">
                                         {project.desc}
                                     </p>
 
@@ -131,7 +140,7 @@ export default function Projects() {
                                         {project.tech.map((t, idx) => (
                                             <span
                                                 key={idx}
-                                                className="text-xs px-3 py-1 rounded-full bg-[#4da3ff]/10 border border-[#4da3ff]/20 text-[#4da3ff]"
+                                                className="text-xs px-3 py-1 rounded-full bg-brand-accent border border-brand-dark/10 text-brand-dark font-bold"
                                             >
                                                 {t}
                                             </span>
@@ -142,7 +151,7 @@ export default function Projects() {
                                         href={project.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-6 inline-flex items-center gap-2 text-sm text-[#4da3ff] hover:text-white transition-colors"
+                                        className="mt-6 inline-flex items-center gap-2 text-sm text-brand-dark hover:opacity-70 transition-opacity font-bold"
                                     >
                                         View Project
                                         <ArrowUpRight size={16} />

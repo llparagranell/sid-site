@@ -4,9 +4,17 @@ export default function ContactSection() {
     return (
         <section
             id="contact"
-            className="bg-[#0b0f14] py-16 sm:py-32 lg:py-40"
+            className="bg-brand-bg relative overflow-hidden py-24 md:py-32"
         >
-            <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+                style={{
+                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
+                    backgroundSize: '100px 100px'
+                }}
+            />
+
+            <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 relative z-10">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
@@ -19,27 +27,27 @@ export default function ContactSection() {
                         className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left"
                     >
                         {/* Small intro */}
-                        <span className="inline-block mb-4 rounded-full border border-[#4da3ff]/20 bg-[#4da3ff]/10 px-4 py-1 text-sm text-[#e6eefb]/80">
+                        <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
                             Let's connect
                         </span>
 
-                        <h2 className="mt-6 text-3xl md:text-5xl font-semibold text-[#e6eefb] leading-tight">
+                        <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
                             Let's build something{" "}
-                            <span className="font-light text-[#4da3ff]">
+                            <span className="italic font-light text-brand-dark">
                                 meaningful?
                             </span>
                         </h2>
 
-                        <p className="mt-6 text-lg text-[#e6eefb]/70">
+                        <p className="mt-6 text-lg text-brand-dark/70 font-medium">
                             We are always ready to have a discussion about your project,
                             ideas, or challenges. Tell us what you're building, and we'll
                             explore how we can help bring it to life.
                         </p>
 
-                        <ul className="mt-10 space-y-4 text-[#e6eefb]/70 text-left max-w-md mx-auto lg:mx-0">
-                            <li>- Clear communication & timelines</li>
-                            <li>- Transparent pricing</li>
-                            <li>- Long-term collaboration & support</li>
+                        <ul className="mt-10 space-y-4 text-brand-dark/60 text-left max-w-md mx-auto lg:mx-0 font-bold">
+                            <li className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-brand-dark" /> Clear communication & timelines</li>
+                            <li className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-brand-dark" /> Transparent pricing</li>
+                            <li className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-brand-dark" /> Long-term collaboration & support</li>
                         </ul>
                     </motion.div>
 
@@ -51,11 +59,12 @@ export default function ContactSection() {
                         transition={{ duration: 0.7 }}
                         className="
               w-full
-              rounded-[28px]
-              
-              bg-[#0e1520]
-              p-6 sm:p-12
-              shadow-2xl
+              rounded-[48px]
+              border border-brand-dark/10
+              bg-brand-accent/20
+              backdrop-blur-sm
+              p-8 sm:p-14
+              shadow-sm
             "
                     >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -68,19 +77,19 @@ export default function ContactSection() {
                         </div>
 
                         <div className="mt-6">
-                            <label className="block text-sm font-medium text-[#e6eefb]/80 mb-2">
+                            <label className="block text-sm font-bold text-brand-dark mb-2">
                                 Project details
                             </label>
                             <textarea
                                 rows={5}
                                 placeholder="Tell us about your project..."
                                 className="
-                  w-full rounded-xl border border-[#4da3ff]/20
-                  bg-[#0b0f14] px-4 py-3
-                  text-sm text-[#e6eefb]
-                  placeholder:text-[#e6eefb]/50
-                  focus:outline-none focus:ring-2 focus:ring-[#4da3ff]/20
-                  transition
+                  w-full rounded-2xl border border-brand-dark/10
+                  bg-brand-bg px-4 py-3
+                  text-sm text-brand-dark
+                  placeholder:text-brand-muted
+                  focus:outline-none focus:ring-4 focus:ring-brand-dark/5
+                  transition-all
                 "
                             />
                         </div>
@@ -89,10 +98,10 @@ export default function ContactSection() {
                             type="submit"
                             className="
                 mt-10 w-full
-                rounded-xl bg-[#4da3ff]
-                px-8 py-4
-                text-sm font-medium text-white
-                transition hover:bg-[#2f7fe6]
+                rounded-2xl bg-brand-dark
+                px-8 py-5
+                text-base font-bold text-white
+                transition hover:bg-brand-dark/90 shadow-2xl shadow-brand-dark/10
               "
                         >
                             Send message
@@ -109,19 +118,19 @@ export default function ContactSection() {
 function Input({ label, placeholder }) {
     return (
         <div>
-            <label className="block text-sm font-medium text-[#e6eefb]/80 mb-2">
+            <label className="block text-sm font-bold text-brand-dark mb-2">
                 {label}
             </label>
             <input
                 type="text"
                 placeholder={placeholder}
                 className="
-          w-full rounded-xl border border-[#4da3ff]/20
-          bg-[#0b0f14] px-4 py-3
-          text-sm text-[#e6eefb]
-          placeholder:text-[#e6eefb]/50
-          focus:outline-none focus:ring-2 focus:ring-[#4da3ff]/20
-          transition
+          w-full rounded-2xl border border-brand-dark/10
+          bg-brand-bg px-5 py-4
+          text-sm text-brand-dark
+          placeholder:text-brand-muted
+          focus:outline-none focus:ring-4 focus:ring-brand-dark/5
+          transition-all
         "
             />
         </div>
