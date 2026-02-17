@@ -63,14 +63,14 @@ export default function Hero() {
     <section className="relative min-h-screen w-full overflow-hidden bg-brand-bg text-brand-dark flex items-center justify-center py-20 mt-8">
 
       {/* Decorative Floating Icons */}
-      <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.5} size={32} />
-      <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={1.2} size={28} />
-      <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={2} size={36} />
-      <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.8} size={30} />
-      <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={2.5} size={20} />
-      <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={1.8} size={24} />
-      <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={3} size={22} />
-      <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.2} size={26} />
+      <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.1} size={32} />
+      <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={0.2} size={28} />
+      <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={0.3} size={36} />
+      <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.15} size={30} />
+      <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={0.4} size={20} />
+      <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={0.25} size={24} />
+      <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={0.5} size={22} />
+      <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.05} size={26} />
 
       {/* Background Grid Lines */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -108,15 +108,15 @@ export default function Hero() {
           <Layers size={32} className="text-brand-dark" />
         </FloatingCard>
 
-        <FloatingCard x="8vw" y="62vh" delay={1.5} layoutId="icon-PenTool">
+        <FloatingCard x="8vw" y="62vh" delay={0.2} layoutId="icon-PenTool">
           <PenTool size={32} className="text-brand-dark" />
         </FloatingCard>
 
-        <FloatingCard x="82vw" y="12vh" delay={0.8} layoutId="icon-Sparkles">
+        <FloatingCard x="82vw" y="12vh" delay={0.1} layoutId="icon-Sparkles">
           <Sparkles size={32} className="text-brand-dark" />
         </FloatingCard>
 
-        <FloatingCard x="88vw" y="58vh" delay={2.2} layoutId="icon-Zap">
+        <FloatingCard x="88vw" y="58vh" delay={0.3} layoutId="icon-Zap">
           <Zap size={32} className="text-brand-dark" />
         </FloatingCard>
       </div>

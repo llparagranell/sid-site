@@ -1,5 +1,6 @@
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import VideoSection from "./components/VideoSection";
 import Services from "./components/Services";
 import WorkPhilosophy from "./components/WorkPhilosophy";
 import TechStack from "./components/TechStack";
@@ -31,6 +32,7 @@ export default function App() {
 
       <Navbar />
       <Hero />
+      <VideoSection />
       <Services />
 
       {/* <WorkPhilosophy /> */}
