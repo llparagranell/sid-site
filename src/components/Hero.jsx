@@ -104,19 +104,19 @@ export default function Hero() {
 
       {/* Floating Cards */}
       <div className="hidden lg:block absolute inset-0 pointer-events-none">
-        <FloatingCard x="15vw" y="18vh" delay={0} layoutId="icon-Layers">
-          <Layers size={32} className="text-brand-dark" />
+        <FloatingCard x="15vw" y="18vh" layoutId="icon-Layers">
+          <Layers size={32} className="text-brand-dark " />
         </FloatingCard>
 
-        <FloatingCard x="8vw" y="62vh" delay={0.2} layoutId="icon-PenTool">
+        <FloatingCard x="8vw" y="62vh" layoutId="icon-PenTool">
           <PenTool size={32} className="text-brand-dark" />
         </FloatingCard>
 
-        <FloatingCard x="82vw" y="12vh" delay={0.1} layoutId="icon-Sparkles">
+        <FloatingCard x="82vw" y="12vh" layoutId="icon-Sparkles">
           <Sparkles size={32} className="text-brand-dark" />
         </FloatingCard>
 
-        <FloatingCard x="88vw" y="58vh" delay={0.3} layoutId="icon-Zap">
+        <FloatingCard x="88vw" y="58vh" layoutId="icon-Zap">
           <Zap size={32} className="text-brand-dark" />
         </FloatingCard>
       </div>
