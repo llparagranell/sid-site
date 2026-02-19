@@ -58,7 +58,7 @@ const FloatingIcon = ({ icon: Icon, x, y, delay = 0, color = "text-brand-dark/20
   </motion.div>
 );
 
-export default function Hero() {
+export default function Hero({ onBookClick }) {
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-brand-bg text-brand-dark flex items-center justify-center py-20 mt-8">
 
@@ -148,20 +148,31 @@ export default function Hero() {
           </motion.p>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-12"
+          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6"
         >
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-brand-dark/95 transition-all shadow-[0_20px_40px_rgba(48,54,79,0.1)] overflow-hidden holographic-button"
+            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-brand-dark/95 transition-all shadow-[0_20px_40px_rgba(48,54,79,0.1)] overflow-hidden cursor-pointer w-full sm:w-auto"
           >
             <span className="relative z-10">Get Started Today</span>
             <ExternalLink size={18} className="relative z-10 text-brand-muted group-hover:text-white transition-colors" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onBookClick}
+            className="group relative inline-flex items-center justify-center gap-3 bg-white text-brand-dark border-2 border-brand-dark/10 px-10 py-5 rounded-2xl font-bold text-lg hover:border-brand-dark transition-all cursor-pointer w-full sm:w-auto shadow-sm hover:shadow-xl"
+          >
+            <Sparkles size={18} className="text-brand-dark opacity-50 group-hover:opacity-100 transition-opacity" />
+            <span className="relative z-10">Book Consultation</span>
           </motion.button>
         </motion.div>
       </div>

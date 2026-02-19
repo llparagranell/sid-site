@@ -12,8 +12,13 @@ import FAQ from "./components/FAQ";
 import ContactSection from "./components/ContactSection";
 import ContactCTA from "./components/ContactCTA";
 import Footer from "./components/Footer";
+import BookingModal from "./components/BookingModal";
+import { useState } from "react";
 
 export default function App() {
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const toggleBooking = () => setIsBookingOpen(!isBookingOpen);
+
   return (
     <div className="relative min-h-screen bg-brand-bg font-sans selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
 
@@ -30,8 +35,8 @@ export default function App() {
         />
       </div>
 
-      <Navbar />
-      <Hero />
+      <Navbar onBookClick={toggleBooking} />
+      <Hero onBookClick={toggleBooking} />
       <Services />
 
       <VideoSection />
@@ -47,6 +52,8 @@ export default function App() {
       <FAQ />
       <ContactSection />
       <Footer />
+
+      <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
     </div>
   );
 }

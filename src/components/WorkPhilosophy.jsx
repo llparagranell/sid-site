@@ -112,14 +112,14 @@ export default function WorkPhilosophy() {
                                 </span>
                             </h2>
                         </div>
-                        <div className="flex items-center gap-4">
+                        {/* <div className="flex items-center gap-4">
                             <span className="text-sm font-bold text-brand-dark uppercase tracking-widest opacity-40">
                                 Phase
                             </span>
                             <span className="text-6xl md:text-8xl font-black text-brand-dark/10 leading-none">
                                 {String(items.indexOf(active) + 1).padStart(2, "0")}
                             </span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
@@ -127,8 +127,8 @@ export default function WorkPhilosophy() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 h-auto sm:h-[80vh]">
 
                     {/* ===== LEFT SIDEBAR (Sticky) ===== */}
-                    <div className="lg:col-span-2 hidden lg:block">
-                        <div className="sticky top-52">
+                    <div className="lg:col-span-3 hidden lg:block">
+                        <div className="sticky top-82">
                             <ul className="space-y-8">
                                 {items.map((item) => (
                                     <li key={item.id}>
@@ -153,14 +153,14 @@ export default function WorkPhilosophy() {
                     {/* ===== CENTER CONTENT (SCROLLABLE ONLY) ===== */}
                     <div
                         ref={scrollRef}
-                        className="lg:col-span-6 overflow-y-auto pr-4 scrollbar-hide"
+                        className="lg:col-span-5 overflow-y-auto pr-4 scrollbar-hide"
                     >
-                        <div className="space-y-32 py-10">
+                        <div className="space-y-24 py-10">
                             {items.map((item) => (
                                 <div
                                     key={item.id}
                                     data-section={item.id}
-                                    className="min-h-[60vh] flex flex-col justify-center"
+                                    className=" flex flex-col justify-center"
                                 >
                                     <h3 className="text-3xl md:text-4xl font-black text-brand-dark mb-8 leading-tight tracking-tight uppercase">
                                         {item.title}
@@ -188,7 +188,7 @@ export default function WorkPhilosophy() {
 
                     {/* ===== RIGHT IMAGE (Sticky) ===== */}
                     <div className="lg:col-span-4 hidden lg:block">
-                        <div className="sticky top-52">
+                        <div className="sticky top-82">
                             <div className="relative">
                                 <motion.div
                                     key={active.image + "_overlay"}

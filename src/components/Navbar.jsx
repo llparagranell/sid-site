@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { Menu, X, ChevronDown, ExternalLink, Box } from "lucide-react";
+import { Menu, X, ChevronDown, ExternalLink, Box, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
 
-export default function Navbar() {
+export default function Navbar({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -138,11 +138,20 @@ export default function Navbar() {
         </nav>
 
         {/* CTA */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`flex items-center gap-2 rounded-full bg-brand-dark text-white font-bold transition-all duration-300 ${scrolled
+            onClick={onBookClick}
+            className={`flex items-center gap-2 font-bold text-brand-dark hover:opacity-70 transition-all cursor-pointer ${scrolled ? "text-xs" : "text-sm"}`}
+          >
+            <Sparkles size={scrolled ? 14 : 16} className="opacity-50" />
+            Book Consultation
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`flex items-center gap-2 rounded-full bg-brand-dark text-white font-bold transition-all duration-300 shadow-lg hover:shadow-brand-dark/20 cursor-pointer ${scrolled
               ? "px-5 py-2 text-xs"
               : "px-7 py-3 text-sm"
               }`}
@@ -242,10 +251,20 @@ export default function Navbar() {
                 </div>
               ))}
 
-              <div className="pt-4">
-                <button className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-bold text-white shadow-xl">
+              <div className="pt-4 flex flex-col gap-4">
+                <button className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-bold text-white shadow-xl cursor-pointer active:scale-95 transition-transform">
                   Get Started
                   <ExternalLink size={20} />
+                </button>
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    onBookClick();
+                  }}
+                  className="w-full flex justify-center items-center gap-3 rounded-2xl border-2 border-brand-dark/10 py-5 text-lg font-bold text-brand-dark cursor-pointer active:scale-95 transition-transform hover:border-brand-dark"
+                >
+                  <Sparkles size={20} className="opacity-50" />
+                  Book Consultation
                 </button>
               </div>
             </div>

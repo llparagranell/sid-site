@@ -67,8 +67,8 @@ const TiltCard = ({ service, index }) => {
                 className="relative z-10 h-full p-8 flex flex-col"
             >
                 {/* Icon Section */}
-                <div className="mb-8 p-1.5 inline-block rounded-2xl bg-brand-bg/50 border border-brand-dark/5 group-hover:bg-brand-dark group-hover:border-brand-dark transition-all duration-500 shadow-sm">
-                    <div className="h-14 w-14 rounded-xl bg-brand-dark text-white flex items-center justify-center group-hover:bg-white group-hover:text-brand-dark transition-all duration-500">
+                <div className="">
+                    <div className="h-14 w-14 mb-6 rounded-xl bg-brand-dark text-white flex items-center justify-center  transition-all duration-500">
                         <Icon size={24} />
                     </div>
                 </div>
