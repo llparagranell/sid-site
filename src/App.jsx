@@ -32,10 +32,11 @@ export default function App() {
 
       <Navbar />
       <Hero />
-      <VideoSection />
       <Services />
 
-      {/* <WorkPhilosophy /> */}
+      <VideoSection />
+
+      <WorkPhilosophy />
 
 
       <ComparisonSection />

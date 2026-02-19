@@ -69,7 +69,7 @@ export default function Projects() {
                 }}
             />
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="max-w-7xl mx-auto px-0 md:px-6 relative z-10">
 
                 {/* Panel */}
                 <motion.div
@@ -77,11 +77,11 @@ export default function Projects() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8 }}
-                    className="bg-brand-accent/20 backdrop-blur-sm border border-brand-dark/10 rounded-[48px] p-10 md:p-14 shadow-sm"
+                    className="bg-brand-accent/20 backdrop-blur-sm border-y md:border border-brand-dark/10 rounded-none md:rounded-[48px] p-6 md:p-14 shadow-sm"
                 >
 
                     {/* Heading */}
-                    <div className="text-center max-w-3xl mx-auto mb-16">
+                    <div className="text-center max-w-3xl mx-auto mb-16 px-6 md:px-0">
                         <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
                             Our Work
                         </span>

@@ -47,7 +47,7 @@ export default function FAQ() {
                 }}
             />
 
-            <div className="relative z-10 mx-auto max-w-4xl px-6">
+            <div className="relative z-10 mx-auto max-w-4xl px-4 md:px-6">
 
                 {/* Heading */}
                 <div className="text-center mb-20">
@@ -80,7 +80,7 @@ export default function FAQ() {
                                     onClick={() =>
                                         setActiveIndex(isOpen ? null : index)
                                     }
-                                    className="flex w-full items-center justify-between px-8 py-6 text-left"
+                                    className="flex w-full items-center justify-between px-6 md:px-8 py-6 text-left"
                                 >
                                     <span className={`text-base md:text-lg font-bold transition-colors ${isOpen ? "text-brand-dark" : "text-brand-dark/80"}`}>
                                         {faq.question}
@@ -100,7 +100,7 @@ export default function FAQ() {
                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                             className="overflow-hidden"
                                         >
-                                            <p className="px-8 pb-8 text-brand-dark/70 text-base leading-relaxed border-t border-brand-dark/10 pt-4 font-medium">
+                                            <p className="px-4 md:px-8 pb-8 text-brand-dark/70 text-base leading-relaxed border-t border-brand-dark/10 pt-4 font-medium">
                                                 {faq.answer}
                                             </p>
                                         </motion.div>

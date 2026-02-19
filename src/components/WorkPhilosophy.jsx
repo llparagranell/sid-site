@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
 const items = [
@@ -56,9 +56,11 @@ const items = [
 
 export default function WorkPhilosophy() {
     const [active, setActive] = useState(items[0]);
+    const scrollRef = useRef(null);
 
+    /* ---- Intersection Observer for Active Section ---- */
     useEffect(() => {
-        const sections = document.querySelectorAll("[data-section]");
+        const sections = scrollRef.current.querySelectorAll("[data-section]");
 
         const observer = new IntersectionObserver(
             (entries) => {
@@ -71,109 +73,145 @@ export default function WorkPhilosophy() {
                     }
                 });
             },
-            { threshold: 0.45 }
+            { threshold: 0.5 }
         );
 
         sections.forEach((s) => observer.observe(s));
+
         return () => observer.disconnect();
     }, []);
 
     return (
-        <section id="about" className="bg-brand-bg relative py-16 sm:py-32">
-
-            {/* Background Pattern */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+        <section
+            id="about"
+            className="bg-brand-bg relative py-16 sm:py-24 overflow-hidden"
+        >
+            {/* Background Grid Pattern */}
+            <div
+                className="absolute inset-0 z-0 pointer-events-none opacity-40"
                 style={{
-                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
+                    backgroundImage:
+                        "linear-gradient(to right, rgba(148,163,184,0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.2) 1px, transparent 1px)",
+                    backgroundSize: "40px 40px",
                 }}
             />
 
-            <div className="mx-auto max-w-7xl px-6 sm:px-16 relative z-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-16 relative z-10">
 
-                {/* ===== Header (Sticky) ===== */}
-                <div className="sticky top-24 z-30 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-dark/10 pb-6 mb-16">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-3xl font-black text-brand-dark uppercase tracking-widest text-xs">
-                            Our Work Philosophy
-                        </h2>
-                        <span className="text-4xl font-light text-brand-dark italic">
-                            {String(items.indexOf(active) + 1).padStart(2, "0")}
-                        </span>
+                {/* ===== Sticky Header ===== */}
+                <div className="sticky top-20 z-30 bg-brand-bg/95 backdrop-blur-md border-b border-brand-dark/10 pb-8 mb-16">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                            <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
+                                Our Methodology
+                            </span>
+                            <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tighter">
+                                Work <br className="hidden sm:block" />
+                                <span className="text-brand-dark italic font-light">
+                                    Philosophy
+                                </span>
+                            </h2>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-bold text-brand-dark uppercase tracking-widest opacity-40">
+                                Phase
+                            </span>
+                            <span className="text-6xl md:text-8xl font-black text-brand-dark/10 leading-none">
+                                {String(items.indexOf(active) + 1).padStart(2, "0")}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                {/* ===== Grid ===== */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                {/* ===== Main Grid Layout ===== */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 h-auto sm:h-[80vh]">
 
-                    {/* ===== LEFT SIDEBAR (STICKY on Desktop) ===== */}
+                    {/* ===== LEFT SIDEBAR (Sticky) ===== */}
                     <div className="lg:col-span-2 hidden lg:block">
                         <div className="sticky top-52">
-                            <ul className="space-y-6">
+                            <ul className="space-y-8">
                                 {items.map((item) => (
                                     <li key={item.id}>
-                                        <span
-                                            className={`block border-b pb-2 text-sm font-bold transition-all ${active.id === item.id
-                                                ? "text-brand-dark border-brand-dark translate-x-1"
-                                                : "text-brand-muted border-brand-dark/10 hover:text-brand-dark/60"
+                                        <button
+                                            onClick={() => {
+                                                const el = scrollRef.current.querySelector(`[data-section="${item.id}"]`);
+                                                el?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            className={`block border-b-2 pb-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all text-left w-full ${active.id === item.id
+                                                ? "text-brand-dark border-brand-dark translate-x-2"
+                                                : "text-brand-muted border-brand-dark/10 hover:text-brand-dark/40"
                                                 }`}
                                         >
                                             {item.title}
-                                        </span>
+                                        </button>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     </div>
 
-                    {/* ===== CENTER CONTENT (SCROLLS) ===== */}
-                    <div className="lg:col-span-6 space-y-24 md:space-y-32 lg:space-y-40">
-                        {items.map((item) => (
-                            <div key={item.id} data-section={item.id} className="min-h-[50vh] lg:min-h-[75vh]">
-                                <h3 className="text-3xl md:text-5xl font-black text-brand-dark mb-8 leading-tight">
-                                    {item.title}
-                                </h3>
+                    {/* ===== CENTER CONTENT (SCROLLABLE ONLY) ===== */}
+                    <div
+                        ref={scrollRef}
+                        className="lg:col-span-6 overflow-y-auto pr-4 scrollbar-hide"
+                    >
+                        <div className="space-y-32 py-10">
+                            {items.map((item) => (
+                                <div
+                                    key={item.id}
+                                    data-section={item.id}
+                                    className="min-h-[60vh] flex flex-col justify-center"
+                                >
+                                    <h3 className="text-3xl md:text-4xl font-black text-brand-dark mb-8 leading-tight tracking-tight uppercase">
+                                        {item.title}
+                                    </h3>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:block">
-                                    <div>
+                                    <div className="space-y-6">
                                         {item.description.map((text, i) => (
                                             <p
                                                 key={i}
-                                                className="text-brand-dark/70 leading-relaxed mb-6 text-lg font-medium"
+                                                className="text-brand-dark/70 leading-relaxed text-lg font-medium"
                                             >
                                                 {text}
                                             </p>
                                         ))}
                                     </div>
-                                    <div className="lg:hidden">
-                                        <img
-                                            src={item.image}
-                                            alt={item.title}
-                                            className="h-48 w-full rounded-2xl object-cover mb-10 shadow-lg"
-                                        />
+
+                                    {/* Mobile Image */}
+                                    <div className="mt-10 lg:hidden rounded-2xl overflow-hidden shadow-xl">
+                                        <img src={item.image} alt={item.title} className="w-full h-64 object-cover" />
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
 
-                    {/* ===== RIGHT IMAGE (STICKY) ===== */}
+                    {/* ===== RIGHT IMAGE (Sticky) ===== */}
                     <div className="lg:col-span-4 hidden lg:block">
                         <div className="sticky top-52">
-                            <motion.img
-                                key={active.image}
-                                src={active.image}
-                                alt={active.title}
-                                initial={{ opacity: 0, scale: 0.96 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5 }}
-                                className="h-[450px] w-full rounded-[32px] object-cover shadow-2xl shadow-brand-dark/10 grayscale hover:grayscale-0 transition-all duration-700 border border-brand-dark/5"
-                            />
+                            <div className="relative">
+                                <motion.div
+                                    key={active.image + "_overlay"}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="absolute inset-0 bg-brand-dark/5 rounded-[40px] z-10 pointer-events-none"
+                                />
+                                <motion.img
+                                    key={active.image}
+                                    src={active.image}
+                                    alt={active.title}
+                                    initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+                                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                                    transition={{ duration: 0.8, ease: "circOut" }}
+                                    className="h-[500px] w-full rounded-[40px] object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 border border-brand-dark/10 z-0"
+                                />
+                                <div className="absolute -bottom-6 -right-6 h-32 w-32 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
+                            </div>
                         </div>
                     </div>
 
                 </div>
             </div>
-        </section >
+        </section>
     );
 }

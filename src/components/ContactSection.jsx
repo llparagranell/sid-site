@@ -14,7 +14,7 @@ export default function ContactSection() {
                 }}
             />
 
-            <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 relative z-10">
+            <div className="mx-auto max-w-7xl px-0 sm:px-10 lg:px-16 relative z-10">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
@@ -24,7 +24,7 @@ export default function ContactSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7 }}
-                        className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left"
+                        className="max-w-xl mx-auto lg:mx-0 text-left px-6 sm:px-0"
                     >
                         {/* Small intro */}
                         <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
@@ -38,16 +38,25 @@ export default function ContactSection() {
                             </span>
                         </h2>
 
-                        <p className="mt-6 text-lg text-brand-dark/70 font-medium">
+                        <p className="mt-6 text-lg text-brand-dark/70 font-medium leading-relaxed hidden sm:block">
                             We are always ready to have a discussion about your project,
                             ideas, or challenges. Tell us what you're building, and we'll
                             explore how we can help bring it to life.
                         </p>
 
-                        <ul className="mt-10 space-y-4 text-brand-dark/60 text-left max-w-md mx-auto lg:mx-0 font-bold">
-                            <li className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-brand-dark" /> Clear communication & timelines</li>
-                            <li className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-brand-dark" /> Transparent pricing</li>
-                            <li className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-brand-dark" /> Long-term collaboration & support</li>
+                        <ul className="mt-10 space-y-4 text-brand-dark/60 font-bold hidden sm:block">
+                            <li className="flex items-start gap-3">
+                                <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-dark shrink-0" />
+                                <span>Clear communication & timelines</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-dark shrink-0" />
+                                <span>Transparent pricing</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-dark shrink-0" />
+                                <span>Long-term collaboration & support</span>
+                            </li>
                         </ul>
                     </motion.div>
 
@@ -59,11 +68,11 @@ export default function ContactSection() {
                         transition={{ duration: 0.7 }}
                         className="
               w-full
-              rounded-[48px]
-              border border-brand-dark/10
+              rounded-none sm:rounded-[48px]
+              border-y sm:border border-brand-dark/10
               bg-brand-accent/20
               backdrop-blur-sm
-              p-8 sm:p-14
+              p-8 md:p-14
               shadow-sm
             "
                     >
@@ -85,7 +94,7 @@ export default function ContactSection() {
                                 placeholder="Tell us about your project..."
                                 className="
                   w-full rounded-2xl border border-brand-dark/10
-                  bg-brand-bg px-4 py-3
+                  bg-brand-bg px-5 py-4
                   text-sm text-brand-dark
                   placeholder:text-brand-muted
                   focus:outline-none focus:ring-4 focus:ring-brand-dark/5
@@ -101,7 +110,7 @@ export default function ContactSection() {
                 rounded-2xl bg-brand-dark
                 px-8 py-5
                 text-base font-bold text-white
-                transition hover:bg-brand-dark/90 shadow-2xl shadow-brand-dark/10
+                transition hover:bg-brand-dark/95 shadow-2xl shadow-brand-dark/10
               "
                         >
                             Send message

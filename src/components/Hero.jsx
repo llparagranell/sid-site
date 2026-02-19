@@ -52,9 +52,9 @@ const FloatingIcon = ({ icon: Icon, x, y, delay = 0, color = "text-brand-dark/20
       delay
     }}
     style={{ position: 'absolute', left: x, top: y }}
-    className={`hidden lg:block z-0 pointer-events-none ${color}`}
+    className={`z-0 pointer-events-none ${color}`}
   >
-    <Icon size={size} />
+    <Icon className="w-5 h-5 md:w-auto md:h-auto" />
   </motion.div>
 );
 
@@ -103,25 +103,25 @@ export default function Hero() {
       />
 
       {/* Floating Cards */}
-      <div className="hidden lg:block absolute inset-0 pointer-events-none">
-        <FloatingCard x="15vw" y="18vh" layoutId="icon-Layers">
-          <Layers size={32} className="text-brand-dark " />
+      <div className="absolute inset-0 pointer-events-none">
+        <FloatingCard x="5vw" y="18vh" layoutId="icon-Layers">
+          <Layers className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
         </FloatingCard>
 
-        <FloatingCard x="8vw" y="62vh" layoutId="icon-PenTool">
-          <PenTool size={32} className="text-brand-dark" />
+        <FloatingCard x="8vw" y="75vh" layoutId="icon-PenTool">
+          <PenTool className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
         </FloatingCard>
 
         <FloatingCard x="82vw" y="12vh" layoutId="icon-Sparkles">
-          <Sparkles size={32} className="text-brand-dark" />
+          <Sparkles className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
         </FloatingCard>
 
-        <FloatingCard x="88vw" y="58vh" layoutId="icon-Zap">
-          <Zap size={32} className="text-brand-dark" />
+        <FloatingCard x="85vw" y="70vh" layoutId="icon-Zap">
+          <Zap className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
         </FloatingCard>
       </div>
 
-      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+      <div className="relative z-10 text-center px-4 md:px-6 max-w-6xl mx-auto">
         {/* Blurry Background Circle for Emphasis */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-brand-accent/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
@@ -130,21 +130,21 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter text-brand-dark leading-[0.95] md:leading-[0.9]"
+          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tighter text-brand-dark leading-[0.95] md:leading-[0.85] lg:leading-[0.8]"
         >
           Engineering MVPs<br />
           <span className="text-brand-dark/90">That Matter.</span>
         </motion.h1>
 
         {/* Description */}
-        <div className="mt-8">
+        <div className="mt-8 md:mt-12">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-brand-dark/70 text-lg md:text-xl max-w-xl mx-auto leading-relaxed font-medium"
+            className="text-brand-dark/70 text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed font-medium"
           >
-            We craft scalable MVPs delivering UX, rapid launches, validation, and business growth.
+            Develop. Grow. Dominate!
           </motion.p>
         </div>
 
@@ -158,11 +158,10 @@ export default function Hero() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-brand-dark/90 transition-all shadow-[0_20px_40px_rgba(48,54,79,0.1)] overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-brand-dark/95 transition-all shadow-[0_20px_40px_rgba(48,54,79,0.1)] overflow-hidden holographic-button"
           >
             <span className="relative z-10">Get Started Today</span>
             <ExternalLink size={18} className="relative z-10 text-brand-muted group-hover:text-white transition-colors" />
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand-muted to-transparent opacity-0 group-hover:opacity-20 transition-opacity" />
           </motion.button>
         </motion.div>
       </div>

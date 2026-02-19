@@ -25,7 +25,7 @@ export default function Footer() {
                 }}
             />
 
-            <div className="mx-auto max-w-7xl px-6 sm:px-16 relative z-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-16 relative z-10">
 
                 {/* Top divider */}
                 <motion.div

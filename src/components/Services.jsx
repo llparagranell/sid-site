@@ -1,104 +1,121 @@
-import { motion } from "framer-motion";
-import {
-    Layers,
-    PenTool,
-    Sparkles,
-    Zap,
-    ShoppingCart,
-    Palette,
-    Database,
-    Code2,
-    ArrowRight,
-} from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { services } from "../constants/servicesData";
 
-const services = [
-    {
-        icon: Layers,
-        title: "Web Development",
-        desc: "Custom websites and web applications built with modern technologies.",
-        points: ["Responsive websites", "SPA & SSR", "Performance optimization"],
-        layoutId: "icon-Layers"
-    },
-    {
-        icon: PenTool,
-        title: "Mobile App Development",
-        desc: "Native mobile solutions for iOS and Android.",
-        points: ["iOS & Android", "React Native / Flutter", "App Store deployment"],
-        layoutId: "icon-PenTool"
-    },
-    {
-        icon: Sparkles,
-        title: "AI & Machine Learning",
-        desc: "Intelligent solutions powered by artificial intelligence and ML.",
-        points: ["Predictive models", "NLP & CV", "Model deployment"],
-        layoutId: "icon-Sparkles"
-    },
-    {
-        icon: Zap,
-        title: "Cloud Solutions",
-        desc: "Scalable cloud infrastructure and migration services.",
-        points: ["Cloud migration", "Serverless", "Cost optimization"],
-        layoutId: "icon-Zap"
-    },
-    {
-        icon: ShoppingCart,
-        title: "E-Commerce Solutions",
-        desc: "Complete online store solutions with payment integration.",
-        points: ["Payments", "Inventory", "Conversion optimization"],
-    },
-    {
-        icon: Palette,
-        title: "UI/UX Design",
-        desc: "Beautiful, intuitive designs that users love.",
-        points: ["User research", "Prototyping", "Design systems"],
-    },
-    {
-        icon: Database,
-        title: "Database Management",
-        desc: "Robust database design, optimization, and maintenance.",
-        points: ["Schema design", "Backups", "Performance tuning"],
-    },
-    {
-        icon: Code2,
-        title: "Custom Software",
-        desc: "Tailored software solutions for unique business needs.",
-        points: ["Custom apps", "APIs", "Integrations"],
-    },
-];
+const TiltCard = ({ service, index }) => {
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
 
-const container = {
-    hidden: {},
-    show: {
-        transition: {
-            staggerChildren: 0.12,
-            delayChildren: 0.15,
-        },
-    },
-};
+    const mouseXSpring = useSpring(x);
+    const mouseYSpring = useSpring(y);
 
-const card = {
-    hidden: {
-        opacity: 0,
-        y: 40,
-        scale: 0.96,
-        filter: "blur(6px)",
-    },
-    show: {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        transition: {
-            duration: 0.55,
-            ease: [0.22, 1, 0.36, 1],
-        },
-    },
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+    const handleMouseMove = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const xPct = (mouseX / width) - 0.5;
+        const yPct = (mouseY / height) - 0.5;
+
+        x.set(xPct);
+        y.set(yPct);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
+
+    const Icon = service.icon;
+
+    return (
+        <motion.div
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX,
+                rotateY,
+                transformStyle: "preserve-3d",
+            }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-colors duration-500 hover:border-brand-dark/10"
+        >
+            {/* Spotlight Gradient */}
+            <motion.div
+                style={{
+                    background: useTransform(
+                        [mouseXSpring, mouseYSpring],
+                        ([mx, my]) => `radial-gradient(600px circle at ${(mx + 0.5) * 100}% ${(my + 0.5) * 100}%, rgba(30, 27, 121, 0.06), transparent 40%)`
+                    ),
+                }}
+                className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            />
+
+            <div
+                style={{
+                    transform: "translateZ(50px)",
+                    transformStyle: "preserve-3d",
+                }}
+                className="relative z-10 h-full p-8 flex flex-col"
+            >
+                {/* Icon Section */}
+                <div className="mb-8 p-1.5 inline-block rounded-2xl bg-brand-bg/50 border border-brand-dark/5 group-hover:bg-brand-dark group-hover:border-brand-dark transition-all duration-500 shadow-sm">
+                    <div className="h-14 w-14 rounded-xl bg-brand-dark text-white flex items-center justify-center group-hover:bg-white group-hover:text-brand-dark transition-all duration-500">
+                        <Icon size={24} />
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark/30 group-hover:text-brand-dark/50 transition-colors">
+                            {String(index + 1).padStart(2, "0")} / Service
+                        </span>
+                        <div className="h-[1px] w-8 bg-brand-dark/10 group-hover:bg-brand-dark/20 transition-colors" />
+                    </div>
+
+                    <h3 className="text-2xl font-black text-brand-dark mb-4 leading-none tracking-tight group-hover:translate-x-1 transition-transform duration-500">
+                        {service.title}
+                    </h3>
+
+                    <p className="text-brand-dark/60 text-sm leading-relaxed mb-8 group-hover:text-brand-dark/80 transition-colors">
+                        {service.desc}
+                    </p>
+
+                    <ul className="space-y-4">
+                        {service.points.map((point, idx) => (
+                            <li key={idx} className="flex items-center gap-4 text-[11px] font-bold text-brand-dark/40 group-hover:text-brand-dark transition-all duration-500 group-hover:translate-x-2" style={{ transitionDelay: `${idx * 50}ms` }}>
+                                <div className="h-1 w-1 rounded-full bg-brand-dark/40 group-hover:bg-brand-dark group-hover:scale-150 transition-all duration-500" />
+                                <span className="uppercase tracking-widest">{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Bottom Corner Detail */}
+                <div className="pt-6 border-t border-brand-dark/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-all duration-500">
+                    <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-brand-dark">Read More</span>
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+            </div>
+
+            {/* Subtle Gradient Overlay on Hover */}
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 via-transparent to-brand-dark/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        </motion.div>
+    );
 };
 
 export default function Services() {
     return (
         <section id="services" className="py-20 md:py-32 bg-brand-bg relative overflow-hidden">
-
             {/* Background Transitions / Grids */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
                 style={{
@@ -107,98 +124,45 @@ export default function Services() {
                 }}
             />
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10"
-                style={{
+            <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
 
-                    backgroundColor: ' #d3d8d52b',
-                    borderRadius: '50px',
-                    padding: '50px'
-                }}>
+                {/* Heading Block */}
+                <div className="bg-brand-accent/10 rounded-[40px] md:rounded-[60px] p-8 md:p-20 mb-16 relative overflow-hidden border border-brand-dark/5">
+                    <div className="absolute top-0 right-0 p-10 opacity-[0.03] text-brand-dark pointer-events-none">
+                        <Sparkles size={200} />
+                    </div>
 
-                {/* Heading */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center max-w-3xl mx-auto mb-20"
-                >
-                    <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
-                        Our Expertise
-                    </span>
-
-                    <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
-                        We build the <br className="hidden sm:block" />
-                        <span className="text-brand-dark italic font-light">
-                            Future of Digital
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center max-w-3xl mx-auto"
+                    >
+                        <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
+                            Our Expertise
                         </span>
-                    </h2>
 
-                    <p className="mt-6 text-brand-dark/70 text-lg leading-relaxed">
-                        From rapid MVP development to enterprise-level architecture,
-                        we deliver high-performance solutions tailored for growth.
-                    </p>
-                </motion.div>
+                        <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tighter">
+                            We build the <br className="hidden sm:block" />
+                            <span className="text-brand-dark italic font-light">
+                                Future of Digital
+                            </span>
+                        </h2>
+
+                        <p className="mt-8 text-brand-dark/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                            From rapid MVP development to enterprise-level architecture,
+                            we deliver high-performance solutions tailored for growth.
+                        </p>
+                    </motion.div>
+                </div>
 
                 {/* Cards Grid */}
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
-                >
-                    {services.map((service, i) => {
-                        const Icon = service.icon;
-
-                        return (
-                            <motion.div
-                                key={i}
-                                variants={card}
-                                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                                className="group relative rounded-3xl bg-brand-bg border border-brand-dark/10 px-8 py-10 hover:shadow-[0_20px_50px_rgba(48,54,79,0.08)] hover:border-brand-dark/20 transition-all duration-500"
-                            >
-                                {/* Active State Background Glow */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/30 to-transparent opacity-100 group-hover:opacity-0 rounded-3xl transition-all duration-500" />
-
-                                {/* Icon Container */}
-                                <div className="mb-6 relative">
-                                    <motion.div
-                                        layoutId={service.layoutId}
-                                        transition={{ duration: 0.8, ease: "easeInOut" }}
-                                        className="h-16 w-16 rounded-2xl bg-brand-dark text-white flex items-center justify-center  transition-all duration-500 shadow-sm border border-brand-dark/10"
-                                    >
-                                        <Icon size={28} />
-                                    </motion.div>
-                                    {/* Small floating detail */}
-                                    {/* <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-brand-muted blur-[2px] opacity-100 group-hover:opacity-0 transition-opacity" /> */}
-                                </div>
-
-                                <h3 className="text-xl font-bold text-brand-dark mb-3">
-                                    {service.title}
-                                </h3>
-
-                                <p className="text-brand-dark/60 text-sm leading-relaxed mb-6 group-hover:text-brand-dark/80 transition-colors">
-                                    {service.desc}
-                                </p>
-
-                                <ul className="space-y-3">
-                                    {service.points.map((point, idx) => (
-                                        <li key={idx} className="flex items-center gap-3 text-xs font-bold text-brand-muted group-hover:text-brand-dark/70 transition-colors">
-                                            <div className="h-1 w-1 rounded-full bg-brand-muted group-hover:bg-brand-dark" />
-                                            {point}
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                {/* Bottom corner arrow */}
-                                <div className="mt-8 flex justify-end opacity-100 group-hover:opacity-0 transition-opacity">
-
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-                </motion.div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {services.map((service, i) => (
+                        <TiltCard key={i} service={service} index={i} />
+                    ))}
+                </div>
             </div>
         </section>
     );
