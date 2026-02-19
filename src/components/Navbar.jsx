@@ -217,19 +217,25 @@ export default function Navbar() {
                           {(link.name === "SERVICES"
                             ? services
                             : industries
-                          ).map((item, idx) => (
-                            <a
-                              key={idx}
-                              href={`#${link.name === "SERVICES"
-                                ? "services"
-                                : "industries"
-                                }`}
-                              onClick={() => setOpen(false)}
-                              className="text-sm font-bold text-brand-dark/60 py-3 hover:text-brand-dark transition-colors"
-                            >
-                              {item.title}
-                            </a>
-                          ))}
+                          ).map((item, idx) => {
+                            const ItemIcon = item.icon;
+                            return (
+                              <a
+                                key={idx}
+                                href={`#${link.name === "SERVICES"
+                                  ? "services"
+                                  : "industries"
+                                  }`}
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-4 py-4 text-sm font-bold text-brand-dark/60 hover:text-brand-dark transition-colors group"
+                              >
+                                <div className="p-2 bg-brand-dark/5 rounded-lg group-hover:bg-brand-dark group-hover:text-white transition-colors">
+                                  <ItemIcon size={18} />
+                                </div>
+                                <span>{item.title}</span>
+                              </a>
+                            );
+                          })}
                         </motion.div>
                       )}
                   </AnimatePresence>

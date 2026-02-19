@@ -1,35 +1,39 @@
 ﻿import {
-    Monitor,
     Truck,
     ClipboardList,
-    Briefcase
+    Briefcase,
+    HeartPulse,
+    GraduationCap,
+    Wallet,
+    ShoppingBag,
+    Code2
 } from "lucide-react";
 
 export const industries = [
     {
         title: "HealthCare",
-        icon: Monitor,
-        desc: "Cutting-edge software solutions and IT infrastructure."
+        icon: HeartPulse,
+        desc: "Smarter healthcare delivery through digital innovation."
     },
     {
         title: "Education",
-        icon: Monitor,
-        desc: "Cutting-edge software solutions and IT infrastructure."
+        icon: GraduationCap,
+        desc: "Transforming learning experiences with custom EdTech."
     },
     {
         title: "Fintech",
-        icon: Monitor,
-        desc: "Cutting-edge software solutions and IT infrastructure."
+        icon: Wallet,
+        desc: "Secure, scalable, and modern financial ecosystem."
     },
     {
         title: "E-commerce",
-        icon: Monitor,
-        desc: "Cutting-edge software solutions and IT infrastructure."
+        icon: ShoppingBag,
+        desc: "High-conversion digital storefronts and marketplaces."
     },
     {
         title: "IT & SOFTWARE",
-        icon: Monitor,
-        desc: "Cutting-edge software solutions and IT infrastructure."
+        icon: Code2,
+        desc: "Full-cycle software engineering and cloud solutions."
     },
     {
         title: "LOGISTICS",
