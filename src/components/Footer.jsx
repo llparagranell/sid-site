@@ -10,6 +10,7 @@ import {
     FaYoutube,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 import logo from "../assets/logo.png";
 
@@ -85,10 +86,16 @@ export default function Footer() {
                     <div>
                         <h4 className="text-brand-dark font-black mb-6 uppercase tracking-widest text-xs">Company</h4>
                         <ul className="space-y-3 text-sm font-bold">
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">About Us</li>
+                            <li>
+                                <Link to="/about" className="hover:text-brand-dark transition-all cursor-pointer">About Us</Link>
+                            </li>
                             <li className="hover:text-brand-dark transition-all cursor-pointer">How we work</li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">Careers</li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">Join us</li>
+                            <li>
+                                <Link to="/case-studies" className="hover:text-brand-dark transition-all cursor-pointer">Case Studies</Link>
+                            </li>
+                            <li>
+                                <Link to="/blog" className="hover:text-brand-dark transition-all cursor-pointer">Blog</Link>
+                            </li>
                         </ul>
                     </div>
 

@@ -137,7 +137,7 @@ export default function WorkPhilosophy() {
                                                 const el = scrollRef.current.querySelector(`[data-section="${item.id}"]`);
                                                 el?.scrollIntoView({ behavior: 'smooth' });
                                             }}
-                                            className={`block border-b-2 pb-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all text-left w-full ${active.id === item.id
+                                            className={`block border-b-2 pb-3 text-[12px] font-black uppercase tracking-[0.2em] transition-all text-left w-full ${active.id === item.id
                                                 ? "text-brand-dark border-brand-dark translate-x-2"
                                                 : "text-brand-muted border-brand-dark/10 hover:text-brand-dark/40"
                                                 }`}

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Menu, X, ChevronDown, ExternalLink, Box, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
 
@@ -8,7 +9,9 @@ export default function Navbar({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const location = useLocation();
   const dropdownRef = useRef(null);
+  const isHomePage = location.pathname === "/";
 
   /* ---------------- SCROLL EFFECT ---------------- */
   useEffect(() => {
@@ -30,12 +33,20 @@ export default function Navbar({ onBookClick }) {
   }, []);
 
   const navLinks = [
-    { name: "SERVICES", href: "#services", hasDropdown: true },
-    { name: "INDUSTRIES", href: "#industries", hasDropdown: true },
-    { name: "ABOUT US", href: "#about" },
-    { name: "BLOG", href: "#blog" },
-    { name: "CASE STUDIES", href: "#case-studies" },
+    { name: "SERVICES", href: isHomePage ? "#services" : "/#services", hasDropdown: true },
+    { name: "INDUSTRIES", href: isHomePage ? "#industries" : "/#industries", hasDropdown: true },
+    { name: "CASE STUDIES", href: "/case-studies" },
+    { name: "BLOG", href: "/blog" },
+    { name: "ABOUT US", href: "/about" },
   ];
+
+  const handleNavClick = (href) => {
+    setOpen(false);
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   /* ---------------- DROPDOWN ---------------- */
   const DropdownContent = ({ items, type }) => (
@@ -45,7 +56,7 @@ export default function Navbar({ onBookClick }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="absolute top-[90%] left-1/2 -translate-x-1/2 mt-2 w-80 bg-white border border-brand-dark/10 rounded-2xl shadow-2xl overflow-hidden p-2 z-50"
+      className="absolute top-[90%] left-1/2 -translate-x-1/2 mt-2 w-64 bg-white border border-brand-dark/10 rounded-2xl shadow-2xl overflow-hidden p-2 z-50"
     >
       <div className="grid grid-cols-1 gap-1">
         {items.map((item, idx) => {
@@ -54,18 +65,13 @@ export default function Navbar({ onBookClick }) {
             <a
               key={idx}
               href={`#${type}`}
-              className="flex items-start gap-3 p-3 rounded-xl hover:bg-brand-bg transition-all duration-300 group/item"
+              className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-bg transition-all duration-300 group/item"
             >
               <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
                 <Icon size={18} />
               </div>
-              <div>
-                <div className="text-xs font-bold text-brand-dark tracking-wide">
-                  {item.title}
-                </div>
-                <div className="text-[10px] text-brand-dark/50 line-clamp-1 group-hover/item:text-brand-dark/70 transition-colors">
-                  {item.desc}
-                </div>
+              <div className="text-xs font-bold text-brand-dark tracking-wide">
+                {item.title}
               </div>
             </a>
           );
@@ -84,7 +90,7 @@ export default function Navbar({ onBookClick }) {
       <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 md:px-12">
 
         {/* LOGO */}
-        <a href="#" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-2 group">
           <motion.div
             layout
             className="bg-brand-dark rounded-lg p-1.5 flex items-center justify-center shadow-lg group-hover:shadow-brand-dark/20 transition-all duration-300"
@@ -97,7 +103,7 @@ export default function Navbar({ onBookClick }) {
           >
             Devgrowthsolutions
           </span>
-        </a>
+        </Link>
 
         {/* DESKTOP NAV */}
         <nav className="hidden lg:flex items-center gap-8">
@@ -108,22 +114,41 @@ export default function Navbar({ onBookClick }) {
               onMouseEnter={() => link.hasDropdown && setActiveDropdown(link.name)}
               onMouseLeave={() => link.hasDropdown && setActiveDropdown(null)}
             >
-              <a
-                href={link.href}
-                className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark/60 hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
-              >
-                {link.name}
-                {link.hasDropdown && (
-                  <ChevronDown
-                    size={14}
-                    className={`transition-transform duration-300 ${activeDropdown === link.name ? "rotate-180" : ""
-                      }`}
-                  />
-                )}
-                {/* Fixed Underline Animation */}
-                <span className={`absolute bottom-2 left-0 h-0.5 bg-brand-dark transition-all duration-300 origin-left ${activeDropdown === link.name ? "w-full" : "w-0 group-hover:w-full"
-                  }`} />
-              </a>
+              {link.href.startsWith("/") ? (
+                <Link
+                  to={link.href}
+                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark/60 hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
+                >
+                  {link.name}
+                  {link.hasDropdown && (
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${activeDropdown === link.name ? "rotate-180" : ""
+                        }`}
+                    />
+                  )}
+                  {/* Fixed Underline Animation */}
+                  <span className={`absolute bottom-2 left-0 h-0.5 bg-brand-dark transition-all duration-300 origin-left ${activeDropdown === link.name ? "w-full" : "w-0 group-hover:w-full"
+                    }`} />
+                </Link>
+              ) : (
+                <a
+                  href={link.href}
+                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark/60 hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
+                >
+                  {link.name}
+                  {link.hasDropdown && (
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${activeDropdown === link.name ? "rotate-180" : ""
+                        }`}
+                    />
+                  )}
+                  {/* Fixed Underline Animation */}
+                  <span className={`absolute bottom-2 left-0 h-0.5 bg-brand-dark transition-all duration-300 origin-left ${activeDropdown === link.name ? "w-full" : "w-0 group-hover:w-full"
+                    }`} />
+                </a>
+              )}
 
               <AnimatePresence>
                 {activeDropdown === link.name && (
@@ -183,31 +208,43 @@ export default function Navbar({ onBookClick }) {
             <div className="flex flex-col p-8 gap-8 pb-32">
               {navLinks.map((link) => (
                 <div key={link.name} className="flex flex-col gap-4">
-                  <button
-                    onClick={() => {
-                      if (link.hasDropdown) {
-                        setActiveDropdown(
-                          activeDropdown === link.name
-                            ? null
-                            : link.name
-                        );
-                      } else {
-                        setOpen(false);
-                      }
-                    }}
-                    className="flex justify-between items-center text-lg font-black text-brand-dark uppercase tracking-tighter w-full text-left"
-                  >
-                    {link.name}
-                    {link.hasDropdown && (
-                      <ChevronDown
-                        size={24}
-                        className={`transition-transform duration-500 ${activeDropdown === link.name
-                          ? "rotate-180"
-                          : ""
-                          }`}
-                      />
-                    )}
-                  </button>
+                  {link.href.startsWith("/") && !link.hasDropdown ? ( // Only use Link                  {link.href.startsWith("/") && !link.hasDropdown ? (
+                    <Link
+                      to={link.href}
+                      onClick={() => handleNavClick(link.href)}
+                      className="flex justify-between items-center text-lg font-black text-brand-dark uppercase tracking-tighter w-full text-left"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      onClick={(e) => {
+                        if (link.hasDropdown) {
+                          e.preventDefault();
+                          setActiveDropdown(
+                            activeDropdown === link.name
+                              ? null
+                              : link.name
+                          );
+                        } else {
+                          handleNavClick(link.href);
+                        }
+                      }}
+                      className="flex justify-between items-center text-lg font-black text-brand-dark uppercase tracking-tighter w-full text-left"
+                    >
+                      {link.name}
+                      {link.hasDropdown && (
+                        <ChevronDown
+                          size={24}
+                          className={`transition-transform duration-500 ${activeDropdown === link.name
+                            ? "rotate-180"
+                            : ""
+                            }`}
+                        />
+                      )}
+                    </a>
+                  )}
 
                   <AnimatePresence>
                     {link.hasDropdown &&
