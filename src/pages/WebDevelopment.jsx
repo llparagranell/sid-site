@@ -105,6 +105,25 @@ const processSteps = [
     }
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, ease: "easeOut" }
+    }
+};
+
 export default function WebDevelopment() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
     const toggleBooking = () => setIsBookingOpen(!isBookingOpen);
@@ -121,6 +140,7 @@ export default function WebDevelopment() {
                         <motion.span
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
                             className="inline-block mb-6 text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40"
                         >
                             WEB DEVELOPMENT SERVICES
@@ -128,16 +148,29 @@ export default function WebDevelopment() {
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
                             className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-brand-dark mb-12"
                         >
                             From Idea to <br />
-                            <span className="italic font-light text-brand-dark/70">Market-Ready</span> <br />
+                            <motion.span
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.5 }}
+                                className="italic font-light text-brand-dark/70"
+                            >
+                                Market-Ready
+                            </motion.span> <br />
                             Website.
                         </motion.h1>
 
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12"
+                        >
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
+                                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={toggleBooking}
                                 className="bg-brand-dark text-white px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-sm shadow-2xl hover:shadow-brand-dark/20 transition-all cursor-pointer flex items-center gap-3"
@@ -145,16 +178,38 @@ export default function WebDevelopment() {
                                 Start Your Project <Rocket size={18} />
                             </motion.button>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
+                                whileHover={{ scale: 1.05, borderColor: "rgba(0,0,0,0.3)" }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={toggleBooking}
                                 className="bg-white border-2 border-brand-dark/10 text-brand-dark px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-sm transition-all cursor-pointer"
                             >
                                 Book a Free Consultation
                             </motion.button>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
+
+                {/* Decorative Elements */}
+                <motion.div
+                    animate={{
+                        y: [0, -20, 0],
+                        rotate: [0, 5, 0]
+                    }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-1/4 right-[10%] opacity-10 pointer-events-none hidden lg:block"
+                >
+                    <Code2 size={120} />
+                </motion.div>
+                <motion.div
+                    animate={{
+                        y: [0, 20, 0],
+                        rotate: [0, -5, 0]
+                    }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute bottom-1/4 left-[5%] opacity-10 pointer-events-none hidden lg:block"
+                >
+                    <Globe size={100} />
+                </motion.div>
             </section>
 
             {/* 2. Overview Section */}
@@ -170,15 +225,21 @@ export default function WebDevelopment() {
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
                         >
                             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-none mb-10">
                                 Crafting Scalable <br />
                                 <span className="text-brand-accent italic font-light">& High-Impact</span> <br />
                                 Experiences.
                             </h2>
-                            <div className="h-1 w-20 bg-brand-accent mb-10" />
+                            <motion.div
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 80 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1, delay: 0.5 }}
+                                className="h-1 bg-brand-accent mb-10"
+                            />
                             <div className="space-y-6 text-lg text-white/60 font-medium leading-relaxed">
                                 <p>At Devgrowth Solutions, we build websites that are more than just digital presence — they are growth engines. Our web development services focus on performance, scalability, and user experience to help startups and businesses launch confidently.</p>
                                 <p>Whether you need a landing page to validate your MVP or a full-scale web application, we deliver secure, responsive, and future-ready solutions built with modern technologies.</p>
@@ -190,27 +251,40 @@ export default function WebDevelopment() {
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
+                                transition={{ duration: 0.8, ease: "backOut" }}
                                 className="grid grid-cols-2 gap-4"
                             >
                                 <div className="space-y-4 pt-12">
-                                    <div className="bg-white/5 backdrop-blur-sm p-8 rounded-[32px] border border-white/10 flex flex-col items-center text-center">
+                                    <motion.div
+                                        whileHover={{ y: -5, backgroundColor: "rgba(255,255,255,0.08)" }}
+                                        className="bg-white/5 backdrop-blur-sm p-8 rounded-[32px] border border-white/10 flex flex-col items-center text-center transition-colors shadow-2xl"
+                                    >
                                         <Monitor className="text-brand-accent mb-4" size={40} />
                                         <span className="text-xs font-bold uppercase tracking-widest text-white/40">Responsive</span>
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-sm p-8 rounded-[32px] border border-white/10 flex flex-col items-center text-center">
+                                    </motion.div>
+                                    <motion.div
+                                        whileHover={{ y: -5, backgroundColor: "rgba(255,255,255,0.15)" }}
+                                        className="bg-white/10 backdrop-blur-sm p-8 rounded-[32px] border border-white/10 flex flex-col items-center text-center transition-colors shadow-2xl"
+                                    >
                                         <Zap className="text-brand-accent mb-4" size={40} />
                                         <span className="text-xs font-bold uppercase tracking-widest text-white/40">Fast</span>
-                                    </div>
+                                    </motion.div>
                                 </div>
                                 <div className="space-y-4">
-                                    <div className="bg-white/10 backdrop-blur-sm p-8 rounded-[32px] border border-white/10 flex flex-col items-center text-center">
+                                    <motion.div
+                                        whileHover={{ y: -5, backgroundColor: "rgba(255,255,255,0.15)" }}
+                                        className="bg-white/10 backdrop-blur-sm p-8 rounded-[32px] border border-white/10 flex flex-col items-center text-center transition-colors shadow-2xl"
+                                    >
                                         <ShieldCheck className="text-brand-accent mb-4" size={40} />
                                         <span className="text-xs font-bold uppercase tracking-widest text-white/40">Secure</span>
-                                    </div>
-                                    <div className="bg-brand-accent p-8 rounded-[32px] flex flex-col items-center text-center">
+                                    </motion.div>
+                                    <motion.div
+                                        whileHover={{ y: -5, scale: 1.02 }}
+                                        className="bg-brand-accent p-8 rounded-[32px] flex flex-col items-center text-center shadow-2xl"
+                                    >
                                         <Sparkles className="text-brand-dark mb-4" size={40} />
                                         <span className="text-xs font-bold uppercase tracking-widest text-brand-dark">Modern</span>
-                                    </div>
+                                    </motion.div>
                                 </div>
                             </motion.div>
                         </div>
@@ -221,20 +295,33 @@ export default function WebDevelopment() {
             {/* 3. Services Grid */}
             <section className="py-24 md:py-40 bg-brand-bg relative">
                 <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-20"
+                    >
                         <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">EXPERT WEB SOLUTIONS</span>
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Our Web Development <br /> <span className="italic font-light">Services.</span></h2>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
                         {services.map((service, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="p-10 rounded-[40px] bg-white border border-brand-dark/5 hover:shadow-2xl transition-all duration-500 group"
+                                variants={itemVariants}
+                                whileHover={{
+                                    y: -10,
+                                    boxShadow: "0 30px 60px rgba(0,0,0,0.08)",
+                                    borderColor: "rgba(30, 27, 121, 0.2)"
+                                }}
+                                className="p-10 rounded-[40px] bg-white border border-brand-dark/5 hover:shadow-2xl transition-all duration-500 group relative z-10"
                             >
                                 <div className="h-16 w-16 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500">
                                     <service.icon size={32} />
@@ -243,70 +330,106 @@ export default function WebDevelopment() {
                                 <p className="text-brand-dark/50 font-medium leading-relaxed">{service.desc}</p>
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
             {/* 4. Tech Stack */}
-            <section className="py-24 md:py-40 bg-brand-accent/10">
+            <section className="py-24 md:py-40 bg-brand-accent/10 relative overflow-hidden">
                 <div className="mx-auto max-w-7xl px-6 lg:px-16">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-20 gap-8">
-                        <div>
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                        >
                             <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">OUR TOOLKIT</span>
                             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Technologies <br /> <span className="italic font-light">We Use.</span></h2>
-                        </div>
-                        <p className="max-w-md text-brand-dark/60 font-medium text-lg lg:text-xl">
+                        </motion.div>
+                        <motion.p
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="max-w-md text-brand-dark/60 font-medium text-lg lg:text-xl"
+                        >
                             We leverage modern, scalable, and industry-leading technologies to build high-performing web solutions.
-                        </p>
+                        </motion.p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 text-center">
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 text-center"
+                    >
                         {techStack.map((tech, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.05 }}
-                                className="p-6 rounded-3xl bg-white shadow-sm border border-brand-dark/5 flex flex-col items-center justify-center group hover:bg-brand-dark transition-all duration-500"
+                                variants={itemVariants}
+                                whileHover={{
+                                    scale: 1.05,
+                                    backgroundColor: "rgba(30, 27, 121, 1)",
+                                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
+                                }}
+                                className="p-6 rounded-3xl bg-white shadow-sm border border-brand-dark/5 flex flex-col items-center justify-center group transition-all duration-500"
                             >
                                 <tech.icon className="text-brand-dark group-hover:text-brand-accent mb-4" size={32} />
-                                <span className="text-xs font-black uppercase tracking-widest text-brand-dark/40 group-hover:text-white/40 block mb-1">{tech.category}</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40 group-hover:text-white/40 block mb-1">{tech.category}</span>
                                 <span className="text-sm font-bold text-brand-dark group-hover:text-white">{tech.name}</span>
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
             {/* 5. Process Section */}
-            <section className="py-24 md:py-40 bg-brand-bg relative">
+            <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
                 <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-20"
+                    >
                         <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">THE ROADMAP</span>
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Our Development <br /> <span className="italic font-light">Process.</span></h2>
-                    </div>
+                    </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {processSteps.map((step, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-50px" }}
-                                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                                viewport={{ once: true, margin: "-100px" }}
+                                transition={{ duration: 0.8, delay: idx * 0.1 }}
                                 className="relative p-12 rounded-[48px] bg-white border border-brand-dark/5 hover:shadow-2xl transition-all duration-500 group overflow-hidden"
                             >
-                                <span className="absolute top-8 right-12 text-6xl font-black text-brand-dark/5 group-hover:text-brand-accent/20 transition-colors z-0">
+                                <motion.span
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 1, delay: 0.3 + idx * 0.1 }}
+                                    className="absolute top-8 right-12 text-6xl font-black text-brand-dark/5 group-hover:text-brand-accent/20 transition-colors z-0"
+                                >
                                     {step.id}
-                                </span>
+                                </motion.span>
                                 <div className="relative z-10">
-                                    <div className="h-14 w-14 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500">
+                                    <motion.div
+                                        whileHover={{ rotate: 12, scale: 1.1 }}
+                                        className="h-14 w-14 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500"
+                                    >
                                         <step.icon size={28} />
-                                    </div>
+                                    </motion.div>
                                     <h3 className="text-2xl font-black text-brand-dark mb-4 tracking-tighter">{step.title}</h3>
                                     <p className="text-brand-dark/50 font-medium leading-relaxed">{step.desc}</p>
                                 </div>
+                                <motion.div
+                                    className="absolute bottom-0 left-0 h-1 bg-brand-accent"
+                                    initial={{ width: 0 }}
+                                    whileHover={{ width: "100%" }}
+                                    transition={{ duration: 0.4 }}
+                                />
                             </motion.div>
                         ))}
                     </div>
@@ -316,29 +439,29 @@ export default function WebDevelopment() {
             {/* Final CTA */}
             <section className="py-24 md:py-40 bg-brand-bg">
                 <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="relative rounded-[80px] bg-brand-dark p-12 md:p-32 text-center overflow-hidden shadow-2xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="relative rounded-[80px] bg-brand-dark p-12 md:p-32 text-center overflow-hidden shadow-2xl"
+                    >
                         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(211,216,213,0.1),transparent_70%)]" />
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            whileInView={{ scale: 1, opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="relative z-10"
-                        >
+                        <div className="relative z-10">
                             <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] tracking-tighter mb-10 uppercase">
                                 Let's build <br />
                                 YOUR <span className="text-brand-accent italic font-light lowercase">digital</span> <br />
                                 future.
                             </h2>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.1, boxShadow: "0 0 30px rgba(162, 237, 219, 0.3)" }}
+                                whileTap={{ scale: 0.9 }}
                                 onClick={toggleBooking}
                                 className="bg-brand-accent text-brand-dark px-12 py-6 rounded-3xl font-black uppercase tracking-widest transition-all shadow-xl hover:shadow-brand-accent/20 cursor-pointer flex items-center gap-3 mx-auto mt-10"
                             >
                                 Start Your Project <Sparkles size={18} />
                             </motion.button>
-                        </motion.div>
-                    </div>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
