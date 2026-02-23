@@ -15,14 +15,16 @@ export const services = [
         title: "Web Development",
         desc: "Custom websites and web applications built with modern technologies.",
         points: ["Responsive websites", "SPA & SSR", "Performance optimization"],
-        layoutId: "icon-Layers"
+        layoutId: "icon-Layers",
+        path: "/services/web-development"
     },
     {
         icon: PenTool,
         title: "Mobile App Development",
         desc: "Native mobile solutions for iOS and Android.",
         points: ["iOS & Android", "React Native / Flutter", "App Store deployment"],
-        layoutId: "icon-PenTool"
+        layoutId: "icon-PenTool",
+        path: "/services/mobile-app-development"
     },
     {
         icon: Sparkles,

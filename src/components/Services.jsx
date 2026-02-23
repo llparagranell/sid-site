@@ -1,5 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import { services } from "../constants/servicesData";
 
 const TiltCard = ({ service, index }) => {
@@ -33,7 +34,7 @@ const TiltCard = ({ service, index }) => {
 
     const Icon = service.icon;
 
-    return (
+    const CardContent = (
         <motion.div
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -46,7 +47,7 @@ const TiltCard = ({ service, index }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-colors duration-500 hover:border-brand-dark/10"
+            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-colors duration-500 hover:border-brand-dark/10 cursor-pointer"
         >
             {/* Spotlight Gradient */}
             <motion.div
@@ -111,6 +112,12 @@ const TiltCard = ({ service, index }) => {
             <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 via-transparent to-brand-dark/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
         </motion.div>
     );
+
+    if (service.path) {
+        return <Link to={service.path} className="block w-full">{CardContent}</Link>;
+    }
+
+    return CardContent;
 };
 
 export default function Services() {

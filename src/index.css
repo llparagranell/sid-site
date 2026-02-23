@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* --color-brand-dark: darkblue; */
+  /* --color-brand-dark: #1434A4; */
 
   --color-brand-dark: #1e1b4b;
   --color-brand-muted: #64748b;
@@ -30,7 +30,23 @@ body {
   font-family: 'Outfit', sans-serif;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  @apply text-base md:text-lg;
 }
+
+@layer base {
+  h1 {
+    @apply text-4xl sm:text-5xl md:text-7xl lg:text-9xl tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-7xl tracking-tight;
+  }
+}
+
+.mx-auto {
+  @apply px-4 sm:px-8 md:px-12 lg:px-16;
+}
+
 
 .bg-noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");

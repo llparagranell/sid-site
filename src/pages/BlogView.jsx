@@ -20,7 +20,7 @@ export default function BlogView() {
         readTime: "8 min read",
         author: "DevGrowth Team",
         content: `
-            <p className="text-lg md:text-xl text-brand-dark/80 leading-relaxed mb-8 font-medium">
+            <p className="text-xl md:text-2xl text-brand-dark/90 leading-relaxed mb-10 font-medium tracking-tight">
                 Building a Minimum Viable Product (MVP) is just the beginning. The real challenge lies in architecture 
                 decisions that allow your product to grow from ten users to ten thousand without requiring 
                 a complete technical overhaul.
@@ -91,7 +91,7 @@ export default function BlogView() {
             <article className="py-24 relative">
                 <div className="mx-auto max-w-3xl px-6 relative z-10">
                     <div
-                        className="prose prose-lg max-w-none prose-headings:text-brand-dark prose-p:text-brand-dark/70 prose-strong:text-brand-dark"
+                        className="prose prose-base md:prose-lg max-w-none prose-headings:text-brand-dark prose-p:text-brand-dark/80 prose-strong:text-brand-dark prose-li:text-brand-dark/80"
                         dangerouslySetInnerHTML={{ __html: post.content }}
                     />
 

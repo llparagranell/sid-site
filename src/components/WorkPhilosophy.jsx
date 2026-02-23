@@ -6,8 +6,8 @@ const items = [
         id: "clients",
         title: "Putting Clients First",
         description: [
-            "We begin every project by deeply understanding your business goals, users, and challenges.",
-            "This ensures the solutions we build are not just technically strong but strategically aligned with your growth and long-term success.",
+            "At Devgrowth Solutions, every project starts with understanding your vision, business goals, and market challenges. We listen before we build.",
+            "Whether you're a startup, founder, or SME, we align technology decisions with your growth roadmap. Our priority is delivering market-ready MVPs that solve real problems and create measurable impact from day one.",
         ],
         image:
             "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80",
@@ -16,8 +16,8 @@ const items = [
         id: "innovation",
         title: "Innovation Drives Us",
         description: [
-            "We adopt modern technologies, efficient development practices, and creative design approaches to deliver future-ready digital products.",
-            "Innovation helps us build solutions that remain scalable, competitive, and adaptable.",
+            "We embrace modern technologies and forward-thinking strategies to build scalable digital products. Using Flutter, React, MERN, Next.js, WordPress, Shopify, and AI solutions, we craft high-performance applications.",
+            "Innovation for us means building smarter, faster, and future-ready MVPs that give startups a competitive advantage.",
         ],
         image:
             "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80",
@@ -26,8 +26,8 @@ const items = [
         id: "partners",
         title: "Partners, Not Vendors",
         description: [
-            "We work alongside our clients as technology partners.",
-            "Our focus is on building lasting relationships.",
+            "We don’t just deliver projects — we build long-term partnerships. From ideation to launch and beyond, we provide end-to-end support to ensure your product succeeds.",
+            "Our team collaborates closely with founders and SMEs, offering strategic guidance, technical expertise, and continuous improvements to help you scale confidently.",
         ],
         image:
             "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=900&q=80",
@@ -36,8 +36,8 @@ const items = [
         id: "quality",
         title: "Quality & Trust First",
         description: [
-            "From clean code architecture to transparent communication.",
-            "Reliability and performance come first.",
+            "Quality is at the core of everything we build. From clean code architecture to intuitive UI/UX design, we ensure reliability, security, and performance.",
+            "We follow structured development processes and transparent communication, so you always stay informed. Our commitment to trust ensures your product is built to perform today and scale tomorrow.",
         ],
         image:
             "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
@@ -46,8 +46,8 @@ const items = [
         id: "learning",
         title: "Continuous Learning",
         description: [
-            "We stay updated with new tools and frameworks.",
-            "Modern, efficient solutions always.",
+            "Technology evolves rapidly, and so do we. Our team continuously upgrades skills in AI, cloud solutions, and modern development frameworks to deliver cutting-edge solutions.",
+            "By staying ahead of trends and tools, we ensure that every MVP we build is not just current but future-ready and adaptable to market changes.",
         ],
         image:
             "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",

@@ -62,15 +62,17 @@ export default function Hero({ onBookClick }) {
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-brand-bg text-brand-dark flex items-center justify-center py-20 mt-8">
 
-      {/* Decorative Floating Icons */}
-      <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.1} size={32} />
-      <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={0.2} size={28} />
-      <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={0.3} size={36} />
-      <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.15} size={30} />
-      <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={0.4} size={20} />
-      <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={0.25} size={24} />
-      <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={0.5} size={22} />
-      <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.05} size={26} />
+      {/* Decorative Floating Icons - Hidden on Mobile */}
+      <div className="hidden lg:block pointer-events-none">
+        <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.1} size={32} />
+        <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={0.2} size={28} />
+        <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={0.3} size={36} />
+        <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.15} size={30} />
+        <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={0.4} size={20} />
+        <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={0.25} size={24} />
+        <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={0.5} size={22} />
+        <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.05} size={26} />
+      </div>
 
       {/* Background Grid Lines */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -102,8 +104,8 @@ export default function Hero({ onBookClick }) {
         }}
       />
 
-      {/* Floating Cards */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Floating Cards - Hidden on Mobile */}
+      <div className="absolute inset-0 pointer-events-none hidden lg:block">
         <FloatingCard x="5vw" y="18vh" layoutId="icon-Layers">
           <Layers className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
         </FloatingCard>
@@ -130,10 +132,10 @@ export default function Hero({ onBookClick }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tighter text-brand-dark leading-[0.95] md:leading-[0.85] lg:leading-[0.8]"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tighter text-brand-dark leading-[1.1] md:leading-[0.85] lg:leading-[0.8]"
         >
           Engineering MVPs<br />
-          <span className="text-brand-dark/90">That Matter.</span>
+          <span className="text-brand-dark/90 text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl">That Matter.</span>
         </motion.h1>
 
         {/* Description */}
@@ -158,10 +160,10 @@ export default function Hero({ onBookClick }) {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-brand-dark/95 transition-all shadow-[0_20px_40px_rgba(48,54,79,0.1)] overflow-hidden cursor-pointer w-full sm:w-auto"
+            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-brand-dark/95 transition-all shadow-xl overflow-hidden cursor-pointer w-full sm:w-auto"
           >
             <span className="relative z-10">Get Started Today</span>
-            <ExternalLink size={18} className="relative z-10 text-brand-muted group-hover:text-white transition-colors" />
+            <ExternalLink size={16} className="relative z-10 text-brand-muted group-hover:text-white transition-colors" />
             <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.button>
 
@@ -169,9 +171,9 @@ export default function Hero({ onBookClick }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onBookClick}
-            className="group relative inline-flex items-center justify-center gap-3 bg-white text-brand-dark border-2 border-brand-dark/10 px-10 py-5 rounded-2xl font-bold text-lg hover:border-brand-dark transition-all cursor-pointer w-full sm:w-auto shadow-sm hover:shadow-xl"
+            className="group relative inline-flex items-center justify-center gap-3 bg-white text-brand-dark border-2 border-brand-dark/10 px-6 py-4 rounded-xl font-bold text-base hover:border-brand-dark transition-all cursor-pointer w-full sm:w-auto shadow-sm"
           >
-            <Sparkles size={18} className="text-brand-dark opacity-50 group-hover:opacity-100 transition-opacity" />
+            <Sparkles size={16} className="text-brand-dark opacity-50 group-hover:opacity-100 transition-opacity" />
             <span className="relative z-10">Book Consultation</span>
           </motion.button>
         </motion.div>

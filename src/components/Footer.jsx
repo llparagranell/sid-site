@@ -16,13 +16,13 @@ import logo from "../assets/logo.png";
 
 export default function Footer() {
     return (
-        <footer className="bg-brand-bg text-brand-dark/60 pt-24 md:pt-32 relative overflow-hidden border-t border-brand-dark/10">
+        <footer className="bg-brand-dark text-white/60 pt-24 md:pt-32 relative overflow-hidden border-t border-white/10">
 
             {/* Background Pattern */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.2]"
                 style={{
                     backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
-                    backgroundSize: '100px 100px'
+                    backgroundSize: '50px 50px'
                 }}
             />
 
@@ -34,7 +34,7 @@ export default function Footer() {
                     whileInView={{ opacity: 1, scaleX: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: "circOut" }}
-                    className="border-t border-brand-dark/10 mb-16"
+                    className="border-t border-white/10 mb-16"
                 />
 
                 {/* Footer grid */}
@@ -49,22 +49,22 @@ export default function Footer() {
                     {/* Brand + Contact */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="flex flex-col gap-4">
-                            <span className="text-2xl font-black text-brand-dark tracking-tighter">
+                            <span className="text-2xl font-black text-white tracking-tighter">
                                 Devgrowthsolutions
                             </span>
                         </div>
 
                         <div className="space-y-4 text-sm font-bold">
-                            <p className="flex items-center gap-4 text-brand-dark/80">
-                                <Phone size={18} className="text-brand-dark" />
+                            <p className="flex items-center gap-4 text-white/80">
+                                <Phone size={18} className="text-white" />
                                 +91 62600 45626
                             </p>
-                            <p className="flex items-center gap-4 text-brand-dark/80">
-                                <Mail size={18} className="text-brand-dark" />
+                            <p className="flex items-center gap-4 text-white/80">
+                                <Mail size={18} className="text-white" />
                                 contact@devgrowth.com
                             </p>
-                            <p className="flex items-start gap-4 text-brand-dark/80">
-                                <MapPin size={18} className="text-brand-dark" />
+                            <p className="flex items-start gap-4 text-white/80">
+                                <MapPin size={18} className="text-white" />
                                 3rd Floor, Wright Town, Jabalpur (M.P.), India
                             </p>
                         </div>
@@ -72,48 +72,48 @@ export default function Footer() {
 
                     {/* Services */}
                     <div>
-                        <h4 className="text-brand-dark font-black mb-6 uppercase tracking-widest text-xs">Services</h4>
+                        <h4 className="text-white font-black mb-6 uppercase tracking-widest text-xs">Services</h4>
                         <ul className="space-y-3 text-sm font-bold">
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">Web Development</li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">Mobile Development</li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">MVP Development</li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">UI / UX Design</li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">Marketing</li>
+                            <li className="hover:text-white transition-all cursor-pointer">Web Development</li>
+                            <li className="hover:text-white transition-all cursor-pointer">Mobile Development</li>
+                            <li className="hover:text-white transition-all cursor-pointer">MVP Development</li>
+                            <li className="hover:text-white transition-all cursor-pointer">UI / UX Design</li>
+                            <li className="hover:text-white transition-all cursor-pointer">Marketing</li>
                         </ul>
                     </div>
 
                     {/* Company */}
                     <div>
-                        <h4 className="text-brand-dark font-black mb-6 uppercase tracking-widest text-xs">Company</h4>
+                        <h4 className="text-white font-black mb-6 uppercase tracking-widest text-xs">Company</h4>
                         <ul className="space-y-3 text-sm font-bold">
                             <li>
-                                <Link to="/about" className="hover:text-brand-dark transition-all cursor-pointer">About Us</Link>
+                                <Link to="/about" className="hover:text-white transition-all cursor-pointer">About Us</Link>
                             </li>
-                            <li className="hover:text-brand-dark transition-all cursor-pointer">How we work</li>
+                            <li className="hover:text-white transition-all cursor-pointer">How we work</li>
                             <li>
-                                <Link to="/case-studies" className="hover:text-brand-dark transition-all cursor-pointer">Case Studies</Link>
+                                <Link to="/case-studies" className="hover:text-white transition-all cursor-pointer">Case Studies</Link>
                             </li>
                             <li>
-                                <Link to="/blog" className="hover:text-brand-dark transition-all cursor-pointer">Blog</Link>
+                                <Link to="/blog" className="hover:text-white transition-all cursor-pointer">Blog</Link>
                             </li>
                         </ul>
                     </div>
 
                     {/* Social */}
                     <div>
-                        <h4 className="text-brand-dark font-black mb-8 uppercase tracking-widest text-xs">Social Links</h4>
-                        <ul className="space-y-4 text-sm font-bold text-brand-dark/60">
-                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
-                                <FaInstagram className="text-brand-dark" /> Instagram
+                        <h4 className="text-white font-black mb-8 uppercase tracking-widest text-xs">Social Links</h4>
+                        <ul className="space-y-4 text-sm font-bold text-white/60">
+                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
+                                <FaInstagram className="text-white" /> Instagram
                             </li>
-                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
-                                <FaFacebookF className="text-brand-dark" /> Facebook
+                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
+                                <FaFacebookF className="text-white" /> Facebook
                             </li>
-                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
-                                <FaLinkedinIn className="text-brand-dark" /> LinkedIn
+                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
+                                <FaLinkedinIn className="text-white" /> LinkedIn
                             </li>
-                            <li className="flex items-center gap-3 hover:text-brand-dark transition-all hover:translate-x-1 cursor-pointer">
-                                <FaYoutube className="text-brand-dark" /> YouTube
+                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
+                                <FaYoutube className="text-white" /> YouTube
                             </li>
                         </ul>
                     </div>
@@ -125,7 +125,7 @@ export default function Footer() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6 }}
-                    className="mt-20 border-t border-brand-dark/10 py-6 text-sm text-center text-brand-dark/40 font-bold"
+                    className="mt-20 border-t border-white/10 py-6 text-sm text-center text-white/40 font-bold"
                 >
                     (c) {new Date().getFullYear()} DevGrowth. All rights reserved.
                 </motion.div>
