@@ -53,24 +53,24 @@ export default function ContactSection() {
                             </span>
                         </h2>
 
-                        <p className="mt-6 text-lg text-white/60 font-medium leading-relaxed hidden sm:block">
+                        <p className="mt-6 text-base md:text-lg text-white/60 font-medium leading-relaxed block">
                             We are always ready to have a discussion about your project,
                             ideas, or challenges. Tell us what you're building, and we'll
                             explore how we can help bring it to life.
                         </p>
 
-                        <ul className="mt-10 space-y-4 text-white/50 font-bold hidden sm:block">
+                        <ul className="mt-10 space-y-4 text-white/50 font-bold block">
                             <li className="flex items-start gap-3">
                                 <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-accent shrink-0" />
-                                <span>Clear communication & timelines</span>
+                                <span className="text-sm md:text-base">Clear communication & timelines</span>
                             </li>
                             <li className="flex items-start gap-3">
                                 <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-accent shrink-0" />
-                                <span>Transparent pricing</span>
+                                <span className="text-sm md:text-base">Transparent pricing</span>
                             </li>
                             <li className="flex items-start gap-3">
                                 <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-accent shrink-0" />
-                                <span>Long-term collaboration & support</span>
+                                <span className="text-sm md:text-base">Long-term collaboration & support</span>
                             </li>
                         </ul>
                     </motion.div>
@@ -83,7 +83,7 @@ export default function ContactSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7 }}
-                        className="w-full rounded-2xl sm:rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-sm p-6 sm:p-14 shadow-2xl"
+                        className="w-full rounded-3xl sm:rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-sm p-6 sm:p-14 shadow-2xl"
                     >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <Input

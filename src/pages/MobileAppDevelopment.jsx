@@ -133,7 +133,7 @@ export default function MobileAppDevelopment() {
             {/* 1. Hero Section */}
             <section className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-brand-bg">
                 <PageHeaderBackground />
-                <div className="mx-auto max-w-7xl px-6 lg:px-16 relative z-10">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
                     <div className="text-center">
                         <motion.span
                             initial={{ opacity: 0, y: 10 }}
@@ -203,7 +203,7 @@ export default function MobileAppDevelopment() {
                         backgroundSize: '100px 100px'
                     }}
                 />
-                <div className="mx-auto max-w-7xl px-6 lg:px-16 relative z-10">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
@@ -273,7 +273,7 @@ export default function MobileAppDevelopment() {
 
             {/* 3. Service Types */}
             <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -326,7 +326,7 @@ export default function MobileAppDevelopment() {
 
             {/* 4. Tech Stack */}
             <section className="py-24 md:py-40 bg-brand-accent/10 relative overflow-hidden">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16 text-center">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -365,7 +365,7 @@ export default function MobileAppDevelopment() {
 
             {/* 5. Process Section */}
             <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -416,12 +416,12 @@ export default function MobileAppDevelopment() {
 
             {/* Final CTA */}
             <section className="py-24 md:py-40 bg-brand-bg">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-0 sm:px-6 lg:px-16">
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         whileInView={{ scale: 1, opacity: 1 }}
                         viewport={{ once: true }}
-                        className="relative rounded-[80px] bg-brand-dark p-12 md:p-32 text-center overflow-hidden shadow-2xl"
+                        className="relative rounded-none sm:rounded-[80px] bg-brand-dark px-6 py-20 sm:p-32 text-center overflow-hidden shadow-2xl"
                     >
                         <motion.div
                             animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}

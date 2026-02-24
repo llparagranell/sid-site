@@ -77,7 +77,7 @@ export default function Projects() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8 }}
-                    className="bg-white/5 backdrop-blur-sm border-y md:border border-white/10 rounded-none md:rounded-[48px] p-6 md:p-14 shadow-2xl"
+                    className="bg-white/5 backdrop-blur-sm border-y md:border border-white/10 rounded-3xl md:rounded-[48px] p-6 md:p-14 shadow-2xl"
                 >
 
                     {/* Heading */}

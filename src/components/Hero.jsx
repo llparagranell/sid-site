@@ -62,16 +62,16 @@ export default function Hero({ onBookClick }) {
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-brand-bg text-brand-dark flex items-center justify-center py-20 mt-8">
 
-      {/* Decorative Floating Icons - Hidden on Mobile */}
-      <div className="hidden lg:block pointer-events-none">
-        <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.1} size={32} />
-        <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={0.2} size={28} />
-        <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={0.3} size={36} />
-        <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.15} size={30} />
-        <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={0.4} size={20} />
-        <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={0.25} size={24} />
-        <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={0.5} size={22} />
-        <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.05} size={26} />
+      {/* Decorative Floating Icons */}
+      <div className="lg:block pointer-events-none">
+        <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.1} size={32} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={0.2} size={28} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={0.3} size={36} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.15} size={30} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={0.4} size={20} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={0.25} size={24} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={0.5} size={22} color="text-brand-dark/10 lg:text-brand-dark/20" />
+        <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.05} size={26} color="text-brand-dark/10 lg:text-brand-dark/20" />
       </div>
 
       {/* Background Grid Lines */}
@@ -132,10 +132,10 @@ export default function Hero({ onBookClick }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tighter text-brand-dark leading-[1.1] md:leading-[0.85] lg:leading-[0.8]"
+          className="text-[3.25rem] sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tighter text-brand-dark leading-[1.1] md:leading-[0.85] lg:leading-[0.8]"
         >
           Engineering MVPs<br />
-          <span className="text-brand-dark/90 text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl">That Matter.</span>
+          <span className="text-brand-dark/90 text-[3.25rem] sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl">That Matter.</span>
         </motion.h1>
 
         {/* Description */}

@@ -44,7 +44,15 @@ body {
 }
 
 .mx-auto {
-  @apply px-4 sm:px-8 md:px-12 lg:px-16;
+  @apply px-6 sm:px-8 md:px-12 lg:px-16;
+}
+
+.glass-morphism {
+  @apply bg-white/10 backdrop-blur-md border border-white/10;
+}
+
+.section-padding {
+  @apply py-20 sm:py-24 md:py-32 lg:py-40;
 }
 
 

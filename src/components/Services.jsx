@@ -45,9 +45,10 @@ const TiltCard = ({ service, index }) => {
             }}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileTap={{ scale: 0.98 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-colors duration-500 hover:border-brand-dark/10 cursor-pointer"
+            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-all duration-500 hover:border-brand-dark/10 cursor-pointer"
         >
             {/* Spotlight Gradient */}
             <motion.div

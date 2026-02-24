@@ -77,6 +77,7 @@ export default function VideoSection() {
                             key={idx}
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
+                            whileTap={{ scale: 0.98 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: idx * 0.15 }}
                             className="group relative p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-500 overflow-hidden"

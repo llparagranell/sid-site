@@ -62,6 +62,7 @@ export default function ProcessSection() {
                                 key={i}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
+                                whileTap={{ scale: 0.98 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: i * 0.1 }}
                                 className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 rounded-3xl bg-brand-accent/20 backdrop-blur-sm px-6 sm:px-8 py-8 text-left border border-brand-dark/5 hover:border-brand-dark/20 transition-all"

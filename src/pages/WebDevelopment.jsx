@@ -135,7 +135,7 @@ export default function WebDevelopment() {
             {/* 1. Hero Section */}
             <section className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-brand-bg">
                 <PageHeaderBackground />
-                <div className="mx-auto max-w-7xl px-6 lg:px-16 relative z-10">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
                     <div className="text-center">
                         <motion.span
                             initial={{ opacity: 0, y: 10 }}
@@ -220,7 +220,7 @@ export default function WebDevelopment() {
                         backgroundSize: '100px 100px'
                     }}
                 />
-                <div className="mx-auto max-w-7xl px-6 lg:px-16 relative z-10">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
@@ -294,7 +294,7 @@ export default function WebDevelopment() {
 
             {/* 3. Services Grid */}
             <section className="py-24 md:py-40 bg-brand-bg relative">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -336,47 +336,37 @@ export default function WebDevelopment() {
 
             {/* 4. Tech Stack */}
             <section className="py-24 md:py-40 bg-brand-accent/10 relative overflow-hidden">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-20 gap-8">
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">OUR TOOLKIT</span>
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Technologies <br /> <span className="italic font-light">We Use.</span></h2>
-                        </motion.div>
-                        <motion.p
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="max-w-md text-brand-dark/60 font-medium text-lg lg:text-xl"
-                        >
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="max-w-3xl mx-auto mb-20"
+                    >
+                        <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">OUR WEB STACK</span>
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter mb-8">Technologies <br /> <span className="italic font-light">We Use.</span></h2>
+                        <p className="text-brand-dark/60 font-medium text-lg lg:text-xl">
                             We leverage modern, scalable, and industry-leading technologies to build high-performing web solutions.
-                        </motion.p>
-                    </div>
+                        </p>
+                    </motion.div>
 
                     <motion.div
                         variants={containerVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 text-center"
+                        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6"
                     >
                         {techStack.map((tech, idx) => (
                             <motion.div
                                 key={idx}
                                 variants={itemVariants}
-                                whileHover={{
-                                    scale: 1.05,
-                                    backgroundColor: "rgba(30, 27, 121, 1)",
-                                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
-                                }}
-                                className="p-6 rounded-3xl bg-white shadow-sm border border-brand-dark/5 flex flex-col items-center justify-center group transition-all duration-500"
+                                whileHover={{ scale: 1.05, y: -5 }}
+                                className="p-8 rounded-[32px] bg-white shadow-sm border border-brand-dark/5 flex flex-col items-center justify-center group hover:bg-brand-dark transition-all duration-500"
                             >
-                                <tech.icon className="text-brand-dark group-hover:text-brand-accent mb-4" size={32} />
+                                <tech.icon className="text-brand-dark group-hover:text-brand-accent mb-4 transition-colors" size={32} />
                                 <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40 group-hover:text-white/40 block mb-1">{tech.category}</span>
-                                <span className="text-sm font-bold text-brand-dark group-hover:text-white">{tech.name}</span>
+                                <span className="text-sm font-bold group-hover:text-white transition-colors">{tech.name}</span>
                             </motion.div>
                         ))}
                     </motion.div>
@@ -385,7 +375,7 @@ export default function WebDevelopment() {
 
             {/* 5. Process Section */}
             <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -438,12 +428,12 @@ export default function WebDevelopment() {
 
             {/* Final CTA */}
             <section className="py-24 md:py-40 bg-brand-bg">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                <div className="mx-auto max-w-none sm:max-w-7xl px-0 sm:px-6 lg:px-16">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="relative rounded-[80px] bg-brand-dark p-12 md:p-32 text-center overflow-hidden shadow-2xl"
+                        className="relative rounded-none sm:rounded-[80px] bg-brand-dark px-6 py-20 sm:p-32 text-center overflow-hidden shadow-2xl"
                     >
                         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(211,216,213,0.1),transparent_70%)]" />
                         <div className="relative z-10">

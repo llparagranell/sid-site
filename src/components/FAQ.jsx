@@ -80,6 +80,7 @@ export default function FAQ() {
                                     onClick={() =>
                                         setActiveIndex(isOpen ? null : index)
                                     }
+                                    whileTap={{ scale: 0.99 }}
                                     className="flex w-full items-center justify-between px-6 md:px-8 py-6 text-left"
                                 >
                                     <span className={`text-base md:text-lg font-bold transition-colors ${isOpen ? "text-brand-dark" : "text-brand-dark/80 group-hover:text-brand-dark"}`}>

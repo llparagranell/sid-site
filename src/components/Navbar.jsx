@@ -265,7 +265,10 @@ export default function Navbar({ onBookClick }) {
               {navLinks.map((link) => (
                 <div key={link.name} className="flex flex-col gap-4">
                   {/* Unified link rendering for mobile */}
-                  <a
+                  <motion.a
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
                     href={link.href}
                     onClick={(e) => {
                       if (link.hasDropdown) {
@@ -277,17 +280,17 @@ export default function Navbar({ onBookClick }) {
                         handleNavClick(link.href);
                       }
                     }}
-                    className="flex justify-between items-center text-base font-black text-brand-dark uppercase tracking-tighter w-full text-left"
+                    className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left"
                   >
                     {link.name}
                     {link.hasDropdown && (
                       <ChevronDown
-                        size={24}
+                        size={28}
                         className={`transition-transform duration-500 ${activeDropdown === link.name ? "rotate-180" : ""
                           }`}
                       />
                     )}
-                  </a>
+                  </motion.a>
 
                   <AnimatePresence>
                     {link.hasDropdown &&

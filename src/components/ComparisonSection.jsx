@@ -125,7 +125,7 @@ export default function ComparisonSection() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
-                    className="grid md:grid-cols-2 gap-0 md:gap-8 ring-0 sm:ring-1 ring-brand-dark/10 rounded-none sm:rounded-[48px] bg-brand-bg p-0 md:p-8 shadow-2xl shadow-brand-dark/5"
+                    className="grid md:grid-cols-2 gap-0 md:gap-8 rounded-[32px] md:rounded-[48px] overflow-hidden bg-brand-bg p-0 md:p-8 shadow-2xl shadow-brand-dark/5 ring-1 ring-brand-dark/5 md:ring-brand-dark/10"
                 >
 
                     {/* ================= WITHOUT YOU (LEFT) ================= */}
@@ -134,7 +134,7 @@ export default function ComparisonSection() {
                         initial="hidden"
                         whileInView="show"
                         viewport={{ once: true }}
-                        className="p-8 md:p-12 bg-gradient-to-br from-brand-accent/30 via-brand-bg to-brand-bg rounded-none sm:rounded-[40px] border-b sm:border border-brand-dark/5"
+                        className="p-8 md:p-12 bg-gradient-to-br from-brand-accent/30 via-brand-bg to-brand-bg rounded-[32px] md:rounded-[40px] border-b sm:border border-brand-dark/5"
                     >
                         <div className="mb-10 flex items-center gap-3 opacity-80">
                             <XCircle className="text-brand-muted" size={24} />
@@ -166,7 +166,7 @@ export default function ComparisonSection() {
                         initial="hidden"
                         whileInView="show"
                         viewport={{ once: true }}
-                        className="bg-gradient-to-br from-brand-dark via-brand-dark to-[#2a266a] p-8 sm:p-10 md:p-12 rounded-none sm:rounded-[40px] text-white shadow-xl"
+                        className="bg-gradient-to-br from-brand-dark via-brand-dark to-[#2a266a] p-8 sm:p-10 md:p-12 rounded-[32px] md:rounded-[40px] text-white shadow-xl"
                     >
                         <div className="mb-10 flex items-center gap-3">
                             <CheckCircle2 className="text-brand-accent" size={24} />

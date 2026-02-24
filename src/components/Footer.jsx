@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import logo from "../assets/logo.png";
+import { services } from "../constants/servicesData";
 
 export default function Footer() {
     return (
@@ -74,11 +75,13 @@ export default function Footer() {
                     <div>
                         <h4 className="text-white font-black mb-6 uppercase tracking-widest text-xs">Services</h4>
                         <ul className="space-y-3 text-sm font-bold">
-                            <li className="hover:text-white transition-all cursor-pointer">Web Development</li>
-                            <li className="hover:text-white transition-all cursor-pointer">Mobile Development</li>
-                            <li className="hover:text-white transition-all cursor-pointer">MVP Development</li>
-                            <li className="hover:text-white transition-all cursor-pointer">UI / UX Design</li>
-                            <li className="hover:text-white transition-all cursor-pointer">Marketing</li>
+                            {services.slice(0, 5).map((service, index) => (
+                                <li key={index}>
+                                    <Link to={service.path || "/"} className="hover:text-white transition-all cursor-pointer">
+                                        {service.title}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
@@ -106,15 +109,18 @@ export default function Footer() {
                             <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
                                 <FaInstagram className="text-white" /> Instagram
                             </li>
-                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
-                                <FaFacebookF className="text-white" /> Facebook
+
+                            <li className="hover:translate-x-1 transition-all duration-300">
+                                <a
+                                    href="https://www.linkedin.com/company/devgrowth-solutions/posts/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 hover:text-white cursor-pointer"
+                                >
+                                    <FaLinkedinIn className="text-white" /> LinkedIn
+                                </a>
                             </li>
-                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
-                                <FaLinkedinIn className="text-white" /> LinkedIn
-                            </li>
-                            <li className="flex items-center gap-3 hover:text-white transition-all hover:translate-x-1 cursor-pointer">
-                                <FaYoutube className="text-white" /> YouTube
-                            </li>
+
                         </ul>
                     </div>
                 </motion.div>
