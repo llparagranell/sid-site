@@ -134,8 +134,8 @@ export default function Services() {
             <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
 
                 {/* Heading Block */}
-                <div className="bg-brand-accent/10 rounded-[40px] md:rounded-[60px] p-8 md:p-20 mb-16 relative overflow-hidden border border-brand-dark/5">
-                    <div className="absolute top-0 right-0 p-10 opacity-[0.03] text-brand-dark pointer-events-none">
+                <div className="bg-brand-dark rounded-[40px] md:rounded-[60px] p-8 md:p-20 mb-16 relative overflow-hidden border border-white/5 shadow-2xl">
+                    <div className="absolute top-0 right-0 p-10 opacity-[0.05] text-white pointer-events-none">
                         <Sparkles size={200} />
                     </div>
 
@@ -146,18 +146,18 @@ export default function Services() {
                         transition={{ duration: 0.8 }}
                         className="text-center max-w-3xl mx-auto"
                     >
-                        <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
+                        <span className="inline-block mb-6 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-accent">
                             Our Expertise
                         </span>
 
-                        <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tighter">
+                        <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter">
                             We build the <br className="hidden sm:block" />
-                            <span className="text-brand-dark italic font-light">
+                            <span className="text-white/90 italic font-light">
                                 Future of Digital
                             </span>
                         </h2>
 
-                        <p className="mt-8 text-brand-dark/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                        <p className="mt-8 text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
                             From rapid MVP development to enterprise-level architecture,
                             we deliver high-performance solutions tailored for growth.
                         </p>

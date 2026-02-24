@@ -14,14 +14,28 @@ export default function Navbar({ onBookClick }) {
   const isHomePage = location.pathname === "/";
 
   /* ---------------- SCROLL EFFECT ---------------- */
+  // useEffect(() => {
+  //   const onScroll = () => {
+  //     setScrolled(window.scrollY > 20);
+  //     if (window.scrollY > 50) setOpen(false);
+  //   };
+  //   window.addEventListener("scroll", onScroll);
+  //   return () => window.removeEventListener("scroll", onScroll);
+  // }, []);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      if (window.scrollY > 50) setOpen(false);
+
+      // Close mobile menu ONLY if open and user scrolls significantly
+      if (open && window.scrollY > 80) {
+        setOpen(false);
+      }
     };
+
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [open]);
 
   /* ---------------- CLICK OUTSIDE CLOSE ---------------- */
   useEffect(() => {
@@ -88,11 +102,29 @@ export default function Navbar({ onBookClick }) {
             );
           }
 
+          if (isExternal) {
+            return (
+              <a
+                key={idx}
+                href={item.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-bg transition-all duration-300 group/item"
+              >
+                <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
+                  <Icon size={18} />
+                </div>
+                <div className="text-xs font-bold text-brand-dark tracking-wide">
+                  {item.title}
+                </div>
+              </a>
+            );
+          }
+
           return (
-            <a
+            <div
               key={idx}
-              href={item.path || `#${type}`}
-              className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-bg transition-all duration-300 group/item"
+              className="flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group/item opacity-60 cursor-default"
             >
               <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
                 <Icon size={18} />
@@ -100,7 +132,7 @@ export default function Navbar({ onBookClick }) {
               <div className="text-xs font-bold text-brand-dark tracking-wide">
                 {item.title}
               </div>
-            </a>
+            </div>
           );
         })}
       </div>
@@ -202,6 +234,7 @@ export default function Navbar({ onBookClick }) {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => handleNavClick("#contact")}
             className="flex items-center gap-2 rounded-full bg-brand-dark text-white font-bold transition-all duration-300 shadow-lg hover:shadow-brand-dark/20 cursor-pointer px-6 py-2.5 text-sm"
           >
             Get Started
@@ -275,21 +308,34 @@ export default function Navbar({ onBookClick }) {
                             : industries
                           ).map((item, idx) => {
                             const ItemIcon = item.icon;
+                            const isInternal = item.path?.startsWith("/");
+
+                            if (isInternal) {
+                              return (
+                                <Link
+                                  key={idx}
+                                  to={item.path}
+                                  onClick={() => setOpen(false)}
+                                  className="flex items-center gap-4 py-4 text-sm font-bold text-brand-dark/60 hover:text-brand-dark transition-colors group"
+                                >
+                                  <div className="p-2 bg-brand-dark/5 rounded-lg group-hover:bg-brand-dark group-hover:text-white transition-colors">
+                                    <ItemIcon size={18} />
+                                  </div>
+                                  <span>{item.title}</span>
+                                </Link>
+                              );
+                            }
+
                             return (
-                              <a
+                              <div
                                 key={idx}
-                                href={`#${link.name === "SERVICES"
-                                  ? "services"
-                                  : "industries"
-                                  }`}
-                                onClick={() => setOpen(false)}
-                                className="flex items-center gap-4 py-4 text-sm font-bold text-brand-dark/60 hover:text-brand-dark transition-colors group"
+                                className="flex items-center gap-4 py-4 text-sm font-bold text-brand-dark/40 transition-colors group opacity-60 cursor-default"
                               >
-                                <div className="p-2 bg-brand-dark/5 rounded-lg group-hover:bg-brand-dark group-hover:text-white transition-colors">
+                                <div className="p-2 bg-brand-dark/5 rounded-lg">
                                   <ItemIcon size={18} />
                                 </div>
                                 <span>{item.title}</span>
-                              </a>
+                              </div>
                             );
                           })}
                         </motion.div>
@@ -299,7 +345,10 @@ export default function Navbar({ onBookClick }) {
               ))}
 
               <div className="pt-4 flex flex-col gap-4">
-                <button className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-bold text-white shadow-xl cursor-pointer active:scale-95 transition-transform">
+                <button
+                  onClick={() => handleNavClick("#contact")}
+                  className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-bold text-white shadow-xl cursor-pointer active:scale-95 transition-transform"
+                >
                   Get Started
                   <ExternalLink size={20} />
                 </button>

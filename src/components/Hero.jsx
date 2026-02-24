@@ -160,6 +160,10 @@ export default function Hero({ onBookClick }) {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              const el = document.getElementById("contact");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
             className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-brand-dark/95 transition-all shadow-xl overflow-hidden cursor-pointer w-full sm:w-auto"
           >
             <span className="relative z-10">Get Started Today</span>
