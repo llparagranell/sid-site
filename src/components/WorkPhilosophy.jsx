@@ -30,7 +30,7 @@ const items = [
             "Our team collaborates closely with founders and SMEs, offering strategic guidance, technical expertise, and continuous improvements to help you scale confidently.",
         ],
         image:
-            "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80",
     },
     {
         id: "quality",
@@ -137,8 +137,8 @@ export default function WorkPhilosophy() {
                                                 const el = scrollRef.current.querySelector(`[data-section="${item.id}"]`);
                                                 el?.scrollIntoView({ behavior: 'smooth' });
                                             }}
-                                            className={`block border-b-2 pb-3 text-[12px] font-black uppercase tracking-[0.2em] transition-all text-left w-full ${active.id === item.id
-                                                ? "text-brand-dark border-brand-dark translate-x-2"
+                                            className={`block border-b-2 pb-3 text-[16px] font-bold uppercase  transition-all text-left w-full ${active.id === item.id
+                                                ? "text-brand-dark border-brand-dark"
                                                 : "text-brand-muted border-brand-dark/10 hover:text-brand-dark/40"
                                                 }`}
                                         >
@@ -162,7 +162,7 @@ export default function WorkPhilosophy() {
                                     data-section={item.id}
                                     className=" flex flex-col justify-center"
                                 >
-                                    <h3 className="text-3xl md:text-4xl font-black text-brand-dark mb-8 leading-tight tracking-tight uppercase">
+                                    <h3 className="text-2xl md:text-3xl font-black text-brand-dark mb-6 leading-tight tracking-tight">
                                         {item.title}
                                     </h3>
 
@@ -170,7 +170,7 @@ export default function WorkPhilosophy() {
                                         {item.description.map((text, i) => (
                                             <p
                                                 key={i}
-                                                className="text-brand-dark/70 leading-relaxed text-lg font-medium"
+                                                className="text-brand-dark/80 leading-relaxed text-lg font-medium"
                                             >
                                                 {text}
                                             </p>
@@ -203,7 +203,7 @@ export default function WorkPhilosophy() {
                                     initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
                                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                                     transition={{ duration: 0.8, ease: "circOut" }}
-                                    className="h-[500px] w-full rounded-[40px] object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 border border-brand-dark/10 z-0"
+                                    className="h-[500px] w-full rounded-[40px] object-cover shadow-2xl transition-all duration-1000 border border-brand-dark/10 z-0"
                                 />
                                 <div className="absolute -bottom-6 -right-6 h-32 w-32 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
                             </div>

@@ -69,6 +69,13 @@ const itemVariantsRight = {
 };
 
 export default function ComparisonSection() {
+    const handleNavClick = (href) => {
+        if (href.startsWith("#")) {
+            const el = document.querySelector(href);
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <section className="py-24 md:py-32 bg-brand-bg relative overflow-hidden">
 
@@ -98,18 +105,18 @@ export default function ComparisonSection() {
                         <span className="italic font-light text-brand-dark">Difference</span>
                     </h2>
 
-                    <motion.a
-                        href="#contact"
+                    <motion.button
+                        onClick={() => handleNavClick("#contact")}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="group inline-flex mt-10 items-center gap-3 rounded-xl bg-brand-dark px-8 py-4 text-sm font-bold text-white shadow-xl shadow-brand-dark/10 transition-all hover:bg-brand-dark/90"
+                        className="group inline-flex mt-10 items-center gap-3 rounded-xl bg-brand-dark px-8 py-4 text-sm font-bold text-white shadow-xl shadow-brand-dark/10 transition-all hover:bg-brand-dark/90 cursor-pointer"
                     >
                         Book Your Free Consultation
                         <ArrowRight
                             size={18}
                             className="transition-transform group-hover:translate-x-1"
                         />
-                    </motion.a>
+                    </motion.button>
                 </motion.div>
 
                 {/* ================= COMPARISON CARD ================= */}

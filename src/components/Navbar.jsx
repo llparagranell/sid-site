@@ -124,7 +124,7 @@ export default function Navbar({ onBookClick }) {
           return (
             <div
               key={idx}
-              className="flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group/item opacity-60 cursor-default"
+              className="flex items-center gap-3 p-3 rounded-xl transition-all duration-300  cursor-default"
             >
               <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
                 <Icon size={18} />
@@ -175,7 +175,7 @@ export default function Navbar({ onBookClick }) {
               {link.href.startsWith("/") ? (
                 <Link
                   to={link.href}
-                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark/60 hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
+                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
                 >
                   {link.name}
                   {link.hasDropdown && (
@@ -192,7 +192,7 @@ export default function Navbar({ onBookClick }) {
               ) : (
                 <a
                   href={link.href}
-                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark/60 hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
+                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
                 >
                   {link.name}
                   {link.hasDropdown && (

@@ -124,7 +124,7 @@ export default function CaseStudies() {
             </section>
 
             {/* Bottom CTA */}
-            <section className="py-24 md:py-40 bg-brand-dark text-white">
+            {/* <section className="py-24 md:py-40 bg-brand-dark text-white">
                 <div className="mx-auto max-w-7xl px-6 lg:px-16 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -146,7 +146,7 @@ export default function CaseStudies() {
                         </motion.button>
                     </motion.div>
                 </div>
-            </section>
+            </section> */}
 
             <Footer />
             <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />

@@ -72,8 +72,8 @@ export default function FAQ() {
                             <div
                                 key={index}
                                 className={`rounded-3xl border transition-all duration-500 overflow-hidden ${isOpen
-                                    ? "border-white/20 bg-brand-dark shadow-2xl"
-                                    : "border-white/5 bg-brand-dark hover:border-white/20"
+                                    ? "border-brand-dark/20 bg-brand-accent/40 shadow-xl"
+                                    : "border-brand-dark/5 bg-brand-accent/20 hover:border-brand-dark/20"
                                     }`}
                             >
                                 <button
@@ -82,11 +82,11 @@ export default function FAQ() {
                                     }
                                     className="flex w-full items-center justify-between px-6 md:px-8 py-6 text-left"
                                 >
-                                    <span className={`text-base md:text-lg font-bold transition-colors ${isOpen ? "text-white" : "text-white/80 group-hover:text-white"}`}>
+                                    <span className={`text-base md:text-lg font-bold transition-colors ${isOpen ? "text-brand-dark" : "text-brand-dark/80 group-hover:text-brand-dark"}`}>
                                         {faq.question}
                                     </span>
 
-                                    <div className={`p-2 rounded-full transition-all duration-300 ${isOpen ? "bg-white text-brand-dark rotate-180" : "bg-white/5 text-white/40"}`}>
+                                    <div className={`p-2 rounded-full transition-all duration-300 ${isOpen ? "bg-brand-dark text-white rotate-180" : "bg-brand-dark/5 text-brand-dark/40"}`}>
                                         <ChevronDown size={18} />
                                     </div>
                                 </button>
@@ -100,7 +100,7 @@ export default function FAQ() {
                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                             className="overflow-hidden"
                                         >
-                                            <p className="px-6 md:px-8 pb-8 text-white/70 text-base leading-relaxed border-t border-white/10 pt-4 font-medium">
+                                            <p className="px-6 md:px-8 pb-8 text-brand-dark/70 text-base leading-relaxed border-t border-brand-dark/10 pt-4 font-medium">
                                                 {faq.answer}
                                             </p>
                                         </motion.div>

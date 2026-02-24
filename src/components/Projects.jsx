@@ -59,12 +59,12 @@ const card = {
 
 export default function Projects() {
     return (
-        <section id="projects" className="py-20 md:py-32 bg-brand-bg relative overflow-hidden">
+        <section id="projects" className="py-20 md:py-32 bg-brand-dark relative overflow-hidden">
 
             {/* Background Pattern */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.1]"
                 style={{
-                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
+                    backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
                     backgroundSize: '80px 80px'
                 }}
             />
@@ -77,23 +77,23 @@ export default function Projects() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8 }}
-                    className="bg-brand-accent/20 backdrop-blur-sm border-y md:border border-brand-dark/10 rounded-none md:rounded-[48px] p-6 md:p-14 shadow-sm"
+                    className="bg-white/5 backdrop-blur-sm border-y md:border border-white/10 rounded-none md:rounded-[48px] p-6 md:p-14 shadow-2xl"
                 >
 
                     {/* Heading */}
                     <div className="text-center max-w-3xl mx-auto mb-16 px-6 md:px-0">
-                        <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
+                        <span className="inline-block mb-6 rounded-full border border-white/10 bg-brand-accent/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-accent">
                             Our Work
                         </span>
 
-                        <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
+                        <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
                             Featured <br />
-                            <span className="italic font-light text-brand-dark">
+                            <span className="italic font-light text-brand-accent">
                                 Projects
                             </span>
                         </h2>
 
-                        <p className="mt-4 text-brand-dark/70 leading-relaxed font-medium">
+                        <p className="mt-4 text-white/60 leading-relaxed font-medium">
                             A selection of recent builds showcasing full-stack, cloud, and
                             product engineering capabilities.
                         </p>
@@ -111,7 +111,7 @@ export default function Projects() {
                             <motion.div
                                 key={i}
                                 variants={card}
-                                className="group rounded-[32px] overflow-hidden border border-brand-dark/10 bg-brand-bg hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(48,54,79,0.1)]"
+                                className="group rounded-[32px] overflow-hidden border border-brand-dark/10 bg-brand-dark text-white hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(48,54,79,0.1)]"
                             >
                                 {/* Image */}
                                 <div className="relative overflow-hidden">
@@ -126,12 +126,12 @@ export default function Projects() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-6 text-brand-dark">
+                                <div className="p-6">
                                     <h3 className="text-xl font-bold">
                                         {project.title}
                                     </h3>
 
-                                    <p className="mt-2 text-sm text-brand-dark/70 leading-relaxed">
+                                    <p className="mt-2 text-sm text-white/70 leading-relaxed">
                                         {project.desc}
                                     </p>
 
@@ -140,7 +140,7 @@ export default function Projects() {
                                         {project.tech.map((t, idx) => (
                                             <span
                                                 key={idx}
-                                                className="text-xs px-3 py-1 rounded-full bg-brand-accent border border-brand-dark/10 text-brand-dark font-bold"
+                                                className="text-xs px-3 py-1 rounded-full bg-white/10 border border-brand-dark/10 text-white font-bold"
                                             >
                                                 {t}
                                             </span>
@@ -151,7 +151,7 @@ export default function Projects() {
                                         href={project.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-6 inline-flex items-center gap-2 text-sm text-brand-dark hover:opacity-70 transition-opacity font-bold"
+                                        className="mt-6 inline-flex items-center gap-2 text-sm text-brand-accent hover:opacity-70 transition-opacity font-bold"
                                     >
                                         View Project
                                         <ArrowUpRight size={16} />

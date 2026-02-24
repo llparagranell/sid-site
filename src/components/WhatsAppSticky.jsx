@@ -146,7 +146,7 @@ Project Details: ${formData.details}
                                             name="name"
                                             value={formData.name}
                                             onChange={handleChange}
-                                            placeholder="John Doe"
+                                            placeholder="Full Name"
                                             className="w-full rounded-2xl border border-brand-dark/10 bg-white px-6 py-4 text-sm text-brand-dark placeholder:text-brand-dark/30 focus:outline-none focus:ring-4 focus:ring-brand-dark/5 focus:border-brand-dark/20 transition-all shadow-sm"
                                         />
                                     </div>

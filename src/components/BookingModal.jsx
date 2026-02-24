@@ -45,8 +45,26 @@ export default function BookingModal({ isOpen, onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Format WhatsApp Message
+        const phoneNumber = "916260045626";
+        const message = `
+New Consultation Booking:
+
+Name: ${formData.name}
+Mobile: ${formData.mobile}
+Industry: ${formData.industry}
+Selected Date: ${formatDate(selectedDate)}
+        `;
+        const encodedMessage = encodeURIComponent(message.trim());
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+        // Simulate API call/processing delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Open WhatsApp
+        window.open(whatsappURL, "_blank");
+
         setIsSubmitting(false);
         setStep(3); // Go to success state
     };
@@ -218,7 +236,7 @@ export default function BookingModal({ isOpen, onClose }) {
                                                     <input
                                                         required
                                                         type="tel"
-                                                        placeholder="+1"
+                                                        placeholder="+91"
                                                         className="w-full bg-brand-bg/50 border-2 border-brand-dark/5 rounded-2xl py-4 pl-12 pr-4 text-brand-dark font-bold placeholder:text-brand-dark/20 focus:border-brand-dark/20 focus:bg-white outline-none transition-all shadow-sm"
                                                         value={formData.mobile}
                                                         onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
@@ -227,9 +245,9 @@ export default function BookingModal({ isOpen, onClose }) {
                                             </div>
 
                                             <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold text-brand-dark/30 uppercase tracking-[0.2em] ml-1">Industry</label>
+                                                <label className="text-[10px] font-bold text-brand-dark uppercase tracking-[0.2em] ml-1">Industry</label>
                                                 <div className="relative group">
-                                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-dark/20 pointer-events-none transition-colors" size={18} />
+                                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-dark pointer-events-none transition-colors" size={18} />
                                                     <select
                                                         className="w-full bg-brand-bg/50 border-2 border-brand-dark/5 rounded-2xl py-4 pl-4 pr-12 text-brand-dark font-bold focus:border-brand-dark/20 focus:bg-white outline-none transition-all appearance-none cursor-pointer shadow-sm"
                                                         value={formData.industry}

@@ -77,7 +77,7 @@ const TiltCard = ({ service, index }) => {
                 {/* Content */}
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark/30 group-hover:text-brand-dark/50 transition-colors">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark transition-colors">
                             {String(index + 1).padStart(2, "0")} / Service
                         </span>
                         <div className="h-[1px] w-8 bg-brand-dark/10 group-hover:bg-brand-dark/20 transition-colors" />
@@ -87,14 +87,14 @@ const TiltCard = ({ service, index }) => {
                         {service.title}
                     </h3>
 
-                    <p className="text-brand-dark/60 text-sm leading-relaxed mb-8 group-hover:text-brand-dark/80 transition-colors">
+                    <p className="text-brand-dark text-sm leading-relaxed mb-8">
                         {service.desc}
                     </p>
 
                     <ul className="space-y-4">
                         {service.points.map((point, idx) => (
-                            <li key={idx} className="flex items-center gap-4 text-[11px] font-bold text-brand-dark/40 group-hover:text-brand-dark transition-all duration-500 group-hover:translate-x-2" style={{ transitionDelay: `${idx * 50}ms` }}>
-                                <div className="h-1 w-1 rounded-full bg-brand-dark/40 group-hover:bg-brand-dark group-hover:scale-150 transition-all duration-500" />
+                            <li key={idx} className="flex items-center gap-4 text-[11px] font-bold text-brand-dark group-hover:translate-x-2 transition-all duration-500" style={{ transitionDelay: `${idx * 50}ms` }}>
+                                <div className="h-1 w-1 rounded-full bg-brand-dark group-hover:scale-150 transition-all duration-500" />
                                 <span className="uppercase tracking-widest">{point}</span>
                             </li>
                         ))}
@@ -102,9 +102,9 @@ const TiltCard = ({ service, index }) => {
                 </div>
 
                 {/* Bottom Corner Detail */}
-                <div className="pt-6 border-t border-brand-dark/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-all duration-500">
-                    <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-brand-dark">Read More</span>
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <div className="pt-6 border-t border-brand-dark flex justify-between items-center transition-all duration-500">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark">Read More</span>
+                    <ArrowRight size={16} className="text-brand-dark group-hover:translate-x-1 transition-transform" />
                 </div>
             </div>
 
@@ -157,7 +157,7 @@ export default function Services() {
                             </span>
                         </h2>
 
-                        <p className="mt-8 text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                        <p className="mt-8 text-white text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
                             From rapid MVP development to enterprise-level architecture,
                             we deliver high-performance solutions tailored for growth.
                         </p>

@@ -39,18 +39,19 @@ export default function Home() {
             <Hero onBookClick={toggleBooking} />
             <Services />
 
-            <VideoSection />
 
             <WorkPhilosophy />
+            <VideoSection />
 
 
             <ComparisonSection />
-            <TechStack />
+            {/* <TechStack /> */}
 
-            <ProcessSection />
             <Projects />
-            <FAQ />
+            <ProcessSection />
             <ContactSection />
+
+            <FAQ />
             <Footer />
 
             <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
