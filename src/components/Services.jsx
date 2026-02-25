@@ -135,9 +135,26 @@ export default function Services() {
             <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
 
                 {/* Heading Block */}
-                <div className="bg-brand-dark rounded-[40px] md:rounded-[60px] p-8 md:p-20 mb-16 relative overflow-hidden border border-white/5 shadow-2xl">
-                    <div className="absolute top-0 right-0 p-10 opacity-[0.05] text-white pointer-events-none">
-                        <Sparkles size={200} />
+                {/* Heading Block */}
+                <div className="
+    relative
+    w-screen sm:w-full
+    left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0
+    bg-brand-dark
+    rounded-none sm:rounded-[40px] md:rounded-[60px]
+    px-2 sm:px-3 md:px-4
+    py-12 sm:py-16 md:py-20
+    mb-12 md:mb-16
+    overflow-hidden
+    border-0 sm:border sm:border-white/5
+    shadow-none sm:shadow-2xl
+">
+
+                    {/* Background Sparkle */}
+                    <div className="absolute top-0 right-0 
+        p-6 sm:p-8 md:p-10 
+        opacity-[0.04] text-white pointer-events-none">
+                        <Sparkles className="w-20 h-20 sm:w-32 sm:h-32 md:w-[200px] md:h-[200px]" />
                     </div>
 
                     <motion.div
@@ -147,18 +164,43 @@ export default function Services() {
                         transition={{ duration: 0.8 }}
                         className="text-center max-w-3xl mx-auto"
                     >
-                        <span className="inline-block mb-6 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-accent">
+                        {/* Badge */}
+                        <span className="
+            inline-block
+            mb-4 sm:mb-6
+            rounded-full
+            border border-white/10
+            bg-white/5
+            px-3 py-1 sm:px-4 sm:py-1.5
+            text-[10px] sm:text-xs
+            font-bold uppercase tracking-widest
+            text-brand-accent
+        ">
                             Our Expertise
                         </span>
 
-                        <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter">
-                            We build the <br className="hidden sm:block" />
+                        {/* Heading */}
+                        <h2 className="
+            text-3xl sm:text-4xl md:text-6xl lg:text-7xl
+            font-black text-white
+            leading-tight md:leading-[0.95]
+            tracking-tight
+        ">
+                            We build the{" "}
+                            <br className="hidden sm:block" />
                             <span className="text-white/90 italic font-light">
                                 Future of Digital
                             </span>
                         </h2>
 
-                        <p className="mt-8 text-white text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                        {/* Paragraph */}
+                        <p className="
+            mt-6 sm:mt-8
+            text-white/90
+            text-base sm:text-lg md:text-xl
+            leading-relaxed
+            max-w-xl sm:max-w-2xl mx-auto
+        ">
                             From rapid MVP development to enterprise-level architecture,
                             we deliver high-performance solutions tailored for growth.
                         </p>

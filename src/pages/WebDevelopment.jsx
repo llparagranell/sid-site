@@ -427,29 +427,71 @@ export default function WebDevelopment() {
             </section>
 
             {/* Final CTA */}
-            <section className="py-24 md:py-40 bg-brand-bg">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-0 sm:px-6 lg:px-16">
+            <section className="py-20 sm:py-28 md:py-40 bg-brand-bg">
+                <div className="w-full sm:mx-auto sm:max-w-7xl sm:px-6 lg:px-16">
+
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="relative rounded-none sm:rounded-[80px] bg-brand-dark px-6 py-20 sm:p-32 text-center overflow-hidden shadow-2xl"
+                        className="
+                relative
+                w-full
+                rounded-none sm:rounded-[80px]
+                bg-brand-dark
+                px-5 sm:px-12 md:px-20
+                py-20 sm:py-24 md:py-32
+                text-center
+                overflow-hidden
+                shadow-2xl
+            "
                     >
-                        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(211,216,213,0.1),transparent_70%)]" />
+                        {/* Background Glow */}
+                        <div className="absolute inset-0 
+                bg-[radial-gradient(circle_at_50%_120%,rgba(211,216,213,0.1),transparent_70%)]" />
+
                         <div className="relative z-10">
-                            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] tracking-tighter mb-10 uppercase">
+
+                            {/* Heading */}
+                            <h2 className="
+                    text-3xl sm:text-4xl md:text-6xl lg:text-7xl
+                    font-black text-white
+                    leading-tight md:leading-[0.9]
+                    tracking-tight
+                    mb-8 sm:mb-10
+                    uppercase
+                ">
                                 Let's build <br />
-                                YOUR <span className="text-brand-accent italic font-light lowercase">digital</span> <br />
+                                YOUR{" "}
+                                <span className="text-brand-accent italic font-light lowercase">
+                                    digital
+                                </span>{" "}
+                                <br />
                                 future.
                             </h2>
+
+                            {/* Button */}
                             <motion.button
-                                whileHover={{ scale: 1.1, boxShadow: "0 0 30px rgba(162, 237, 219, 0.3)" }}
-                                whileTap={{ scale: 0.9 }}
+                                whileHover={{ scale: 1.08, boxShadow: "0 0 30px rgba(162, 237, 219, 0.3)" }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={toggleBooking}
-                                className="bg-brand-accent text-brand-dark px-12 py-6 rounded-3xl font-black uppercase tracking-widest transition-all shadow-xl hover:shadow-brand-accent/20 cursor-pointer flex items-center gap-3 mx-auto mt-10"
+                                className="
+                        bg-brand-accent text-brand-dark
+                        px-8 sm:px-12
+                        py-4 sm:py-6
+                        rounded-2xl sm:rounded-3xl
+                        font-black uppercase tracking-widest
+                        text-sm sm:text-base
+                        transition-all shadow-xl
+                        hover:shadow-brand-accent/20
+                        cursor-pointer
+                        flex items-center gap-3
+                        mx-auto mt-8 sm:mt-10
+                    "
                             >
                                 Start Your Project <Sparkles size={18} />
                             </motion.button>
+
                         </div>
                     </motion.div>
                 </div>
