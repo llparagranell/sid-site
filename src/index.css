@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* --color-brand-dark: #1434A4; */
+  /* --color-brand-dark: linear-gradient(180deg,
+      #3A36A3 0%,
+      #2E2A7B 50%,
+      #1E1B4B 100%);
+  ; */
 
   --color-brand-dark: #1e1b4b;
   --color-brand-muted: #64748b;

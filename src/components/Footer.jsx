@@ -92,7 +92,7 @@ export default function Footer() {
                             <li>
                                 <Link to="/about" className="hover:text-white transition-all cursor-pointer">About Us</Link>
                             </li>
-                            <li className="hover:text-white transition-all cursor-pointer">How we work</li>
+
                             <li>
                                 <Link to="/case-studies" className="hover:text-white transition-all cursor-pointer">Case Studies</Link>
                             </li>

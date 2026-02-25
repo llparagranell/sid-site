@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
+import logo from "../assets/Transparent-logo.png";
 
 export default function Navbar({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false);
@@ -150,12 +151,11 @@ export default function Navbar({ onBookClick }) {
 
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-2 group">
-          <motion.div
-            layout
-            className="bg-brand-dark rounded-lg p-1.5 flex items-center justify-center shadow-lg group-hover:shadow-brand-dark/20 transition-all duration-300"
-          >
-            <Box size={20} className="text-brand-bg" />
-          </motion.div>
+          <img
+            src={logo}
+            alt="Devgrowthsolutions Logo"
+            className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          />
           <span
             className="font-bold tracking-tight text-brand-dark transition-all duration-300 text-lg"
           >
@@ -264,33 +264,49 @@ export default function Navbar({ onBookClick }) {
             <div className="flex flex-col p-8 gap-8 pb-32">
               {navLinks.map((link) => (
                 <div key={link.name} className="flex flex-col gap-4">
-                  {/* Unified link rendering for mobile */}
-                  <motion.a
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
-                    href={link.href}
-                    onClick={(e) => {
-                      if (link.hasDropdown) {
-                        e.preventDefault();
-                        setActiveDropdown(
-                          activeDropdown === link.name ? null : link.name
-                        );
-                      } else {
-                        handleNavClick(link.href);
-                      }
-                    }}
-                    className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left"
-                  >
-                    {link.name}
-                    {link.hasDropdown && (
-                      <ChevronDown
-                        size={28}
-                        className={`transition-transform duration-500 ${activeDropdown === link.name ? "rotate-180" : ""
-                          }`}
-                      />
-                    )}
-                  </motion.a>
+                  {link.href.startsWith("/") && !link.hasDropdown ? (
+                    <Link
+                      to={link.href}
+                      onClick={() => setOpen(false)}
+                      className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left"
+                    >
+                      <motion.span
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
+                      >
+                        {link.name}
+                      </motion.span>
+                    </Link>
+                  ) : (
+                    <motion.a
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
+                      href={link.href}
+                      onClick={(e) => {
+                        if (link.hasDropdown) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setActiveDropdown(prev =>
+                            prev === link.name ? null : link.name
+                          );
+                        } else {
+                          handleNavClick(link.href);
+                        }
+                      }}
+                      className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left"
+                    >
+                      {link.name}
+                      {link.hasDropdown && (
+                        <ChevronDown
+                          size={28}
+                          className={`transition-transform duration-500 ${activeDropdown === link.name ? "rotate-180" : ""
+                            }`}
+                        />
+                      )}
+                    </motion.a>
+                  )}
 
                   <AnimatePresence>
                     {link.hasDropdown &&
