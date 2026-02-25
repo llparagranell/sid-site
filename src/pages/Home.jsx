@@ -3,14 +3,11 @@ import Hero from "../components/Hero";
 import VideoSection from "../components/VideoSection";
 import Services from "../components/Services";
 import WorkPhilosophy from "../components/WorkPhilosophy";
-import TechStack from "../components/TechStack";
 import Projects from "../components/Projects";
-import Testimonials from "../components/Testimonials";
 import ProcessSection from "../components/ProcessSection";
 import ComparisonSection from "../components/ComparisonSection";
 import FAQ from "../components/FAQ";
 import ContactSection from "../components/ContactSection";
-import ContactCTA from "../components/ContactCTA";
 import Footer from "../components/Footer";
 import BookingModal from "../components/BookingModal";
 import { useState } from "react";
@@ -45,7 +42,6 @@ export default function Home() {
 
 
             <ComparisonSection />
-            {/* <TechStack /> */}
 
             <Projects />
             <ProcessSection />
