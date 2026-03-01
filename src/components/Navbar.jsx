@@ -29,7 +29,8 @@ export default function Navbar({ onBookClick }) {
   /* ---------------- CLICK OUTSIDE CLOSE ---------------- */
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      // Only close on click-outside if we are in desktop view
+      if (window.innerWidth >= 1024 && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setActiveDropdown(null);
       }
     };
@@ -39,8 +40,8 @@ export default function Navbar({ onBookClick }) {
   }, []);
 
   const navLinks = [
-    { name: "SERVICES", href: isHomePage ? "#services" : "/#services", hasDropdown: true },
-    { name: "INDUSTRIES", href: isHomePage ? "#industries" : "/#industries", hasDropdown: true },
+    { name: "SERVICES", href: isHomePage ? "#services" : "/", hasDropdown: true },
+    { name: "INDUSTRIES", href: isHomePage ? "#industries" : "/", hasDropdown: true },
     { name: "CASE STUDIES", href: "/case-studies" },
     { name: "BLOG", href: "/blog" },
     { name: "ABOUT US", href: "/about" },
@@ -143,6 +144,9 @@ export default function Navbar({ onBookClick }) {
               className="h-full w-full object-contain rounded-xl"
             />
           </div>
+          <span className="text-sm md:text-xl font-bold text-brand-dark whitespace-nowrap">
+            Devgrowth Solutions
+          </span>
         </Link>
 
         {/* DESKTOP NAV */}
@@ -261,33 +265,31 @@ export default function Navbar({ onBookClick }) {
                       </motion.span>
                     </Link>
                   ) : (
-                    <motion.a
+                    <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
-                      href={link.href}
+                      className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left cursor-pointer select-none"
                       onClick={(e) => {
+                        e.preventDefault();
                         if (link.hasDropdown) {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setActiveDropdown(prev =>
-                            prev === link.name ? null : link.name
-                          );
+                          setActiveDropdown(activeDropdown === link.name ? null : link.name);
                         } else {
                           handleNavClick(link.href);
                         }
                       }}
-                      className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left"
                     >
-                      {link.name}
+                      <span>{link.name}</span>
                       {link.hasDropdown && (
-                        <ChevronDown
-                          size={28}
-                          className={`transition-transform duration-500 ${activeDropdown === link.name ? "rotate-180" : ""
-                            }`}
-                        />
+                        <div className="p-2">
+                          <ChevronDown
+                            size={28}
+                            className={`transition-transform duration-500 ${activeDropdown === link.name ? "rotate-180" : ""
+                              }`}
+                          />
+                        </div>
                       )}
-                    </motion.a>
+                    </motion.div>
                   )}
 
                   <AnimatePresence>

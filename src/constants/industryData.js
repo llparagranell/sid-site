@@ -11,7 +11,7 @@
 
 export const industries = [
     {
-        title: "HealthCare",
+        title: "Healthcare",
         icon: HeartPulse,
         desc: "Smarter healthcare delivery through digital innovation.",
         path: "/industries/healthcare"
@@ -32,29 +32,25 @@ export const industries = [
         title: "E-commerce",
         icon: ShoppingBag,
         desc: "High-conversion digital storefronts and marketplaces.",
-        path: "/services/ecommerce-solutions"
+        path: "/industries/ecommercesolutions"
     },
     {
-        title: "IT & SOFTWARE",
+        title: "IT & Software",
         icon: Code2,
         desc: "Full-cycle software engineering and cloud solutions.",
         path: "/industries/it-software"
     },
     {
-        title: "LOGISTICS",
+        title: "Logistics",
         icon: Truck,
         desc: "Efficient transportation and fleet management systems.",
         path: "/industries/logistics"
     },
     {
-        title: "SUPPLY CHAIN",
+        title: "Supply Chain",
         icon: ClipboardList,
         desc: "Seamless end-to-end supply chain optimization.",
         path: "/industries/supply-chain"
     },
-    {
-        title: "MANAGEMENT",
-        icon: Briefcase,
-        desc: "Strategic business management and workflow automation."
-    }
+
 ];

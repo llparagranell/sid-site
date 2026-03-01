@@ -4,10 +4,10 @@ import {
     ShoppingCart, Search, ShieldCheck, RefreshCcw, CheckCircle2,
     Cloud, Code2, Rocket, TrendingUp, Layers, Smartphone, Database
 } from "lucide-react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import BookingModal from "../components/BookingModal";
-import PageHeaderBackground from "../components/PageHeaderBackground";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import BookingModal from "../../components/BookingModal";
+import PageHeaderBackground from "../../components/PageHeaderBackground";
 
 const serviceTypes = [
     {

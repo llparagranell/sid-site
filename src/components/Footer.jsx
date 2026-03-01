@@ -62,7 +62,7 @@ export default function Footer() {
                     className="h-px w-full mb-20 origin-left bg-gradient-to-r from-brand-accent via-indigo-400/40 to-transparent"
                 />
 
-                <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-12">
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-12">
 
                     {/* Brand Section */}
                     <motion.div {...fadeUp(0)} className="lg:col-span-4 flex flex-col gap-10">
@@ -79,9 +79,9 @@ export default function Footer() {
                             />
                         </motion.div>
 
-                        <p className="text-sm text-white/60 max-w-sm leading-relaxed font-medium">
+                        {/* <p className="text-sm text-white/60 max-w-sm leading-relaxed font-medium">
                             Building digital products that scale — from idea to launch and beyond.
-                        </p>
+                        </p> */}
 
                         {/* Contact */}
                         <ul className="space-y-4">
@@ -104,9 +104,10 @@ export default function Footer() {
 
                     {/* Dynamic Link Columns */}
                     {[
-                        { title: "Services", data: services.slice(0, 6) },
-                        { title: "Industries", data: industries.slice(0, 6) },
-                        { title: "Company", data: COMPANY_LINKS }
+                        { title: "Company", data: [...COMPANY_LINKS, { label: "Contact Us", to: "/#contact" }] },
+                        { title: "Services", data: services },
+                        { title: "Industries", data: industries }
+
                     ].map((section, idx) => (
                         <motion.div key={section.title} {...fadeUp(0.1 + idx * 0.1)} className="lg:col-span-2">
                             <h4 className="mb-6 text-xs uppercase tracking-[0.25em] font-bold text-white/40">

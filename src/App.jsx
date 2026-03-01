@@ -13,7 +13,6 @@ import AiMachineLearning from "./pages/AiMachineLearning";
 import CloudSolutions from "./pages/CloudSolutions";
 import UiUxDesign from "./pages/UiUxDesign";
 import DatabaseManagement from "./pages/DatabaseManagement";
-import EcommerceSolutions from "./pages/EcommerceSolutions";
 import CustomSoftware from "./pages/CustomSoftware";
 // Industry Pages
 import Healthcare from "./pages/industries/Healthcare";
@@ -22,6 +21,7 @@ import Fintech from "./pages/industries/Fintech";
 import ItSoftware from "./pages/industries/ItSoftware";
 import Logistics from "./pages/industries/Logistics";
 import SupplyChain from "./pages/industries/SupplyChain";
+import EcommerceSolutions from "./pages/industries/EcommerceSolutions";
 
 export default function App() {
   return (
@@ -40,9 +40,9 @@ export default function App() {
         <Route path="/services/cloud-solutions" element={<CloudSolutions />} />
         <Route path="/services/ui-ux-design" element={<UiUxDesign />} />
         <Route path="/services/database-management" element={<DatabaseManagement />} />
-        <Route path="/services/ecommerce-solutions" element={<EcommerceSolutions />} />
         <Route path="/services/custom-software" element={<CustomSoftware />} />
         {/* Industry Routes */}
+        <Route path="/industries/ecommercesolutions" element={<EcommerceSolutions />} />
         <Route path="/industries/healthcare" element={<Healthcare />} />
         <Route path="/industries/education" element={<Education />} />
         <Route path="/industries/fintech" element={<Fintech />} />

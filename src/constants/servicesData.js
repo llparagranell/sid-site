@@ -42,13 +42,7 @@ export const services = [
         layoutId: "icon-Zap",
         path: "/services/cloud-solutions"
     },
-    {
-        icon: ShoppingCart,
-        title: "E-Commerce Solutions",
-        desc: "Complete online store solutions with payment integration.",
-        points: ["Payments", "Inventory", "Conversion optimization"],
-        path: "/services/ecommerce-solutions"
-    },
+
     {
         icon: Palette,
         title: "UI/UX Design",
