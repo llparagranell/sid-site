@@ -31,37 +31,44 @@ export const services = [
         title: "AI & Machine Learning",
         desc: "Intelligent solutions powered by artificial intelligence and ML.",
         points: ["Predictive models", "NLP & CV", "Model deployment"],
-        layoutId: "icon-Sparkles"
+        layoutId: "icon-Sparkles",
+        path: "/services/ai-machine-learning"
     },
     {
         icon: Zap,
         title: "Cloud Solutions",
         desc: "Scalable cloud infrastructure and migration services.",
         points: ["Cloud migration", "Serverless", "Cost optimization"],
-        layoutId: "icon-Zap"
+        layoutId: "icon-Zap",
+        path: "/services/cloud-solutions"
     },
     {
         icon: ShoppingCart,
         title: "E-Commerce Solutions",
         desc: "Complete online store solutions with payment integration.",
         points: ["Payments", "Inventory", "Conversion optimization"],
+        path: "/services/ecommerce-solutions"
     },
     {
         icon: Palette,
         title: "UI/UX Design",
         desc: "Beautiful, intuitive designs that users love.",
         points: ["User research", "Prototyping", "Design systems"],
+        path: "/services/ui-ux-design"
     },
     {
         icon: Database,
         title: "Database Management",
         desc: "Robust database design, optimization, and maintenance.",
         points: ["Schema design", "Backups", "Performance tuning"],
+        path: "/services/database-management"
     },
     {
         icon: Code2,
         title: "Custom Software",
         desc: "Tailored software solutions for unique business needs.",
         points: ["Custom apps", "APIs", "Integrations"],
+        path: "/services/custom-software"
     },
 ];
+

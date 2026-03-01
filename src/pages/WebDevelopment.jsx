@@ -212,7 +212,6 @@ export default function WebDevelopment() {
                 </motion.div>
             </section>
 
-            {/* 2. Overview Section */}
             <section className="py-24 md:py-40 bg-brand-dark text-white relative overflow-hidden">
                 <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.1]"
                     style={{
@@ -287,6 +286,74 @@ export default function WebDevelopment() {
                                     </motion.div>
                                 </div>
                             </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Modern Framework Stack (Unique Component) */}
+            <section className="py-24 bg-brand-bg relative overflow-hidden border-b border-brand-dark/5">
+                <div className="mx-auto max-w-7xl px-6 lg:px-16">
+                    <div className="flex flex-col lg:flex-row items-center gap-16">
+                        <div className="w-full lg:w-1/2 flex flex-col gap-6 order-2 lg:order-1">
+                            <div className="relative flex gap-4 overflow-hidden py-4 -mx-4 px-4 overflow-x-auto no-scrollbar">
+                                {[
+                                    { name: "React", icon: Layers, color: "rgba(97, 218, 251, 0.1)" },
+                                    { name: "Next.js", icon: Rocket, color: "rgba(0, 0, 0, 0.05)" },
+                                    { name: "Node.js", icon: Database, color: "rgba(104, 160, 99, 0.1)" },
+                                    { name: "Tailwind", icon: Sparkles, color: "rgba(56, 189, 248, 0.1)" },
+                                ].map((tech, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: idx * 0.1 }}
+                                        className="flex-shrink-0 w-40 p-8 rounded-[32px] border border-brand-dark/5 flex flex-col items-center justify-center gap-4 group hover:bg-brand-dark transition-all duration-500"
+                                        style={{ backgroundColor: tech.color }}
+                                    >
+                                        <tech.icon size={32} className="text-brand-dark group-hover:text-brand-accent transition-colors" />
+                                        <span className="text-xs font-black uppercase tracking-widest text-brand-dark group-hover:text-white transition-colors">{tech.name}</span>
+                                    </motion.div>
+                                ))}
+                            </div>
+                            <div className="h-px w-full bg-brand-dark/5" />
+                            <div className="flex items-center gap-3">
+                                <div className="flex -space-x-2">
+                                    {[1, 2, 3].map((_, i) => (
+                                        <div key={i} className="h-8 w-8 rounded-full border-2 border-white bg-brand-dark/10 overflow-hidden">
+                                            <div className="w-full h-full bg-brand-accent animate-pulse" />
+                                        </div>
+                                    ))}
+                                </div>
+                                <span className="text-xs font-bold text-brand-dark/40 uppercase tracking-widest">Used by Global Leaders</span>
+                            </div>
+                        </div>
+                        <div className="w-full lg:w-1/2 order-1 lg:order-2">
+                            <motion.span
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="inline-block mb-4 text-xs font-bold tracking-[0.3em] text-brand-dark opacity-30 uppercase"
+                            >
+                                Tech Superiority
+                            </motion.span>
+                            <h3 className="text-4xl md:text-5xl font-black text-brand-dark tracking-tighter mb-8 leading-tight">
+                                Modern Stack <br />
+                                <span className="italic font-light">Architecture.</span>
+                            </h3>
+                            <p className="text-brand-dark/60 text-lg font-medium leading-relaxed mb-10">
+                                We utilize the industry's most advanced frameworks and libraries to ensure your web application is fast, secure, and ready to scale. Our choice of tools is driven by performance and developer experience.
+                            </p>
+                            <div className="flex items-center gap-8">
+                                {[
+                                    { value: "99.9%", label: "Uptime" },
+                                    { value: "<200ms", label: "latency" },
+                                ].map((stat, i) => (
+                                    <div key={i}>
+                                        <div className="text-3xl font-black text-brand-dark">{stat.value}</div>
+                                        <div className="text-[10px] font-black tracking-widest text-brand-dark/40 uppercase">{stat.label}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -13,37 +13,44 @@ export const industries = [
     {
         title: "HealthCare",
         icon: HeartPulse,
-        desc: "Smarter healthcare delivery through digital innovation."
+        desc: "Smarter healthcare delivery through digital innovation.",
+        path: "/industries/healthcare"
     },
     {
         title: "Education",
         icon: GraduationCap,
-        desc: "Transforming learning experiences with custom EdTech."
+        desc: "Transforming learning experiences with custom EdTech.",
+        path: "/industries/education"
     },
     {
         title: "Fintech",
         icon: Wallet,
-        desc: "Secure, scalable, and modern financial ecosystem."
+        desc: "Secure, scalable, and modern financial ecosystem.",
+        path: "/industries/fintech"
     },
     {
         title: "E-commerce",
         icon: ShoppingBag,
-        desc: "High-conversion digital storefronts and marketplaces."
+        desc: "High-conversion digital storefronts and marketplaces.",
+        path: "/services/ecommerce-solutions"
     },
     {
         title: "IT & SOFTWARE",
         icon: Code2,
-        desc: "Full-cycle software engineering and cloud solutions."
+        desc: "Full-cycle software engineering and cloud solutions.",
+        path: "/industries/it-software"
     },
     {
         title: "LOGISTICS",
         icon: Truck,
-        desc: "Efficient transportation and fleet management systems."
+        desc: "Efficient transportation and fleet management systems.",
+        path: "/industries/logistics"
     },
     {
         title: "SUPPLY CHAIN",
         icon: ClipboardList,
-        desc: "Seamless end-to-end supply chain optimization."
+        desc: "Seamless end-to-end supply chain optimization.",
+        path: "/industries/supply-chain"
     },
     {
         title: "MANAGEMENT",

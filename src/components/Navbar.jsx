@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
-import logo from "../assets/Transparent-logo.png";
+import devgrowthlogo from "../assets/devgrowthlogo.jpeg";
 
 export default function Navbar({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false);
@@ -14,22 +14,10 @@ export default function Navbar({ onBookClick }) {
   const dropdownRef = useRef(null);
   const isHomePage = location.pathname === "/";
 
-  /* ---------------- SCROLL EFFECT ---------------- */
-  // useEffect(() => {
-  //   const onScroll = () => {
-  //     setScrolled(window.scrollY > 20);
-  //     if (window.scrollY > 50) setOpen(false);
-  //   };
-  //   window.addEventListener("scroll", onScroll);
-  //   return () => window.removeEventListener("scroll", onScroll);
-  // }, []);
-
   useEffect(() => {
+    // Close mobile menu ONLY if open and user scrolls significantly
     const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      // Close mobile menu ONLY if open and user scrolls significantly
-      if (open && window.scrollY > 80) {
+      if (open && window.scrollY > 200) { // Increased threshold to 200px
         setOpen(false);
       }
     };
@@ -142,25 +130,19 @@ export default function Navbar({ onBookClick }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b py-4 ${scrolled
-        ? "bg-white/80 backdrop-blur-lg border-brand-dark/10 shadow-lg"
-        : "bg-white border-transparent"
-        }`}
+      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-brand-dark/10 "
     >
       <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 md:px-12">
 
         {/* LOGO */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <img
-            src={logo}
-            alt="Devgrowthsolutions Logo"
-            className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-          />
-          <span
-            className="font-bold tracking-tight text-brand-dark transition-all duration-300 text-lg"
-          >
-            Devgrowthsolutions
-          </span>
+        <Link to="/" className="flex items-center gap-4 group">
+          <div className="h-20 w-20 md:h-20 md:w-20 overflow-hidden ">
+            <img
+              src={devgrowthlogo}
+              alt="Devgrowth Solutions Logo"
+              className="h-full w-full object-contain rounded-xl"
+            />
+          </div>
         </Link>
 
         {/* DESKTOP NAV */}
@@ -245,7 +227,7 @@ export default function Navbar({ onBookClick }) {
         {/* MOBILE BUTTON */}
         <button
           onClick={() => setOpen(!open)}
-          className="lg:hidden text-brand-dark p-2 hover:bg-brand-dark/5 rounded-full transition-colors"
+          className="lg:hidden text-brand-dark p-2 hover:bg-brand-dark/5 rounded-full transition-colors z-[60]"
         >
           {open ? <X size={28} /> : <Menu size={28} />}
         </button>
@@ -255,11 +237,11 @@ export default function Navbar({ onBookClick }) {
       <AnimatePresence>
         {open && (
           <motion.nav
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "calc(100vh - 72px)" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-full left-0 right-0 bg-white border-t border-brand-dark/10 shadow-2xl lg:hidden z-40 overflow-y-auto"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 right-0 bg-white border-t border-brand-dark/10 shadow-2xl lg:hidden z-50 overflow-y-auto max-h-[calc(100vh-80px)]"
           >
             <div className="flex flex-col p-8 gap-8 pb-32">
               {navLinks.map((link) => (
@@ -386,6 +368,7 @@ export default function Navbar({ onBookClick }) {
           </motion.nav>
         )}
       </AnimatePresence>
+
     </header>
   );
 }

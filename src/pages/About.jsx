@@ -274,11 +274,17 @@ export default function About() {
             </section>
 
             {/* Join Us CTA */}
-            < section className="py-24 md:py-40" >
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="relative rounded-[80px] bg-brand-dark p-12 md:p-32 text-center overflow-hidden shadow-2xl">
+            <section className="py-20 sm:py-28 md:py-36 w-full">
+                <div className="w-full sm:px-8 md:px-12 lg:px-16">
+
+                    <div className="relative w-full 
+        rounded-none sm:rounded-[50px] md:rounded-[80px]
+        bg-brand-dark
+        p-8 sm:p-12 md:p-20 lg:p-28
+        text-center overflow-hidden shadow-2xl">
+
                         {/* Background Sparkle Effect */}
-                        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(211,216,213,0.1),transparent_70%)]" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(211,216,213,0.1),transparent_70%)]" />
 
                         <motion.div
                             initial={{ scale: 0.95, opacity: 0 }}
@@ -286,27 +292,43 @@ export default function About() {
                             viewport={{ once: true }}
                             className="relative z-10"
                         >
-                            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] tracking-tighter mb-10 uppercase">
-                                Let's <span className="text-brand-accent italic font-light lowercase">build</span> <br />
+                            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl 
+            font-black text-white leading-[0.95] tracking-tighter mb-8 uppercase">
+                                Let's{" "}
+                                <span className="text-brand-accent italic font-light lowercase">
+                                    build
+                                </span>
+                                <br className="hidden sm:block" />
                                 your future?
                             </h2>
-                            <p className="text-white/50 text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto">
+
+                            <p className="text-white/50 text-base sm:text-lg md:text-xl 
+            font-medium mb-10 max-w-3xl mx-auto">
                                 Whether you're a startup looking for an MVP or an enterprise seeking
                                 digital transformation, we have the expertise to make it happen.
                             </p>
+
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={toggleBooking}
-                                className="inline-flex items-center gap-3 bg-brand-accent text-brand-dark px-12 py-6 rounded-3xl font-black uppercase tracking-widest transition-all shadow-xl hover:shadow-brand-accent/20 cursor-pointer"
+                                className="inline-flex items-center gap-3 
+              bg-brand-accent text-brand-dark 
+              px-8 sm:px-10 md:px-12 
+              py-4 sm:py-5 md:py-6 
+              rounded-2xl sm:rounded-3xl 
+              font-black uppercase tracking-widest 
+              transition-all shadow-xl 
+              hover:shadow-brand-accent/20 
+              cursor-pointer"
                             >
-                                Start Your Project <Sparkles size={22} />
+                                Start Your Project <Sparkles size={20} />
                             </motion.button>
                         </motion.div>
+
                     </div>
                 </div>
-            </section >
-
+            </section>
             <Footer />
             <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
         </div >
