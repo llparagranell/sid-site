@@ -144,7 +144,7 @@ export default function Navbar({ onBookClick }) {
               className="h-full w-full object-contain rounded-xl"
             />
           </div>
-          <span className="text-sm md:text-xl font-bold text-brand-dark whitespace-nowrap">
+          <span className="hidden md:block text-xl font-bold text-brand-dark whitespace-nowrap">
             Devgrowth Solutions
           </span>
         </Link>
@@ -209,22 +209,20 @@ export default function Navbar({ onBookClick }) {
         {/* CTA */}
         <div className="hidden md:flex items-center gap-6">
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{
+              scale: 1.05,
+
+            }}
+            whileTap={{ scale: 0.98 }}
             onClick={onBookClick}
-            className="flex items-center gap-2 font-bold text-brand-dark hover:opacity-70 transition-all cursor-pointer text-sm"
+            className="flex items-center gap-3 px-8 py-3 rounded-full bg-brand-dark text-white font-bold transition-all shadow-lg cursor-pointer border border-white/10"
           >
-            <Sparkles size={16} className="opacity-50" />
-            Book Consultation
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleNavClick("#contact")}
-            className="flex items-center gap-2 rounded-full bg-brand-dark text-white font-bold transition-all duration-300 shadow-lg hover:shadow-brand-dark/20 cursor-pointer px-6 py-2.5 text-sm"
-          >
-            Get Started
-            <ExternalLink size={16} />
+            <motion.div
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-2 h-2 rounded-full bg-brand-accent shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+            />
+            <span className="text-[14px] tracking-tight">Book a 30 mins call</span>
           </motion.button>
         </div>
 
@@ -348,23 +346,17 @@ export default function Navbar({ onBookClick }) {
               ))}
 
               <div className="pt-4 flex flex-col gap-4">
-                <button
-                  onClick={() => handleNavClick("#contact")}
-                  className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-bold text-white shadow-xl cursor-pointer active:scale-95 transition-transform"
-                >
-                  Get Started
-                  <ExternalLink size={20} />
-                </button>
-                <button
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setOpen(false);
                     onBookClick();
                   }}
-                  className="w-full flex justify-center items-center gap-3 rounded-2xl border-2 border-brand-dark/10 py-5 text-lg font-bold text-brand-dark cursor-pointer active:scale-95 transition-transform hover:border-brand-dark"
+                  className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-black text-white shadow-xl cursor-pointer active:scale-95 transition-transform"
                 >
-                  <Sparkles size={20} className="opacity-50" />
-                  Book Consultation
-                </button>
+                  <div className="w-2.5 h-2.5 rounded-full bg-brand-accent shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                  Book a 30 mins call
+                </motion.button>
               </div>
             </div>
           </motion.nav>

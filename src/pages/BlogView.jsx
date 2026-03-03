@@ -12,49 +12,19 @@ export default function BlogView() {
     const toggleBooking = () => setIsBookingOpen(!isBookingOpen);
     const { id } = useParams();
 
-    // Mock data for the single post view
     const post = {
         title: "Scaling MVPs for Seed-Stage Startups",
         category: "Scalability",
         date: "Feb 15, 2026",
         readTime: "8 min read",
         author: "DevGrowth Team",
-        content: `
-            <p className="text-xl md:text-2xl text-brand-dark/90 leading-relaxed mb-10 font-medium tracking-tight">
-                Building a Minimum Viable Product (MVP) is just the beginning. The real challenge lies in architecture 
-                decisions that allow your product to grow from ten users to ten thousand without requiring 
-                a complete technical overhaul.
-            </p>
-            
-            <h2 className="text-2xl md:text-3xl font-black text-brand-dark mt-12 mb-6 tracking-tighter leading-tight">The "Disposable MVP" Myth</h2>
-            <p className="text-brand-dark/70 leading-relaxed mb-6">
-                Many founders fall into the trap of thinking an MVP should be built to be thrown away. 
-                While speed is critical, total disregard for architecture leads to "technical bankruptcy" 
-                at the exact moment your business starts to succeed.
-            </p>
-
-            <div className="my-12 p-8 rounded-4xl bg-brand-dark text-white border-l-4 border-brand-accent">
-                <p className="italic text-lg font-medium">
-                    "Scalability isn't about handling a million users today; it's about the ease with 
-                    which you can change the system to handle them tomorrow."
-                </p>
-            </div>
-
-            <h2 className="text-2xl md:text-3xl font-black text-brand-dark mt-12 mb-6 tracking-tighter leading-tight">Strategic Tech Stack Selection</h2>
-            <p className="text-brand-dark/70 leading-relaxed mb-6">
-                Choosing a stack isn't just about what's trendy. It's about finding the balance between 
-                developer velocity and infrastructure scalability. We recommend starting with 
-                robust, well-supported frameworks like React and Node.js that have proven 
-                ecosystems for modular growth.
-            </p>
-        `
     };
 
     return (
         <div className="relative min-h-screen bg-brand-bg font-sans selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
             <Navbar onBookClick={toggleBooking} />
 
-            {/* Header / Hero */}
+            {/* Header */}
             <header className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-brand-bg">
                 <PageHeaderBackground />
                 <div className="mx-auto max-w-4xl px-6 relative z-10 text-center">
@@ -63,15 +33,21 @@ export default function BlogView() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <Link to="/blog" className="inline-flex items-center gap-2 text-brand-dark/40 hover:text-brand-dark font-bold text-xs uppercase tracking-[0.3em] mb-8 transition-colors">
+                        <Link
+                            to="/blog"
+                            className="inline-flex items-center gap-2 text-brand-dark/40 hover:text-brand-dark font-bold text-xs uppercase tracking-[0.3em] mb-8 transition-colors"
+                        >
                             <ArrowLeft size={16} /> Back to Blog
                         </Link>
+
                         <span className="block mb-6 text-brand-accent font-black uppercase tracking-[0.3em] text-xs">
                             {post.category}
                         </span>
+
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9] mb-10">
                             {post.title}
                         </h1>
+
                         <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-bold text-brand-dark/40 uppercase tracking-widest">
                             <div className="flex items-center gap-2">
                                 <Calendar size={14} /> {post.date}
@@ -87,14 +63,76 @@ export default function BlogView() {
                 </div>
             </header>
 
-            {/* Article Content */}
+            {/* Article */}
             <article className="py-24 relative">
-                <div className="mx-auto max-w-3xl px-6 relative z-10">
-                    <div
-                        className="prose prose-base md:prose-lg max-w-none prose-headings:text-brand-dark prose-p:text-brand-dark/80 prose-strong:text-brand-dark prose-li:text-brand-dark/80"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
-                    />
+                <div className="mx-auto max-w-3xl px-6 relative z-10 space-y-8">
 
+                    {/* Intro */}
+                    <p className="text-brand-dark/70 leading-relaxed">
+                        Launching a Minimum Viable Product (MVP) is an exciting milestone —
+                        but it’s not the finish line. The real inflection point begins when
+                        early traction demands rapid growth. The technical decisions you
+                        make at the MVP stage determine whether your product scales effortlessly
+                        — or struggles under the weight of its own success.
+                    </p>
+
+                    {/* Section 1 */}
+                    <h2 className="text-2xl md:text-3xl font-black text-brand-dark tracking-tight">
+                        The Dangerous “Build Now, Fix Later” Mindset
+                    </h2>
+
+                    <p className="text-brand-dark/70 leading-relaxed">
+                        Speed is essential for startups. But treating your MVP as disposable
+                        technical debt is one of the most expensive mistakes founders make.
+                        What feels like a shortcut today often turns into engineering paralysis
+                        tomorrow — slowing releases, increasing bugs, and forcing painful
+                        rewrites right when growth accelerates.
+                    </p>
+
+                    <p className="text-brand-dark/70 leading-relaxed">
+                        A scalable MVP doesn’t mean over-engineering. It means building with
+                        intentional flexibility — structuring code, APIs, and infrastructure
+                        in a way that supports iteration without introducing hidden fragility.
+                    </p>
+
+                    {/* Quote */}
+                    <div className="my-12 p-8 rounded-3xl bg-brand-dark text-white border-l-4 border-brand-accent">
+                        <p className="italic text-lg font-medium">
+                            "Scalability isn’t about handling a million users today —
+                            it’s about how effortlessly your system adapts when that moment arrives."
+                        </p>
+                    </div>
+
+                    {/* Section 2 */}
+                    <h2 className="text-2xl md:text-3xl font-black text-brand-dark tracking-tight">
+                        Designing for Growth from Day One
+                    </h2>
+
+                    <p className="text-brand-dark/70 leading-relaxed">
+                        Smart architectural decisions early on dramatically reduce future risk.
+                        Modular codebases, clean separation of concerns, and predictable data models
+                        create a foundation that can evolve without costly disruption.
+                    </p>
+
+                    <p className="text-brand-dark/70 leading-relaxed">
+                        Rather than chasing trends, founders should prioritize battle-tested ecosystems.
+                        Frameworks like React and Node.js provide maturity, performance, and strong communities —
+                        enabling rapid development today and scalable infrastructure tomorrow.
+                    </p>
+
+                    {/* Section 3 */}
+                    <h2 className="text-2xl md:text-3xl font-black text-brand-dark tracking-tight">
+                        Balancing Velocity with Stability
+                    </h2>
+
+                    <p className="text-brand-dark/70 leading-relaxed">
+                        The goal is not perfection — it’s controlled acceleration. Your MVP should
+                        move fast, but in the right direction. Clear technical boundaries, scalable
+                        hosting strategies, and well-defined APIs ensure your product can handle
+                        exponential growth without engineering chaos.
+                    </p>
+
+                    {/* Author Section */}
                     <div className="mt-20 pt-12 border-t border-brand-dark/5 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full bg-brand-dark/5 flex items-center justify-center">
@@ -102,18 +140,25 @@ export default function BlogView() {
                             </div>
                             <div>
                                 <div className="text-sm font-black text-brand-dark">{post.author}</div>
-                                <div className="text-[10px] font-bold text-brand-dark/40 uppercase tracking-widest">Digital Strategy Lead</div>
+                                <div className="text-[10px] font-bold text-brand-dark/40 uppercase tracking-widest">
+                                    Digital Strategy Lead
+                                </div>
                             </div>
                         </div>
+
                         <button className="p-4 rounded-2xl bg-brand-dark/5 text-brand-dark hover:bg-brand-dark hover:text-white transition-all cursor-pointer">
                             <Share2 size={20} />
                         </button>
                     </div>
+
                 </div>
             </article>
 
             <Footer />
-            <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+            <BookingModal
+                isOpen={isBookingOpen}
+                onClose={() => setIsBookingOpen(false)}
+            />
         </div>
     );
 }
