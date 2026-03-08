@@ -43,7 +43,7 @@ export default function Home() {
 
             <ComparisonSection />
 
-            <Projects />
+            {/* <Projects />     */}
             <ProcessSection />
             <ContactSection />
 

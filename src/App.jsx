@@ -14,6 +14,8 @@ import CloudSolutions from "./pages/CloudSolutions";
 import UiUxDesign from "./pages/UiUxDesign";
 import DatabaseManagement from "./pages/DatabaseManagement";
 import CustomSoftware from "./pages/CustomSoftware";
+import EcommerceSolutions from "./pages/industries/EcommerceSolutions";
+
 // Industry Pages
 import Healthcare from "./pages/industries/Healthcare";
 import Education from "./pages/industries/Education";
@@ -21,7 +23,7 @@ import Fintech from "./pages/industries/Fintech";
 import ItSoftware from "./pages/industries/ItSoftware";
 import Logistics from "./pages/industries/Logistics";
 import SupplyChain from "./pages/industries/SupplyChain";
-import EcommerceSolutions from "./pages/industries/EcommerceSolutions";
+// import EcommerceSolutions from "./pages/industries/EcommerceSolutions";
 
 export default function App() {
   return (

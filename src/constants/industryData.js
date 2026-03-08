@@ -28,12 +28,12 @@ export const industries = [
         desc: "Secure, scalable, and modern financial ecosystem.",
         path: "/industries/fintech"
     },
-    {
-        title: "E-commerce",
-        icon: ShoppingBag,
-        desc: "High-conversion digital storefronts and marketplaces.",
-        path: "/industries/ecommercesolutions"
-    },
+    // {
+    //     title: "E-commerce",
+    //     icon: ShoppingBag,
+    //     desc: "High-conversion digital storefronts and marketplaces.",
+    //     path: "/industries/ecommercesolutions"
+    // },
     {
         title: "IT & Software",
         icon: Code2,

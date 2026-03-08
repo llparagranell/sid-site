@@ -51,6 +51,13 @@ export const services = [
         path: "/services/ui-ux-design"
     },
     {
+        icon: ShoppingCart,
+        title: "E-commerce",
+        desc: "High-conversion digital storefronts and marketplaces.",
+        points: ["User research", "Prototyping", "Design systems"],
+        path: "/services/ecommercesolutions"
+    },
+    {
         icon: Database,
         title: "Database Management",
         desc: "Robust database design, optimization, and maintenance.",
