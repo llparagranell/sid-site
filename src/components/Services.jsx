@@ -199,19 +199,31 @@ export default function Services() {
         return () => window.clearTimeout(timer);
     }, [hoverId]);
 
-    // Exactly one group is open at a time: a click opens (or keeps open), never collapses to none.
-    const openGroup = (id) => {
+    // At most one group is open. A click on a closed row opens it; a click on the open row
+    // (the × icon) closes it. After a click-close, hover must not re-open the row still under
+    // the pointer, so that row is ignored by hover until the pointer leaves it.
+    const hoverSuppressed = useRef(null);
+
+    const toggleGroup = (id) => {
         setHoverId(null);
-        setOpenId(id);
+        if (openId === id) {
+            hoverSuppressed.current = id;
+            setOpenId(null);
+        } else {
+            hoverSuppressed.current = null;
+            setOpenId(id);
+        }
     };
 
     const hover = (id, event) => {
         if (event.pointerType !== "mouse") return;
         if (settling.current) return;
+        if (hoverSuppressed.current === id) return;
         setHoverId(id);
     };
 
     const hoverEnd = (id) => {
+        if (hoverSuppressed.current === id) hoverSuppressed.current = null;
         setHoverId((current) => (current === id ? null : current));
     };
 
@@ -235,7 +247,7 @@ export default function Services() {
                             group={group}
                             open={openId === group.id}
                             reduced={reduced}
-                            onOpen={() => openGroup(group.id)}
+                            onOpen={() => toggleGroup(group.id)}
                             onHover={(event) => hover(group.id, event)}
                             onHoverEnd={() => hoverEnd(group.id)}
                         />

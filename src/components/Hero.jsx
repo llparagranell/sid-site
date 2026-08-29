@@ -1,4 +1,4 @@
-import { Component, lazy, Suspense, useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { Component, lazy, Suspense, useEffect, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig, useReducedMotionConfig } from "framer-motion";
 import { ChevronRight } from "lucide-react";
@@ -25,7 +25,6 @@ const WORDS = ["ship.", "scale.", "matter."];
 const WORD_INTERVAL_MS = 2400;
 const DISCIPLINES = ["Web", "Mobile", "AI", "Cloud"];
 const PRELOADER_EVENT = "dg:preloader-done";
-const LG_QUERY = "(min-width: 1024px)";
 
 /** Entrance: fade + rise, delayed by `custom` x 0.1s. */
 const rise = {
@@ -46,20 +45,6 @@ const fade = {
 /* ------------------------------------------------------------------ */
 /* Hooks                                                               */
 /* ------------------------------------------------------------------ */
-
-/** `matchMedia(query).matches` as an external store; re-renders on change. */
-function useMediaQuery(query) {
-    const subscribe = useCallback(
-        (onChange) => {
-            const mql = window.matchMedia(query);
-            mql.addEventListener("change", onChange);
-            return () => mql.removeEventListener("change", onChange);
-        },
-        [query],
-    );
-    const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
-    return useSyncExternalStore(subscribe, getSnapshot, () => false);
-}
 
 function subscribeVisibility(onChange) {
     document.addEventListener("visibilitychange", onChange);
@@ -180,9 +165,10 @@ class CubeBoundary extends Component {
 
 function HeroContent({ onBookClick }) {
     const reduced = Boolean(useReducedMotionConfig());
-    const isLarge = useMediaQuery(LG_QUERY);
     const ready = usePreloaderDone();
-    const wantsCube = isLarge && !reduced;
+    /* The WebGL cube renders at every size (27 meshes is cheap even on phones); the SVG
+       stands in only under reduced motion, without WebGL, or while the chunk loads. */
+    const wantsCube = !reduced;
     const cubeClass = "h-full w-full";
 
     // Fetch the chunk right away so it is cached by the time the entrance starts;
@@ -199,10 +185,10 @@ function HeroContent({ onBookClick }) {
             aria-labelledby="hero-title"
             initial={reduced ? "show" : "hidden"}
             animate={ready || reduced ? "show" : "hidden"}
-            className="band-dark relative flex min-h-[100svh] items-center overflow-hidden border-b border-line-dark pt-28 pb-16 md:pt-32"
+            className="band-dark relative flex items-center overflow-hidden border-b border-line-dark pt-24 pb-12 md:pt-32 md:pb-16 lg:min-h-[100svh]"
         >
-            <Container className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-                <div className="flex flex-col items-start gap-6 md:gap-8">
+            <Container className="grid gap-10 md:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div className="flex flex-col items-start gap-5 md:gap-8">
                     <MotionDiv custom={0} variants={rise}>
                         <Link
                             to="/case-studies"
@@ -268,7 +254,7 @@ function HeroContent({ onBookClick }) {
                     aria-hidden="true"
                     custom={0.2}
                     variants={fade}
-                    className="relative mx-auto aspect-square w-full max-w-[260px] lg:max-w-[560px]"
+                    className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[560px]"
                 >
                     <div className="relative h-full w-full">
                         {wantsCube && ready ? (
