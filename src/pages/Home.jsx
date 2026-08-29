@@ -15,7 +15,9 @@ import Footer from "../components/Footer";
 import BookingModal from "../components/BookingModal";
 
 /**
- * Homepage. Bands alternate dark / light; the hero is dark so the Navbar
+ * Homepage. Bands run dark / light / dark / light / dark / light / light (grain) /
+ * dark / light / dark / light (grain) / dark: Hero, Proof, Work, Services, Process,
+ * Stack, About, Why, Start, Contact, FAQ, Footer. The hero is dark so the Navbar
  * renders transparent over it until the page scrolls.
  *
  * No overflow-x on this wrapper: body already clips horizontal overflow, and an
@@ -27,7 +29,7 @@ export default function Home() {
     const closeBooking = () => setIsBookingOpen(false);
 
     return (
-        <div className="relative min-h-screen bg-paper text-ink font-sans">
+        <div className="relative min-h-screen overflow-x-clip bg-paper text-ink font-sans">
             <a
                 href="#main"
                 className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-paper"
@@ -39,8 +41,8 @@ export default function Home() {
             <main id="main" tabIndex={-1} className="outline-none!">
                 <Hero onBookClick={openBooking} />
                 <ProofBand />
-                <Services />
                 <Projects />
+                <Services />
                 <ProcessSection />
                 <TechStack />
                 <WorkPhilosophy />

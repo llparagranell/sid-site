@@ -19,8 +19,8 @@ export const products = [
 ];
 
 export const stats = [
-    { value: 3, suffix: "", label: "Products live on Google Play" },
-    { value: 8, suffix: "", label: "Service lines" },
-    { value: 6, suffix: "", label: "Industries we build for" },
-    { value: 7, suffix: "", label: "Days to a written scope" },
+    { value: 3, suffix: "", label: "products on Google Play" },
+    { value: 8, suffix: "", label: "service lines" },
+    { value: 6, suffix: "", label: "industries we build for" },
+    { value: 7, suffix: "", label: "days to a written scope" },
 ];

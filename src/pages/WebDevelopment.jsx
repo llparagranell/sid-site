@@ -170,7 +170,7 @@ export default function WebDevelopment() {
     const closeBooking = () => setIsBookingOpen(false);
 
     return (
-        <div className="relative min-h-screen bg-paper text-ink font-sans">
+        <div className="relative min-h-screen overflow-x-clip bg-paper text-ink font-sans">
             <Navbar onBookClick={openBooking} />
 
             <main>

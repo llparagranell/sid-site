@@ -1,34 +1,18 @@
 import { useEffect, useRef } from "react";
 import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import Container from "./ui/Container";
-import Eyebrow from "./ui/Eyebrow";
-import Reveal from "./motion/Reveal";
 import { EASE, VIEWPORT } from "./motion/constants";
-import cx from "../lib/cx";
-import { products, stats } from "../constants/stats";
+import { stats } from "../constants/stats";
 
 /* This repo's ESLint (no react plugin) reports `motion` unused when it only appears as `<motion.span>`; alias it like Reveal does. */
 const MotionSpan = motion.span;
 
 /**
- * Cell chrome for the stats grid. Below lg the four stats sit 2×2: a hairline between the two
- * columns and one between the two rows, with padding only around that horizontal rule. At lg
- * they sit in a single row of four with a hairline between every cell and no vertical padding.
+ * One studio fact: a serif numeral with its label beside it on the same baseline, read as a
+ * sentence ("3 products on Google Play"). The number counts up once when the row scrolls into
+ * view; under reduced motion it is set straight to its value.
  */
-function cellClasses(index) {
-    const topRow = index < 2;
-    const leftCol = index % 2 === 0;
-    return cx(
-        "flex flex-col gap-3 border-line",
-        leftCol ? "pr-4" : "border-l pl-6",
-        topRow ? "pb-6 md:pb-8 lg:pb-0" : "border-t pt-6 md:pt-8 lg:border-t-0 lg:pt-0",
-        index > 0 && "lg:border-l lg:pl-8",
-        index < 3 && "lg:pr-6",
-    );
-}
-
-function Counter({ value, suffix, label, active, className }) {
+function Counter({ value, suffix, label, active, className = "" }) {
     const reduce = useReducedMotion();
     const count = useMotionValue(reduce ? value : 0);
     const rounded = useTransform(count, (v) => Math.round(v));
@@ -44,16 +28,16 @@ function Counter({ value, suffix, label, active, className }) {
     }, [active, reduce, value, count]);
 
     return (
-        <div className={className}>
-            <dt className="order-2 text-sm text-muted">{label}</dt>
-            <dd className="order-1 type-mono text-5xl md:text-6xl text-ink">
+        <div className={`flex items-baseline gap-2.5 ${className}`}>
+            <dt className="order-2 max-w-[12ch] text-sm leading-tight text-muted">{label}</dt>
+            <dd className="order-1 type-display text-4xl leading-none text-ink tabular lg:text-5xl">
                 <span aria-hidden="true">
                     {/* The invisible final value sizes the box, so the suffix never shifts while the count runs. */}
                     <span className="relative inline-block">
                         <span className="invisible">{value}</span>
                         <MotionSpan className="absolute inset-0">{rounded}</MotionSpan>
                     </span>
-                    {suffix && <span className="text-accent">{suffix}</span>}
+                    {suffix && <span className="text-ink">{suffix}</span>}
                 </span>
                 <span className="sr-only">{`${value}${suffix}`}</span>
             </dd>
@@ -61,48 +45,38 @@ function Counter({ value, suffix, label, active, className }) {
     );
 }
 
+/**
+ * The masthead under the hero: no heading, no eyebrow. A mono dateline (the place and its
+ * coordinates) and one running line of four serif numerals with their labels beside them.
+ * Phone: dateline as one justified row, stats 2×2 with no rules. Desktop: dateline stacked at
+ * the left, the four stats in a single row separated by hairlines. The only motion is the count.
+ */
 export default function ProofBand() {
     const rowRef = useRef(null);
     const inView = useInView(rowRef, VIEWPORT);
 
     return (
-        <section className="band-light border-b border-line py-12 md:py-16">
-            <Container className="flex flex-col gap-10 md:gap-12">
-                <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-                    <Eyebrow className="shrink-0">Live on Google Play</Eyebrow>
-                    <ul
-                        role="list"
-                        aria-label="Products live on Google Play"
-                        className="flex flex-col divide-y divide-line md:flex-row md:items-center md:divide-y-0 md:divide-x"
-                    >
-                        {products.map(({ name, url, tagline }) => (
-                            <li key={name} className="md:px-6 md:first:pl-0 md:last:pr-0">
-                                <a
-                                    href={url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group inline-flex items-center gap-1.5 py-3 md:py-2 font-sans text-lg md:text-xl font-semibold text-muted hover:text-ink transition-colors duration-300"
-                                >
-                                    <span>{name}</span>
-                                    <span className="sr-only">{`, ${tagline} (opens in a new tab)`}</span>
-                                    <ArrowUpRight
-                                        size={14}
-                                        aria-hidden="true"
-                                        className="translate-y-0.5 opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
-                                    />
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </Reveal>
+        <section aria-label="Studio facts" className="band-light border-b border-line py-8 md:py-10">
+            <Container className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-10">
+                {/* Tracking is a touch tighter below md so both halves of the dateline fit one 390px line;
+                    flex-wrap drops the coordinates to a second line on narrower phones instead of breaking a word. */}
+                <p className="type-mono flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-[11px] uppercase tracking-[0.12em] text-muted md:tracking-[0.16em] lg:shrink-0 lg:flex-col lg:flex-nowrap lg:items-start lg:justify-start lg:gap-1.5">
+                    <span>Jabalpur, India</span>
+                    <span>23.18° N · 79.99° E · IST</span>
+                </p>
 
-                <Reveal>
-                    <dl ref={rowRef} className="grid grid-cols-2 lg:grid-cols-4">
-                        {stats.map((stat, index) => (
-                            <Counter key={stat.label} {...stat} active={inView} className={cellClasses(index)} />
-                        ))}
-                    </dl>
-                </Reveal>
+                {/* 2×2 on phones, one row of four from md; at lg the cells stretch to the row's height
+                    (the flex default) so every numeral shares one baseline and the hairlines run full height. */}
+                <dl ref={rowRef} className="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-4 md:gap-x-8 lg:flex lg:gap-0">
+                    {stats.map((stat, index) => (
+                        <Counter
+                            key={stat.label}
+                            {...stat}
+                            active={inView}
+                            className={index === 0 ? "lg:pr-8" : "lg:border-l lg:border-line lg:pl-8 lg:pr-8 lg:last:pr-0"}
+                        />
+                    ))}
+                </dl>
             </Container>
         </section>
     );

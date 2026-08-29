@@ -1,14 +1,7 @@
-import { motion } from "framer-motion";
-import { Check, CheckCircle2, X, XCircle } from "lucide-react";
 import Container from "./ui/Container";
-import SectionHeading from "./ui/SectionHeading";
 import Button from "./ui/Button";
-import Reveal, { Stagger } from "./motion/Reveal";
-import { staggerChild } from "./motion/constants";
+import cx from "../lib/cx";
 import { scrollToTarget } from "../lib/scroll";
-
-/** Alias so the repo ESLint config (no react plugin) sees the `motion` import as used. */
-const MotionLi = motion.li;
 
 const withUs = [
     {
@@ -56,72 +49,63 @@ const withoutUs = [
     },
 ];
 
+/** One ledger entry: the struck original, then its replacement beneath (phone) or beside (md+). */
+const ROWS = withoutUs.map((without, i) => ({ id: without.title, without, withUs: withUs[i] }));
+
+/* The two edit marks, shared by the key and every entry so they never drift apart. */
+const STRUCK = "line-through decoration-muted-dark decoration-[1.5px]";
+const REPLACEMENT = "border-l-2 border-paper pl-4 md:border-l md:border-line-dark md:pl-12";
+
+/**
+ * #why — edit marks. No heading opener: the ledger starts on a key set exactly like an entry
+ * (struck "Without", ruled "With"), each entry is a struck line with its replacement, and the
+ * conclusion sits at the bottom. Static: no motion, no accent.
+ */
 export default function ComparisonSection() {
     return (
-        <section id="why" aria-labelledby="why-heading" className="band-light section-pad border-b border-line">
+        <section id="why" aria-labelledby="why-heading" className="band-dark section-pad-tight border-b border-line-dark">
             <Container>
-                <SectionHeading
-                    id="why-heading"
-                    eyebrow="Why us"
-                    title={
-                        <>
-                            The DevGrowth <em>difference</em>.
-                        </>
-                    }
-                    align="center"
-                />
+                <h2 id="why-heading" className="sr-only">
+                    The DevGrowth difference
+                </h2>
 
-                <div className="mt-14 grid gap-6 md:grid-cols-2">
-                    <div className="flex flex-col gap-6 pt-6 md:pt-8">
-                        <h3 className="type-eyebrow flex items-center gap-2.5 text-muted">
-                            <XCircle size={16} aria-hidden="true" />
-                            Without DevGrowth
-                        </h3>
-                        <Stagger as="ul" className="divide-y divide-line border-y border-line">
-                            {withoutUs.map((item) => (
-                                <MotionLi
-                                    key={item.title}
-                                    variants={staggerChild}
-                                    className="flex items-start gap-3 py-5"
-                                >
-                                    <X size={16} aria-hidden="true" className="mt-1 shrink-0 text-muted" />
-                                    <div className="flex flex-col gap-1">
-                                        <h4 className="font-medium text-muted">{item.title}</h4>
-                                        <p className="text-sm text-muted">{item.desc}</p>
-                                    </div>
-                                </MotionLi>
-                            ))}
-                        </Stagger>
-                    </div>
+                {/* The key. Stacked on phones like the entries below it; column heads from md. */}
+                <p className="type-eyebrow flex flex-col gap-2 border-b border-line-dark pb-3 text-muted-dark md:grid md:grid-cols-2 md:gap-x-12">
+                    <s className={STRUCK}>Without DevGrowth</s>
+                    <span className={cx(REPLACEMENT, "text-paper")}>With DevGrowth</span>
+                </p>
 
-                    <div className="flex flex-col gap-6 rounded-2xl border border-line bg-surface p-6 md:p-8">
-                        <h3 className="type-eyebrow flex items-center gap-2.5 text-accent">
-                            <CheckCircle2 size={16} aria-hidden="true" />
-                            With DevGrowth
-                        </h3>
-                        <Stagger as="ul" className="divide-y divide-line border-t border-line">
-                            {withUs.map((item) => (
-                                <MotionLi
-                                    key={item.title}
-                                    variants={staggerChild}
-                                    className="flex items-start gap-3 py-5"
-                                >
-                                    <Check size={16} aria-hidden="true" className="mt-1 shrink-0 text-accent" />
-                                    <div className="flex flex-col gap-1">
-                                        <h4 className="font-semibold text-ink">{item.title}</h4>
-                                        <p className="text-sm text-muted">{item.desc}</p>
-                                    </div>
-                                </MotionLi>
-                            ))}
-                        </Stagger>
-                    </div>
-                </div>
+                <ol className="divide-y divide-line-dark border-b border-line-dark">
+                    {ROWS.map(({ id, without, withUs: w }) => (
+                        <li key={id} className="py-5 md:grid md:grid-cols-2 md:gap-x-12 md:py-6">
+                            <div>
+                                <p className="text-base text-muted-dark">
+                                    <s className={STRUCK}>{without.title}</s>
+                                </p>
+                                <p className="mt-1 text-sm text-muted-dark">{without.desc}</p>
+                            </div>
+                            <div className={cx("mt-4 md:mt-0", REPLACEMENT)}>
+                                <p className="font-sans text-lg font-semibold tracking-tight text-paper">{w.title}</p>
+                                <p className="mt-1 text-sm text-muted-dark">{w.desc}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
 
-                <Reveal className="mt-12 flex justify-center">
-                    <Button variant="primary" arrow onClick={() => scrollToTarget("#contact")}>
+                <div className="mt-10 flex flex-col gap-6 md:mt-12 md:flex-row md:items-end md:justify-between md:gap-8">
+                    <p aria-hidden="true" className="type-display max-w-[20ch] text-3xl text-paper md:text-4xl lg:text-5xl">
+                        That is the DevGrowth difference.
+                    </p>
+                    <Button
+                        tone="dark"
+                        variant="primary"
+                        arrow
+                        className="w-full min-h-12 md:w-auto md:shrink-0"
+                        onClick={() => scrollToTarget("#contact")}
+                    >
                         Book your free consultation
                     </Button>
-                </Reveal>
+                </div>
             </Container>
         </section>
     );

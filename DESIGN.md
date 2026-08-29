@@ -102,3 +102,65 @@ src/lib/cx.js                          cx("a", cond && "b")
   value under `integrationNotes` and the integrator will apply it.
 - Keep default export names and props exactly as specified in your task so the integrator can wire you in blind.
 - Delete dead code you replace inside your own files. Don't leave commented-out blocks.
+
+## 10. Anti-template rules
+
+Added after the owner's note that the site "looks AI-generated, mainly on mobile". The cause was
+one grammar repeated eleven times: eyebrow → serif h2 with one accent word → lede → grid of
+rounded cards (icon in a tinted square, title, one-liner, pill chips), each with the same fade-up.
+These rules make the fix permanent. They sit above §5–§7 for the homepage sections after the hero.
+
+- **Openers differ.** No two neighbouring sections may open the same way, and at most **two**
+  sections after the hero may use `SectionHeading` (eyebrow → title → lede). Today only
+  `ContactSection` does. Current openers in page order: ProofBand — a dateline and a running line
+  of numbers; `#work` — a rubber stamp over a strip of phone frames; `#services` — a labelled
+  hairline with the h2 knocked out of it; `#process` — a numeral bleeding off the column;
+  `#stack` — a table whose caption is the h2; `#about` — a first-person sentence and a drop cap;
+  `#why` — edit marks (struck line, replacement beneath), h2 as the conclusion; `#start` — a scope
+  sheet with serif tabs; `#contact` — `SectionHeading`; `#faq` — a numbered index under an italic
+  aside; Footer — a sign-off line. Adding a section means choosing a new opener, not reusing one.
+- **No cards, no chips.** Icon-in-tinted-square tiles, pill chips and `rounded-2xl` boxes around
+  list items are banned on the homepage. Short lists are typeset: mono runs joined by ` · `,
+  sans/serif runs joined by `, `, hairline lists (`divide-y`), tables with `<th scope="row">`, or
+  numbered indexes (`01`–`nn` in `type-mono text-xs`). The only rounded objects are `Button`
+  (`rounded-full`), `PhoneFrame` (a device illustration, `rounded-[28px]`, documented exception to
+  the §5 radius cap) and `Stamp` (`rounded-[4px]`).
+- **Real material first.** Prefer the three shipped apps (icons in `src/assets`, Play Store links,
+  package ids), the real process (a written scope within a week, a demo every week), the real
+  place (Jabalpur, 23.18° N 79.99° E, IST) over abstractions. No invented numbers, clients, dates
+  or quotes. The only figures on the page are the four derived stats and the timing words already
+  in the copy.
+- **Accent is a highlighter.** Exactly five static accent-coloured elements after the hero:
+  the `#work` stamp, the `HandUnderline` under "not" in `#stack`, the "Scope my MVP" button in
+  `#start`, the "Send message" button in `#contact`, and the `HandUnderline` under "lasts" in the
+  Footer. Every other emphasis is *italic serif* in the band's text colour. Hover and focus states
+  may use accent; static text may not. `bg-accent-soft` is a tint and may appear once (the note
+  card's tape).
+- **Devices are rationed.** Each appears at most twice on the homepage: `Stamp` (`#work`,
+  `#start`), `HandUnderline` (`#stack`, Footer), `NoteCard` rotated (`#about`), an oversized
+  numeral bleeding off the column (`#process`), `.paper-grain` (`#about`, `#faq`), a dashed
+  tear-off rule with a scissors glyph (`#start`), `PhoneFrame` (`#work`). Adding a device means
+  removing one elsewhere.
+- **Mono is annotation.** `type-mono` / `type-eyebrow` mark dates, coordinates, indices, package
+  ids, timing words, form labels and footer column titles. Never as a label above an h2.
+- **Type does the work.** Post-hero h2s are `type-display` at `text-3xl` on phones and
+  `text-4xl`…`text-6xl` on desktop (the hero alone keeps §4's large scale). Serif italic carries
+  asides and captions; `.drop-cap` appears once (`#about`). Body is Outfit `text-base`,
+  `max-w-[56ch]`.
+- **Motion is uneven on purpose.** One section counts (ProofBand), one draws lines (`#process`),
+  two fade once (`#about` note card, `#contact` form). Every other section renders still — do not
+  import `Reveal`/`Stagger` there. Interaction animations (accordion, tabs) keep `EASE` and go to
+  0 under reduced motion. No new infinite animation.
+- **Phone first, short.** Design each section top-to-bottom at 390 px before widening. Homepage
+  sections use `section-pad-tight` (py-14 / md:py-20 / lg:py-28); `section-pad` stays for inner
+  pages. Primary CTAs are `w-full min-h-12` on phones; list links `min-h-11`; inputs `text-base`
+  (16 px, no iOS zoom); rows that must stay rows swipe inside `overflow-x-auto snap-x` strips with
+  `-mx-6 px-6` bleed and `data-lenis-prevent`. Nothing relies on hover. The homepage must stay
+  under ~11,000 px tall at 390 wide with all content present — measure with
+  `document.documentElement.scrollHeight` after a build, do not estimate.
+- **Bands** run D L D L D L L(grain) D L D L(grain) D: Hero, Proof, Work, Services, Process,
+  Stack, About, Why, Start, Contact, FAQ, Footer. Two adjacent light bands are separated by the
+  grain and a `border-b border-line`.
+- **New primitives:** `ui/Stamp.jsx`, `ui/HandUnderline.jsx`, `ui/PhoneFrame.jsx`,
+  `ui/NoteCard.jsx`. **New utilities** in `src/index.css`: `section-pad-tight`, `paper-grain`,
+  `drop-cap`, `stamp-ring`. `.bg-noise` stays for inner pages.

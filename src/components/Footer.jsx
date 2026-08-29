@@ -1,10 +1,8 @@
-import { MotionConfig } from "framer-motion";
-import { Phone, Mail, MapPin, ArrowUp } from "lucide-react";
-import { FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Container from "./ui/Container";
 import Button from "./ui/Button";
-import Reveal from "./motion/Reveal";
+import HandUnderline from "./ui/HandUnderline";
 import { scrollToTarget, scrollToTop } from "../lib/scroll";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
@@ -14,13 +12,15 @@ const EMAIL = "contact@devgrowth.com";
 const CONTACT_HASH = "#contact";
 const CONTACT_PATH = `/${CONTACT_HASH}`;
 
-/* Intrinsic size of the png lockup, so the 48px-tall slot is reserved before it loads. */
+/* Intrinsic size of the png lockup, so the slot is reserved before it loads. It is a stacked
+   mark (building over the wordmark), so it needs height: at 80px the wordmark is legible. */
 const LOGO_SIZE = { width: 301, height: 192 };
 
+/* Address block, typeset in mono. A line without `href` is plain text (the place). */
 const CONTACT = [
-    { icon: Phone, label: "+91 62600 45626", href: "tel:+916260045626" },
-    { icon: Mail, label: EMAIL, href: `mailto:${EMAIL}` },
-    { icon: MapPin, label: "Jabalpur, Madhya Pradesh, India" },
+    { label: "+91 62600 45626", href: "tel:+916260045626" },
+    { label: EMAIL, href: `mailto:${EMAIL}` },
+    { label: "Jabalpur, Madhya Pradesh, India" },
 ];
 
 const COMPANY_LINKS = [
@@ -37,35 +37,44 @@ const LINK_COLUMNS = [
 ];
 
 const SOCIAL = [
-    {
-        icon: FaInstagram,
-        label: "Instagram",
-        href: "https://www.instagram.com/devgrowthsolutions/",
-    },
-    {
-        icon: FaLinkedinIn,
-        label: "LinkedIn",
-        href: "https://www.linkedin.com/company/devgrowth-solutions/posts/",
-    },
+    { label: "Instagram", href: "https://www.instagram.com/devgrowthsolutions/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/devgrowth-solutions/posts/" },
 ];
 
-const linkClass =
-    "group relative inline-block text-sm text-muted-dark transition-colors duration-300 hover:text-paper";
+/* Column titles are mono annotations: the `type-eyebrow` utility, not the Eyebrow component,
+   so no leading rule and no accent. */
+const COLUMN_TITLE = "type-eyebrow text-muted-dark";
+const LINK_CLASS =
+    "flex min-h-11 items-center text-sm text-muted-dark transition-colors duration-300 hover:text-paper";
 
 const contactSectionMounted = () => Boolean(document.querySelector(CONTACT_HASH));
 
-function Underline() {
+/* One site-map column: mono title over a list of router links, every row a 44px tap target. */
+function NavColumn({ column, onContactLinkClick }) {
     return (
-        <span
-            aria-hidden="true"
-            className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:scale-x-100"
-        />
+        <nav aria-label={column.title}>
+            <h3 className={COLUMN_TITLE}>{column.title}</h3>
+            <ul className="mt-3">
+                {column.items.map((item) => (
+                    <li key={item.title}>
+                        <Link
+                            to={item.path}
+                            onClick={item.path === CONTACT_PATH ? onContactLinkClick : undefined}
+                            className={LINK_CLASS}
+                        >
+                            {item.title}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </nav>
     );
 }
 
 export default function Footer() {
     const navigate = useNavigate();
     const year = new Date().getFullYear();
+    const [company, serviceLinks, industryLinks] = LINK_COLUMNS;
 
     /* On the homepage the contact form is on the page: scroll to it. Elsewhere, go home with
        `state.scrollTo` and let the Navbar's state handler finish the scroll once Home is mounted.
@@ -89,116 +98,115 @@ export default function Footer() {
 
     return (
         <footer className="band-dark border-t border-line-dark">
-            <MotionConfig reducedMotion="user">
-                <Container>
-                    <Reveal className="grid items-end gap-12 py-20 md:py-28 lg:grid-cols-[1.2fr_0.8fr]">
-                        <p className="type-display max-w-[20ch] text-4xl text-paper sm:text-5xl md:text-6xl">
-                            Let&rsquo;s build something that{" "}
-                            <em className="italic text-accent-bright">lasts</em>.
-                        </p>
-                        <div className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-end">
-                            <Button tone="dark" variant="accent" arrow onClick={startProject}>
-                                Start a project
-                            </Button>
-                            <a
-                                href={`mailto:${EMAIL}`}
-                                className="type-eyebrow inline-flex min-h-10 items-center text-muted-dark transition-colors duration-300 hover:text-paper"
-                            >
-                                {EMAIL}
-                            </a>
-                        </div>
-                    </Reveal>
+            <Container>
+                {/* Sign-off: the closing line, one call to action, the address to write to. Static. */}
+                <div className="flex flex-col gap-8 py-16 lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-12 lg:py-24">
+                    <p className="type-display max-w-[14ch] text-4xl text-paper lg:text-6xl">
+                        Let&rsquo;s build something that{" "}
+                        <HandUnderline tone="dark">lasts</HandUnderline>.
+                    </p>
+                    <div className="flex flex-col gap-4 lg:items-end">
+                        <Button
+                            tone="dark"
+                            variant="primary"
+                            arrow
+                            className="min-h-12 w-full lg:w-auto"
+                            onClick={startProject}
+                        >
+                            Start a project
+                        </Button>
+                        <a
+                            href={`mailto:${EMAIL}`}
+                            className="type-mono inline-flex min-h-11 w-fit items-center text-sm text-muted-dark underline decoration-line-dark underline-offset-4 transition-colors duration-300 hover:text-paper"
+                        >
+                            {EMAIL}
+                        </a>
+                    </div>
+                </div>
 
-                    <Reveal className="grid gap-10 border-t border-line-dark py-14 sm:grid-cols-2 lg:grid-cols-12">
-                        <div className="flex flex-col gap-6 sm:col-span-2 lg:col-span-4">
-                            <img
-                                src={footerLogo}
-                                alt="DevGrowth Solutions"
-                                width={LOGO_SIZE.width}
-                                height={LOGO_SIZE.height}
-                                loading="lazy"
-                                decoding="async"
-                                className="h-12 w-auto"
-                            />
-                            <p className="max-w-[36ch] text-sm leading-relaxed text-muted-dark">
-                                Product engineering studio. MVPs for founders and growing businesses.
-                            </p>
-                            <ul className="flex flex-col gap-3">
-                                {CONTACT.map(({ icon: Icon, label, href }) => (
-                                    <li key={label} className="flex items-center gap-3">
-                                        <Icon size={16} aria-hidden="true" className="shrink-0 text-muted-dark" />
-                                        {href ? (
+                {/* Colophon: who we are, where we are, the map of the site. */}
+                <div className="flex flex-col gap-10 border-t border-line-dark py-12 lg:grid lg:grid-cols-12 lg:gap-10">
+                    <div className="lg:col-span-4">
+                        <img
+                            src={footerLogo}
+                            alt="DevGrowth Solutions"
+                            width={LOGO_SIZE.width}
+                            height={LOGO_SIZE.height}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-20 w-auto"
+                        />
+                        <p className="mt-4 max-w-[36ch] text-sm leading-relaxed text-muted-dark">
+                            Product engineering studio. MVPs for founders and growing businesses.
+                        </p>
+                        <address className="type-mono mt-4 flex flex-col text-sm not-italic text-muted-dark">
+                            {CONTACT.map(({ label, href }) =>
+                                href ? (
+                                    <a
+                                        key={label}
+                                        href={href}
+                                        className="flex min-h-11 w-fit items-center transition-colors duration-300 hover:text-paper"
+                                    >
+                                        {label}
+                                    </a>
+                                ) : (
+                                    <span key={label} className="flex min-h-11 items-center">
+                                        {label}
+                                    </span>
+                                ),
+                            )}
+                        </address>
+                    </div>
+
+                    {/* Phone: two columns of ten rows each, Company over Industries and Services over
+                        Follow, so neither column outruns the other. Column A sizes to its longest
+                        link and B takes the rest, which keeps "Mobile App Development" on one line
+                        at 390. From lg the wrappers dissolve (`contents`) and the four navs share
+                        one row, packed left with the Follow column absorbing the slack. */}
+                    <div className="grid grid-cols-[auto_1fr] gap-x-10 lg:col-span-8 lg:grid-cols-[auto_auto_auto_1fr]">
+                        <div className="flex flex-col gap-10 lg:contents">
+                            <NavColumn column={company} onContactLinkClick={onContactLinkClick} />
+                            <NavColumn column={industryLinks} />
+                        </div>
+                        <div className="flex flex-col gap-10 lg:contents">
+                            <NavColumn column={serviceLinks} />
+                            <nav aria-label="Follow">
+                                <h3 className={COLUMN_TITLE}>Follow</h3>
+                                <ul className="mt-3">
+                                    {SOCIAL.map(({ label, href }) => (
+                                        <li key={label}>
                                             <a
                                                 href={href}
-                                                className="text-sm text-muted-dark transition-colors duration-300 hover:text-paper"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-paper"
                                             >
                                                 {label}
+                                                <ArrowUpRight size={14} aria-hidden="true" />
+                                                <span className="sr-only">{" (opens in a new tab)"}</span>
                                             </a>
-                                        ) : (
-                                            <span className="text-sm text-muted-dark">{label}</span>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {LINK_COLUMNS.map((column) => (
-                            <nav key={column.title} aria-label={column.title} className="flex flex-col gap-5 lg:col-span-2">
-                                <h3 className="type-eyebrow text-muted-dark">{column.title}</h3>
-                                <ul className="flex flex-col gap-3">
-                                    {column.items.map((item) => {
-                                        const isContact = item.path === CONTACT_PATH;
-                                        return (
-                                            <li key={item.title}>
-                                                <Link
-                                                    to={item.path}
-                                                    onClick={isContact ? onContactLinkClick : undefined}
-                                                    className={linkClass}
-                                                >
-                                                    {item.title}
-                                                    <Underline />
-                                                </Link>
-                                            </li>
-                                        );
-                                    })}
+                                        </li>
+                                    ))}
                                 </ul>
                             </nav>
-                        ))}
-
-                        <div className="flex flex-col gap-5 lg:col-span-2">
-                            <h3 className="type-eyebrow text-muted-dark">Follow</h3>
-                            <ul className="flex gap-3">
-                                {SOCIAL.map(({ icon: Icon, label, href }) => (
-                                    <li key={label}>
-                                        {/* 36px box as designed; the ::before pad widens the hit area to 44px. */}
-                                        <a
-                                            href={href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            aria-label={label}
-                                            className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line-dark text-muted-dark transition-[color,border-color,translate] duration-300 ease-out before:absolute before:-inset-1 hover:-translate-y-0.5 hover:border-paper/40 hover:text-paper"
-                                        >
-                                            <Icon size={16} aria-hidden="true" />
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
-                    </Reveal>
-
-                    <div className="flex flex-col gap-3 border-t border-line-dark py-6 sm:flex-row sm:items-center sm:justify-between sm:pr-16">
-                        <p className="type-eyebrow text-muted-dark">&copy; {year} DevGrowth Solutions</p>
-                        <button
-                            type="button"
-                            onClick={() => scrollToTop()}
-                            className="type-eyebrow inline-flex w-fit cursor-pointer items-center gap-2 text-muted-dark transition-colors hover:text-paper"
-                        >
-                            Back to top
-                            <ArrowUp size={12} aria-hidden="true" />
-                        </button>
                     </div>
-                </Container>
-            </MotionConfig>
+                </div>
+
+                {/* Imprint. `sm:pr-16` keeps "Back to top" clear of the sticky WhatsApp button. */}
+                <div className="type-eyebrow flex flex-col gap-2 border-t border-line-dark py-6 text-muted-dark sm:flex-row sm:items-center sm:justify-between sm:pr-16">
+                    <p>&copy; {year} DevGrowth Solutions</p>
+                    <p className="hidden sm:block">Jabalpur, Madhya Pradesh, India</p>
+                    <button
+                        type="button"
+                        onClick={() => scrollToTop()}
+                        className="inline-flex min-h-11 w-fit cursor-pointer items-center gap-2 transition-colors duration-300 hover:text-paper"
+                    >
+                        Back to top
+                        <ArrowUp size={12} aria-hidden="true" />
+                    </button>
+                </div>
+            </Container>
         </footer>
     );
 }

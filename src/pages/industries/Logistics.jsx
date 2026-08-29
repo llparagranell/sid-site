@@ -148,7 +148,7 @@ export default function Logistics() {
     const toggleBooking = () => setIsBookingOpen(!isBookingOpen);
 
     return (
-        <div className="relative min-h-screen bg-paper text-ink font-sans">
+        <div className="relative min-h-screen overflow-x-clip bg-paper text-ink font-sans">
             <Navbar onBookClick={toggleBooking} />
 
             <main>
