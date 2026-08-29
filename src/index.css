@@ -1,67 +1,154 @@
 @import "tailwindcss";
 
+/* =====================================================================
+   DevGrowth design tokens — the single source of truth.
+   tailwind.config.js is intentionally gone: Tailwind v4 reads @theme.
+   ===================================================================== */
 @theme {
-  /* --color-brand-dark: linear-gradient(180deg,
-      #3A36A3 0%,
-      #2E2A7B 50%,
-      #1E1B4B 100%);
-  ; */
+  /* ---- Type ---- */
+  --font-sans: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  --color-brand-dark: #1e1b4b;
-  --color-brand-muted: #64748b;
-  --color-brand-accent: #d3d8d5;
-  --color-brand-bg: #f8fafc;
-  --color-primary: #1e1b4b;
+  /* ---- Palette (indigo-biased neutrals, one accent) ---- */
+  --color-ink: #0b0b14;            /* dark band ground; primary text on light */
+  --color-ink-2: #151520;          /* raised surface on dark */
+  --color-ink-3: #22223a;          /* borders / hover fills on dark */
+  --color-paper: #f4f4f8;          /* light band ground */
+  --color-surface: #ffffff;        /* cards on light */
+  --color-muted: #6b6e86;          /* secondary text on light */
+  --color-muted-dark: #9a9cb5;     /* secondary text on dark */
+  --color-line: #dcdde8;           /* hairlines on light */
+  --color-line-dark: #26263a;      /* hairlines on dark */
+  --color-accent: #4f46e5;         /* indigo: CTAs, links, the one loud thing */
+  --color-accent-deep: #3730a3;    /* hover state on light */
+  --color-accent-bright: #8b85ff;  /* accent text / edges on dark */
+  --color-accent-soft: #e4e2fb;    /* tint fills on light */
+
+  /* ---- Legacy aliases: keep untouched pages rendering until they are swept ---- */
+  --color-brand-dark: #0b0b14;
+  --color-brand-muted: #6b6e86;
+  --color-brand-accent: #dddbfb;
+  --color-brand-bg: #f4f4f8;
+  --color-primary: #0b0b14;
   --color-secondary: #4f46e5;
-  --color-accent: #818cf8;
-  --color-main-text: #0f172a;
-  --color-sub-text: #475569;
+  --color-main-text: #0b0b14;
+  --color-sub-text: #4a4c66;
+
+  /* ---- Motion ---- */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ---- Radii ---- */
+  --radius-card: 1rem;
+  --radius-pill: 999px;
 }
 
+/* ---------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------- */
 :root {
-  --primary: #1b4b2b;
-  --primary-hover: #312e81;
-  --bg-main: #c9c9c9;
-  --bg-subtle: #f1f5f9;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border-subtle: rgba(30, 27, 75, 0.1);
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis owns smooth scrolling; native fallback under reduced motion */
+  position: relative; /* framer-motion useScroll() measures targets against the scrolling element */
 }
 
 body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  font-family: 'Outfit', sans-serif;
-  scroll-behavior: smooth;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  @apply text-base md:text-lg;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Dark bands: the indigo ring is <3:1 on ink/ink-2, so lift it to accent-bright (6.4:1 / 5.9:1).
+   Unlayered on purpose - it must outrank Tailwind's focus-visible:outline-* utilities. */
+.band-dark :focus-visible {
+  outline-color: var(--color-accent-bright);
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  display: block;
 }
 
 @layer base {
+  button {
+    font: inherit;
+  }
+
+  /* Sizes only; families are applied explicitly with `type-display` so
+     serif never gets faux-bolded by leftover `font-black` utilities. */
   h1 {
-    @apply text-4xl sm:text-5xl md:text-7xl lg:text-9xl tracking-tight;
+    @apply text-4xl sm:text-5xl md:text-7xl tracking-tight;
   }
 
   h2 {
-    @apply text-3xl sm:text-4xl md:text-5xl lg:text-7xl tracking-tight;
+    @apply text-3xl sm:text-4xl md:text-5xl tracking-tight;
   }
 }
 
-.mx-auto {
-  @apply px-6 sm:px-8 md:px-12 lg:px-16;
+/* ---------------------------------------------------------------------
+   Utilities — the shared vocabulary every section is built from
+   --------------------------------------------------------------------- */
+@utility type-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  --tw-leading: 0.95; /* text-* size utilities read this; without it their own line-height wins */
+  line-height: 0.95;
+  text-wrap: balance;
 }
 
-.glass-morphism {
-  @apply bg-white/10 backdrop-blur-md border border-white/10;
+@utility type-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
 }
 
-.section-padding {
-  @apply py-20 sm:py-24 md:py-32 lg:py-40;
+@utility type-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
+@utility section-pad {
+  @apply py-24 md:py-32 lg:py-40;
+}
 
-.bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+@utility band-dark {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
+@utility band-light {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -73,58 +160,40 @@ body {
   scrollbar-width: none;
 }
 
-html {
-  scroll-behavior: smooth;
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
 }
 
-.scroll-smooth {
-  scroll-behavior: smooth;
+/* ---------------------------------------------------------------------
+   Lenis smooth scroll
+   --------------------------------------------------------------------- */
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
-/* Holographic Button Effect */
-.holographic-button {
-  position: relative;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
   overflow: hidden;
-  transition: all 0.3s ease-out;
-  z-index: 1;
 }
 
-.holographic-button::before {
-  content: "";
-  position: absolute;
-  top: -150%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(115deg,
-      transparent 20%,
-      rgba(0, 0, 255, 0.322));
-  opacity: 0;
-  transform: rotate(35deg);
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.holographic-button:hover {
-  cursor: pointer;
-
-  box-shadow: 0 0 25px rgba(223, 212, 243, 0.5), 0 0 50px rgba(79, 70, 229, 0.3);
-}
-
-.holographic-button:hover::before {
-  opacity: 1;
-  animation: holographic-shimmer 2s infinite linear;
-}
-
-@keyframes holographic-shimmer {
-  0% {
-    top: -150%;
-    left: -50%;
-  }
-
-  100% {
-    top: 50%;
-    left: 50%;
+/* ---------------------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

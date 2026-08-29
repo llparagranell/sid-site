@@ -1,61 +1,70 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { MotionConfig } from "framer-motion";
 import ScrollToTop from "./components/ScrollToTop";
+import SmoothScroll from "./components/motion/SmoothScroll";
+import Preloader from "./components/Preloader";
 import WhatsAppSticky from "./components/WhatsAppSticky";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Blog from "./pages/Blog";
-import BlogView from "./pages/BlogView";
-import CaseStudies from "./pages/CaseStudies";
-import WebDevelopment from "./pages/WebDevelopment";
-import MobileAppDevelopment from "./pages/MobileAppDevelopment";
-// Service Pages
-import AiMachineLearning from "./pages/AiMachineLearning";
-import CloudSolutions from "./pages/CloudSolutions";
-import UiUxDesign from "./pages/UiUxDesign";
-import DatabaseManagement from "./pages/DatabaseManagement";
-import CustomSoftware from "./pages/CustomSoftware";
-import EcommerceSolutions from "./pages/industries/EcommerceSolutions";
 
-// Industry Pages
-import Healthcare from "./pages/industries/Healthcare";
-import Education from "./pages/industries/Education";
-import Fintech from "./pages/industries/Fintech";
-import ItSoftware from "./pages/industries/ItSoftware";
-import Logistics from "./pages/industries/Logistics";
-import SupplyChain from "./pages/industries/SupplyChain";
-// import EcommerceSolutions from "./pages/industries/EcommerceSolutions";
+// Every non-home route is code-split so the homepage bundle only carries Home.
+const About = lazy(() => import("./pages/About"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogView = lazy(() => import("./pages/BlogView"));
+const CaseStudies = lazy(() => import("./pages/CaseStudies"));
+// Service pages
+const WebDevelopment = lazy(() => import("./pages/WebDevelopment"));
+const MobileAppDevelopment = lazy(() => import("./pages/MobileAppDevelopment"));
+const AiMachineLearning = lazy(() => import("./pages/AiMachineLearning"));
+const CloudSolutions = lazy(() => import("./pages/CloudSolutions"));
+const UiUxDesign = lazy(() => import("./pages/UiUxDesign"));
+const DatabaseManagement = lazy(() => import("./pages/DatabaseManagement"));
+const CustomSoftware = lazy(() => import("./pages/CustomSoftware"));
+// Industry pages
+const EcommerceSolutions = lazy(() => import("./pages/industries/EcommerceSolutions"));
+const Healthcare = lazy(() => import("./pages/industries/Healthcare"));
+const Education = lazy(() => import("./pages/industries/Education"));
+const Fintech = lazy(() => import("./pages/industries/Fintech"));
+const ItSoftware = lazy(() => import("./pages/industries/ItSoftware"));
+const Logistics = lazy(() => import("./pages/industries/Logistics"));
+const SupplyChain = lazy(() => import("./pages/industries/SupplyChain"));
 
 export default function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<BlogView />} />
-        <Route path="/case-studies" element={<CaseStudies />} />
-        {/* Service Routes */}
-        <Route path="/services/web-development" element={<WebDevelopment />} />
-        <Route path="/services/mobile-app-development" element={<MobileAppDevelopment />} />
-        <Route path="/services/ai-machine-learning" element={<AiMachineLearning />} />
-        <Route path="/services/cloud-solutions" element={<CloudSolutions />} />
-        <Route path="/services/ui-ux-design" element={<UiUxDesign />} />
-        <Route path="/services/database-management" element={<DatabaseManagement />} />
-        <Route path="/services/custom-software" element={<CustomSoftware />} />
-        {/* Industry Routes */}
-        <Route path="/industries/ecommercesolutions" element={<EcommerceSolutions />} />
-        <Route path="/industries/healthcare" element={<Healthcare />} />
-        <Route path="/industries/education" element={<Education />} />
-        <Route path="/industries/fintech" element={<Fintech />} />
-        <Route path="/industries/it-software" element={<ItSoftware />} />
-        <Route path="/industries/logistics" element={<Logistics />} />
-        <Route path="/industries/supply-chain" element={<SupplyChain />} />
-      </Routes>
-      <WhatsAppSticky />
-    </Router>
+    <MotionConfig reducedMotion="user">
+      <Router>
+        {/* Preloader must mount in the same commit as the first page so the hero can wait for it. */}
+        <Preloader />
+        <SmoothScroll />
+        <ScrollToTop />
+        {/* Only the route outlet suspends; the shell above and below stays mounted across chunk loads. */}
+        <Suspense fallback={<div className="min-h-screen bg-paper" />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogView />} />
+            <Route path="/case-studies" element={<CaseStudies />} />
+            {/* Service routes */}
+            <Route path="/services/web-development" element={<WebDevelopment />} />
+            <Route path="/services/mobile-app-development" element={<MobileAppDevelopment />} />
+            <Route path="/services/ai-machine-learning" element={<AiMachineLearning />} />
+            <Route path="/services/cloud-solutions" element={<CloudSolutions />} />
+            <Route path="/services/ui-ux-design" element={<UiUxDesign />} />
+            <Route path="/services/database-management" element={<DatabaseManagement />} />
+            <Route path="/services/custom-software" element={<CustomSoftware />} />
+            {/* Industry routes */}
+            <Route path="/industries/ecommercesolutions" element={<EcommerceSolutions />} />
+            <Route path="/industries/healthcare" element={<Healthcare />} />
+            <Route path="/industries/education" element={<Education />} />
+            <Route path="/industries/fintech" element={<Fintech />} />
+            <Route path="/industries/it-software" element={<ItSoftware />} />
+            <Route path="/industries/logistics" element={<Logistics />} />
+            <Route path="/industries/supply-chain" element={<SupplyChain />} />
+          </Routes>
+        </Suspense>
+        <WhatsAppSticky />
+      </Router>
+    </MotionConfig>
   );
 }
-
-
-

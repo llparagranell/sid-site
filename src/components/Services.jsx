@@ -1,219 +1,247 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion as Motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import Container from "./ui/Container";
+import SectionHeading from "./ui/SectionHeading";
+import Reveal from "./motion/Reveal";
+import { EASE } from "./motion/constants";
+import cx from "../lib/cx";
 import { services } from "../constants/servicesData";
 
-const TiltCard = ({ service, index }) => {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+/** How long the pointer has to rest on a row before hover opens it. */
+const HOVER_INTENT_MS = 120;
+/**
+ * Panel height animation. Hover is ignored while a panel is still settling so a row that
+ * slides under a moving pointer cannot chain-open the next one.
+ */
+const PANEL_MS = 550;
+const SETTLE_MS = PANEL_MS + 100;
 
-    const mouseXSpring = useSpring(x);
-    const mouseYSpring = useSpring(y);
+const GROUP_DEFS = [
+    {
+        id: "build",
+        word: "Build",
+        description: "Websites, mobile apps, storefronts and custom software, built to ship and easy to extend.",
+        titles: ["Web Development", "Mobile App Development", "Custom Software", "E-commerce"],
+    },
+    {
+        id: "design",
+        word: "Design",
+        description: "User research, prototypes and design systems, so the product makes sense the first time someone opens it.",
+        titles: ["UI/UX Design"],
+    },
+    {
+        id: "scale",
+        word: "Scale",
+        description: "Cloud infrastructure and databases that hold up as traffic, data and the team grow.",
+        titles: ["Cloud Solutions", "Database Management"],
+    },
+    {
+        id: "ai",
+        word: "AI",
+        description: "Predictive models, language and vision features, and the pipelines to run them in production.",
+        titles: ["AI & Machine Learning"],
+    },
+];
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+const byTitle = new Map(services.map((service) => [service.title, service]));
 
-    const handleMouseMove = (e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+const GROUPS = GROUP_DEFS.map(({ titles, ...group }) => ({
+    ...group,
+    items: titles.map((title) => byTitle.get(title)).filter(Boolean),
+}));
 
-        const xPct = (mouseX / width) - 0.5;
-        const yPct = (mouseY / height) - 0.5;
+const countLabel = (n) => `${n} ${n === 1 ? "service" : "services"}`;
 
-        x.set(xPct);
-        y.set(yPct);
-    };
-
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
-
+function ServiceCard({ service }) {
     const Icon = service.icon;
-
-    const CardContent = (
-        <motion.div
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                rotateX,
-                rotateY,
-                transformStyle: "preserve-3d",
-            }}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileTap={{ scale: 0.98 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-all duration-500 hover:border-brand-dark/10 cursor-pointer"
-        >
-            {/* Spotlight Gradient */}
-            <motion.div
-                style={{
-                    background: useTransform(
-                        [mouseXSpring, mouseYSpring],
-                        ([mx, my]) => `radial-gradient(600px circle at ${(mx + 0.5) * 100}% ${(my + 0.5) * 100}%, rgba(30, 27, 121, 0.06), transparent 40%)`
-                    ),
-                }}
-                className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            />
-
-            <div
-                style={{
-                    transform: "translateZ(50px)",
-                    transformStyle: "preserve-3d",
-                }}
-                className="relative z-10 h-full p-8 flex flex-col"
+    return (
+        <li className="flex">
+            <Link
+                to={service.path}
+                className="group/card flex w-full flex-col gap-5 rounded-2xl border border-line bg-surface p-5 transition-colors duration-300 ease-out-expo hover:border-ink"
             >
-                {/* Icon Section */}
-                <div className="">
-                    <div className="h-14 w-14 mb-6 rounded-xl bg-brand-dark text-white flex items-center justify-center  transition-all duration-500">
-                        <Icon size={24} />
-                    </div>
+                <div className="flex items-start justify-between gap-4">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent">
+                        <Icon size={18} aria-hidden="true" />
+                    </span>
+                    <ArrowUpRight
+                        size={18}
+                        aria-hidden="true"
+                        className="shrink-0 text-muted transition-[translate,color] duration-300 ease-out-expo group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 group-hover/card:text-ink"
+                    />
                 </div>
-
-                {/* Content */}
-                <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark transition-colors">
-                            {String(index + 1).padStart(2, "0")} / Service
-                        </span>
-                        <div className="h-[1px] w-8 bg-brand-dark/10 group-hover:bg-brand-dark/20 transition-colors" />
-                    </div>
-
-                    <h3 className="text-2xl font-black text-brand-dark mb-4 leading-none tracking-tight group-hover:translate-x-1 transition-transform duration-500">
+                <div className="flex flex-col gap-1.5">
+                    <h4 className="font-sans text-xl font-semibold tracking-tight text-ink md:text-2xl">
                         {service.title}
-                    </h3>
-
-                    <p className="text-brand-dark text-sm leading-relaxed mb-8">
-                        {service.desc}
-                    </p>
-
-                    <ul className="space-y-4">
-                        {service.points.map((point, idx) => (
-                            <li key={idx} className="flex items-center gap-4 text-[11px] font-bold text-brand-dark group-hover:translate-x-2 transition-all duration-500" style={{ transitionDelay: `${idx * 50}ms` }}>
-                                <div className="h-1 w-1 rounded-full bg-brand-dark group-hover:scale-150 transition-all duration-500" />
-                                <span className="uppercase tracking-widest">{point}</span>
-                            </li>
-                        ))}
-                    </ul>
+                    </h4>
+                    <p className="text-sm leading-relaxed text-muted">{service.desc}</p>
                 </div>
-
-                {/* Bottom Corner Detail */}
-                <div className="pt-6 border-t border-brand-dark flex justify-between items-center transition-all duration-500">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark">Read More</span>
-                    <ArrowRight size={16} className="text-brand-dark group-hover:translate-x-1 transition-transform" />
-                </div>
-            </div>
-
-            {/* Subtle Gradient Overlay on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 via-transparent to-brand-dark/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-        </motion.div>
+                <ul className="mt-auto flex flex-wrap gap-2">
+                    {service.points.map((point) => (
+                        <li
+                            key={point}
+                            className="type-eyebrow rounded-full border border-line px-3 py-2 text-muted"
+                        >
+                            {point}
+                        </li>
+                    ))}
+                </ul>
+            </Link>
+        </li>
     );
+}
 
-    if (service.path) {
-        return <Link to={service.path} className="block w-full">{CardContent}</Link>;
-    }
+function ServiceRow({ group, open, reduced, onOpen, onHover, onHoverEnd }) {
+    const triggerId = `services-${group.id}-trigger`;
+    const panelId = `services-${group.id}-panel`;
+    const transition = reduced
+        ? { duration: 0 }
+        : {
+              height: { duration: PANEL_MS / 1000, ease: EASE },
+              opacity: { duration: 0.4, ease: EASE },
+          };
 
-    return CardContent;
-};
+    return (
+        <li className="border-t border-line">
+            <h3>
+                <button
+                    type="button"
+                    id={triggerId}
+                    aria-expanded={open}
+                    aria-controls={open ? panelId : undefined}
+                    onClick={onOpen}
+                    onPointerMove={onHover}
+                    onPointerLeave={onHoverEnd}
+                    className="group/row flex w-full cursor-pointer items-center justify-between gap-6 py-6 text-left md:py-8"
+                >
+                    <span
+                        className={cx(
+                            "type-display min-w-0 uppercase text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem]",
+                            "transition-colors duration-500 ease-out-expo",
+                            open ? "text-accent" : "text-ink",
+                        )}
+                    >
+                        {group.word}
+                    </span>
+                    <span className="flex shrink-0 items-center gap-4 md:gap-6">
+                        <span className="type-eyebrow text-muted">{countLabel(group.items.length)}</span>
+                        <span
+                            aria-hidden="true"
+                            className={cx(
+                                "flex h-10 w-10 items-center justify-center rounded-full border",
+                                "transition-[rotate,border-color,color] duration-500 ease-out-expo",
+                                open
+                                    ? "rotate-45 border-accent text-accent"
+                                    : "border-line text-muted group-hover/row:border-ink group-hover/row:text-ink",
+                            )}
+                        >
+                            <Plus size={18} />
+                        </span>
+                    </span>
+                </button>
+            </h3>
+
+            <AnimatePresence initial={false}>
+                {open && (
+                    <Motion.div
+                        key={panelId}
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={triggerId}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={transition}
+                        // Horizontal breathing room so the cards' focus ring is not clipped by overflow-hidden.
+                        className="-mx-2 overflow-hidden px-2"
+                    >
+                        <div className="flex flex-col gap-6 pb-10 md:gap-8 md:pb-12">
+                            <p className="max-w-[56ch] text-base leading-relaxed text-muted md:text-lg">
+                                {group.description}
+                            </p>
+                            <ul className="grid gap-4 sm:grid-cols-2">
+                                {group.items.map((service) => (
+                                    <ServiceCard key={service.title} service={service} />
+                                ))}
+                            </ul>
+                        </div>
+                    </Motion.div>
+                )}
+            </AnimatePresence>
+        </li>
+    );
+}
 
 export default function Services() {
+    const reduced = useReducedMotion();
+    const [openId, setOpenId] = useState(GROUPS[0].id);
+    const [hoverId, setHoverId] = useState(null);
+    // True while the last open/close is still animating; hover is ignored meanwhile.
+    const settling = useRef(false);
+
+    useEffect(() => {
+        if (reduced) return undefined;
+        settling.current = true;
+        const timer = window.setTimeout(() => {
+            settling.current = false;
+        }, SETTLE_MS);
+        return () => {
+            window.clearTimeout(timer);
+            settling.current = false;
+        };
+    }, [openId, reduced]);
+
+    useEffect(() => {
+        if (hoverId === null) return undefined;
+        const timer = window.setTimeout(() => setOpenId(hoverId), HOVER_INTENT_MS);
+        return () => window.clearTimeout(timer);
+    }, [hoverId]);
+
+    // Exactly one group is open at a time: a click opens (or keeps open), never collapses to none.
+    const openGroup = (id) => {
+        setHoverId(null);
+        setOpenId(id);
+    };
+
+    const hover = (id, event) => {
+        if (event.pointerType !== "mouse") return;
+        if (settling.current) return;
+        setHoverId(id);
+    };
+
+    const hoverEnd = (id) => {
+        setHoverId((current) => (current === id ? null : current));
+    };
+
     return (
-        <section id="services" className="py-20 md:py-32 bg-brand-bg relative overflow-hidden">
-            {/* Background Transitions / Grids */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 121, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 121, 0.05) 1px, transparent 1px)`,
-                    backgroundSize: '30px 30px'
-                }}
-            />
+        <section id="services" className="band-light section-pad border-b border-line">
+            <Container className="flex flex-col gap-12 md:gap-16">
+                <SectionHeading
+                    eyebrow="Services"
+                    title={
+                        <>
+                            Everything a product needs, <em>in-house</em>.
+                        </>
+                    }
+                    lede="Four disciplines, one team. Pick what you need now; the rest is there when you grow."
+                />
 
-            <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-
-                {/* Heading Block */}
-                {/* Heading Block */}
-                <div className="
-    relative
-    w-screen sm:w-full
-    left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0
-    bg-brand-dark
-    rounded-none sm:rounded-[40px] md:rounded-[60px]
-    px-2 sm:px-3 md:px-4
-    py-12 sm:py-16 md:py-20
-    mb-12 md:mb-16
-    overflow-hidden
-    border-0 sm:border sm:border-white/5
-    shadow-none sm:shadow-2xl
-">
-
-                    {/* Background Sparkle */}
-                    <div className="absolute top-0 right-0 
-        p-6 sm:p-8 md:p-10 
-        opacity-[0.04] text-white pointer-events-none">
-                        <Sparkles className="w-20 h-20 sm:w-32 sm:h-32 md:w-[200px] md:h-[200px]" />
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center max-w-3xl mx-auto"
-                    >
-                        {/* Badge */}
-                        <span className="
-            inline-block
-            mb-4 sm:mb-6
-            rounded-full
-            border border-white/10
-            bg-white/5
-            px-3 py-1 sm:px-4 sm:py-1.5
-            text-[10px] sm:text-xs
-            font-bold uppercase tracking-widest
-            text-brand-accent
-        ">
-                            Our Expertise
-                        </span>
-
-                        {/* Heading */}
-                        <h2 className="
-            text-3xl sm:text-4xl md:text-6xl lg:text-7xl
-            font-black text-white
-            leading-tight md:leading-[0.95]
-            tracking-tight
-        ">
-                            We build the{" "}
-                            <br className="hidden sm:block" />
-                            <span className="text-white/90 italic font-light">
-                                Future of Digital
-                            </span>
-                        </h2>
-
-                        {/* Paragraph */}
-                        <p className="
-            mt-6 sm:mt-8
-            text-white/90
-            text-base sm:text-lg md:text-xl
-            leading-relaxed
-            max-w-xl sm:max-w-2xl mx-auto
-        ">
-                            From rapid MVP development to enterprise-level architecture,
-                            we deliver high-performance solutions tailored for growth.
-                        </p>
-                    </motion.div>
-                </div>
-
-                {/* Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {services.map((service, i) => (
-                        <TiltCard key={i} service={service} index={i} />
+                <Reveal as="ul" className="flex flex-col border-b border-line">
+                    {GROUPS.map((group) => (
+                        <ServiceRow
+                            key={group.id}
+                            group={group}
+                            open={openId === group.id}
+                            reduced={reduced}
+                            onOpen={() => openGroup(group.id)}
+                            onHover={(event) => hover(group.id, event)}
+                            onHoverEnd={() => hoverEnd(group.id)}
+                        />
                     ))}
-                </div>
-            </div>
+                </Reveal>
+            </Container>
         </section>
     );
 }

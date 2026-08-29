@@ -1,10 +1,19 @@
-import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Check, CheckCircle2, X, XCircle } from "lucide-react";
+import Container from "./ui/Container";
+import SectionHeading from "./ui/SectionHeading";
+import Button from "./ui/Button";
+import Reveal, { Stagger } from "./motion/Reveal";
+import { staggerChild } from "./motion/constants";
+import { scrollToTarget } from "../lib/scroll";
+
+/** Alias so the repo ESLint config (no react plugin) sees the `motion` import as used. */
+const MotionLi = motion.li;
 
 const withUs = [
     {
         title: "Expert Developer and Designer",
-        desc: "Experienced professionals ensuring exceptional quality, best practices, and attention to detail.",
+        desc: "Senior people on every build, with reviews and tests that keep quality up.",
     },
     {
         title: "Streamlined Project Management",
@@ -12,7 +21,7 @@ const withUs = [
     },
     {
         title: "Transparent Pricing & Clear Contracts",
-        desc: "No hidden costs, no surprises -- everything defined upfront.",
+        desc: "No hidden costs, no surprises — everything defined upfront.",
     },
     {
         title: "24/7 Dedicated Support",
@@ -20,7 +29,7 @@ const withUs = [
     },
     {
         title: "Modern Technology Stack",
-        desc: "Future-proof solutions built with the latest tools and best practices.",
+        desc: "Current tools chosen per project, so the product is easy to hire for and extend.",
     },
 ];
 
@@ -47,152 +56,73 @@ const withoutUs = [
     },
 ];
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.2,
-        },
-    },
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-};
-
-const itemVariantsRight = {
-    hidden: { opacity: 0, x: 20 },
-    show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-};
-
 export default function ComparisonSection() {
-    const handleNavClick = (href) => {
-        if (href.startsWith("#")) {
-            const el = document.querySelector(href);
-            if (el) el.scrollIntoView({ behavior: "smooth" });
-        }
-    };
-
     return (
-        <section className="py-24 md:py-32 bg-brand-bg relative overflow-hidden">
+        <section id="why" aria-labelledby="why-heading" className="band-light section-pad border-b border-line">
+            <Container>
+                <SectionHeading
+                    id="why-heading"
+                    eyebrow="Why us"
+                    title={
+                        <>
+                            The DevGrowth <em>difference</em>.
+                        </>
+                    }
+                    align="center"
+                />
 
-            {/* Background Pattern */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.3]"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.2) 1px, transparent 1px)`,
-                    backgroundSize: '50px 50px'
-                }}
-            />
-
-            <div className="mx-auto max-w-6xl px-0 sm:px-10 lg:px-16 relative z-10">
-
-                {/* ================= HEADER ================= */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8 }}
-                    className="mx-auto mb-20 max-w-3xl text-center px-6 sm:px-0"
-                >
-                    <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
-                        Why Choose Us?
-                    </span>
-                    <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight mb-6">
-                        The Devgrowth <br />
-                        <span className="italic font-light text-brand-dark">Difference</span>
-                    </h2>
-
-                    <motion.button
-                        onClick={() => handleNavClick("#contact")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="group inline-flex mt-10 items-center gap-3 rounded-xl bg-brand-dark px-8 py-4 text-sm font-bold text-white shadow-xl shadow-brand-dark/10 transition-all hover:bg-brand-dark/90 cursor-pointer"
-                    >
-                        Book Your Free Consultation
-                        <ArrowRight
-                            size={18}
-                            className="transition-transform group-hover:translate-x-1"
-                        />
-                    </motion.button>
-                </motion.div>
-
-                {/* ================= COMPARISON CARD ================= */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8 }}
-                    className="grid md:grid-cols-2 gap-0 md:gap-8 rounded-[32px] md:rounded-[48px] overflow-hidden bg-brand-bg p-0 md:p-8 shadow-2xl shadow-brand-dark/5 ring-1 ring-brand-dark/5 md:ring-brand-dark/10"
-                >
-
-                    {/* ================= WITHOUT YOU (LEFT) ================= */}
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true }}
-                        className="p-8 md:p-12 bg-gradient-to-br from-brand-accent/30 via-brand-bg to-brand-bg rounded-[32px] md:rounded-[40px] border-b sm:border border-brand-dark/5"
-                    >
-                        <div className="mb-10 flex items-center gap-3 opacity-80">
-                            <XCircle className="text-brand-muted" size={24} />
-                            <h3 className="text-2xl font-bold text-brand-dark/50">
-                                Without Devgrowth
-                            </h3>
-                        </div>
-
-                        <ul className="space-y-8">
-                            {withoutUs.map((item, i) => (
-                                <motion.li key={i} variants={itemVariants} className="flex gap-4">
-                                    <XCircle className="mt-1 text-brand-muted/60" size={20} />
-                                    <div>
-                                        <h4 className="font-bold text-brand-dark/70">
-                                            {item.title}
-                                        </h4>
-                                        <p className="mt-1 text-brand-muted text-sm">
-                                            {item.desc}
-                                        </p>
+                <div className="mt-14 grid gap-6 md:grid-cols-2">
+                    <div className="flex flex-col gap-6 pt-6 md:pt-8">
+                        <h3 className="type-eyebrow flex items-center gap-2.5 text-muted">
+                            <XCircle size={16} aria-hidden="true" />
+                            Without DevGrowth
+                        </h3>
+                        <Stagger as="ul" className="divide-y divide-line border-y border-line">
+                            {withoutUs.map((item) => (
+                                <MotionLi
+                                    key={item.title}
+                                    variants={staggerChild}
+                                    className="flex items-start gap-3 py-5"
+                                >
+                                    <X size={16} aria-hidden="true" className="mt-1 shrink-0 text-muted" />
+                                    <div className="flex flex-col gap-1">
+                                        <h4 className="font-medium text-muted">{item.title}</h4>
+                                        <p className="text-sm text-muted">{item.desc}</p>
                                     </div>
-                                </motion.li>
+                                </MotionLi>
                             ))}
-                        </ul>
-                    </motion.div>
+                        </Stagger>
+                    </div>
 
-                    {/* ================= WITH YOU (RIGHT) ================= */}
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true }}
-                        className="bg-gradient-to-br from-brand-dark via-brand-dark to-[#2a266a] p-8 sm:p-10 md:p-12 rounded-[32px] md:rounded-[40px] text-white shadow-xl"
-                    >
-                        <div className="mb-10 flex items-center gap-3">
-                            <CheckCircle2 className="text-brand-accent" size={24} />
-                            <h3 className="text-2xl font-bold text-brand-bg">
-                                With Devgrowth
-                            </h3>
-                        </div>
-
-                        <ul className="space-y-8">
-                            {withUs.map((item, i) => (
-                                <motion.li key={i} variants={itemVariantsRight} className="flex gap-4">
-                                    <CheckCircle2 className="mt-1 text-brand-accent" size={20} />
-                                    <div>
-                                        <h4 className="font-bold text-brand-bg">
-                                            {item.title}
-                                        </h4>
-                                        <p className="mt-1 text-brand-muted text-sm opacity-90">
-                                            {item.desc}
-                                        </p>
+                    <div className="flex flex-col gap-6 rounded-2xl border border-line bg-surface p-6 md:p-8">
+                        <h3 className="type-eyebrow flex items-center gap-2.5 text-accent">
+                            <CheckCircle2 size={16} aria-hidden="true" />
+                            With DevGrowth
+                        </h3>
+                        <Stagger as="ul" className="divide-y divide-line border-t border-line">
+                            {withUs.map((item) => (
+                                <MotionLi
+                                    key={item.title}
+                                    variants={staggerChild}
+                                    className="flex items-start gap-3 py-5"
+                                >
+                                    <Check size={16} aria-hidden="true" className="mt-1 shrink-0 text-accent" />
+                                    <div className="flex flex-col gap-1">
+                                        <h4 className="font-semibold text-ink">{item.title}</h4>
+                                        <p className="text-sm text-muted">{item.desc}</p>
                                     </div>
-                                </motion.li>
+                                </MotionLi>
                             ))}
-                        </ul>
-                    </motion.div>
-                </motion.div>
-            </div>
+                        </Stagger>
+                    </div>
+                </div>
+
+                <Reveal className="mt-12 flex justify-center">
+                    <Button variant="primary" arrow onClick={() => scrollToTarget("#contact")}>
+                        Book your free consultation
+                    </Button>
+                </Reveal>
+            </Container>
         </section>
     );
 }

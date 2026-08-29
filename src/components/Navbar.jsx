@@ -1,368 +1,619 @@
-import { useEffect, useState, useRef } from "react";
-import { Menu, X, ChevronDown, ExternalLink, Box, Sparkles } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
-import devgrowthlogo from "../assets/devgrowthlogo.jpeg";
+import logoMark from "../assets/devgrowthlogo.jpeg";
+import Container from "./ui/Container";
+import Button from "./ui/Button";
+import { EASE, staggerChild, staggerParent } from "./motion/constants";
+import { scrollToTarget, scrollToTop } from "../lib/scroll";
+import cx from "../lib/cx";
+
+const SCROLL_THRESHOLD = 24;
+const CLOSE_DELAY = 120;
+const FOCUSABLE =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+const MotionDiv = motion.div;
+const MotionSpan = motion.span;
+const MotionUl = motion.ul;
+const MotionLi = motion.li;
+
+const NAV = [
+    { key: "services", label: "Services", hash: "#services", match: "/services", items: services },
+    { key: "industries", label: "Industries", match: "/industries", items: industries },
+    { key: "case-studies", label: "Case Studies", to: "/case-studies", match: "/case-studies" },
+    { key: "blog", label: "Blog", to: "/blog", match: "/blog" },
+    { key: "about", label: "About", to: "/about", match: "/about" },
+];
+
+/* Intrinsic size of the jpeg mark, so the 36px slot is reserved before it loads. */
+const MARK_SIZE = { width: 391, height: 243 };
+
+const subscribeScroll = (callback) => {
+    window.addEventListener("scroll", callback, { passive: true });
+    return () => window.removeEventListener("scroll", callback);
+};
+const getScrolled = () => window.scrollY > SCROLL_THRESHOLD;
+const getScrolledServer = () => false;
+
+function Logo({ overDark, onClick }) {
+    return (
+        <Link to="/" onClick={onClick} className="col-start-1 flex w-fit items-center gap-3">
+            {/* One jpeg mark for both states: on paper it sits in a white tile; over the dark band it is
+                inverted to light and screen-blended so its white background disappears into the ink. */}
+            <span
+                className={cx(
+                    "flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border transition-colors duration-300",
+                    overDark ? "border-transparent bg-transparent" : "border-line bg-surface",
+                )}
+            >
+                <img
+                    src={logoMark}
+                    alt="DevGrowth Solutions"
+                    width={MARK_SIZE.width}
+                    height={MARK_SIZE.height}
+                    className={cx(
+                        "size-full object-contain transition-[filter] duration-300",
+                        overDark && "invert grayscale mix-blend-screen",
+                    )}
+                />
+            </span>
+            <span aria-hidden="true" className="whitespace-nowrap text-[15px] font-semibold tracking-tight">
+                DevGrowth Solutions
+            </span>
+        </Link>
+    );
+}
+
+function DropdownItem({ entry, onNavigate }) {
+    const Icon = entry.icon;
+    return (
+        <Link
+            to={entry.path}
+            onClick={onNavigate}
+            className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors duration-200 hover:bg-paper focus-visible:bg-paper"
+        >
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-paper text-ink transition-colors duration-200 group-hover:bg-accent-soft group-hover:text-accent">
+                <Icon size={16} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="text-sm font-medium leading-snug text-ink">{entry.title}</span>
+                <span className="text-xs leading-snug text-muted">{entry.desc}</span>
+            </span>
+        </Link>
+    );
+}
+
+function NavItem({ item, isHome, active, isOpen, highlighted, reduce, onHover, onOpen, onScheduleClose, onClose }) {
+    const triggerRef = useRef(null);
+    const panelRef = useRef(null);
+    const focusFirst = useRef(false);
+    const panelId = useId();
+    const hasMenu = Boolean(item.items);
+
+    /* Focus the first link once a panel that was opened from the trigger has mounted. */
+    useEffect(() => {
+        if (!isOpen || !focusFirst.current) return;
+        focusFirst.current = false;
+        panelRef.current?.querySelector("a")?.focus();
+    }, [isOpen]);
+
+    /* Open the panel and move focus in, whether or not it is already mounted (e.g. opened by hover first). */
+    const openAndFocusFirst = () => {
+        onOpen(item.key);
+        const first = panelRef.current?.querySelector("a");
+        if (first) first.focus();
+        else focusFirst.current = true;
+    };
+
+    const handleItemKeyDown = (event) => {
+        if (hasMenu && isOpen && event.key === "Escape") {
+            event.preventDefault();
+            onClose();
+            triggerRef.current?.focus();
+        }
+    };
+
+    /* Disclosure pattern: focus alone never opens the panel; ArrowDown / Space do.
+       Space needs preventDefault on the <a href="#…"> variant or it would page-scroll. */
+    const handleTriggerKeyDown = (event) => {
+        if (!hasMenu || (event.key !== "ArrowDown" && event.key !== " ")) return;
+        event.preventDefault();
+        openAndFocusFirst();
+    };
+
+    const linkClass = cx(
+        "type-eyebrow relative inline-flex items-center gap-1.5 whitespace-nowrap py-2 transition-opacity duration-300",
+        highlighted ? "opacity-100" : "opacity-70 hover:opacity-100",
+    );
+
+    const label = (
+        <>
+            <span>{item.label}</span>
+            {hasMenu && (
+                <ChevronDown
+                    size={12}
+                    aria-hidden="true"
+                    className={cx("transition-transform duration-300", isOpen && "rotate-180")}
+                />
+            )}
+            {highlighted && (
+                <MotionSpan
+                    layoutId="nav-underline"
+                    aria-hidden="true"
+                    className="absolute inset-x-0 bottom-0 h-px bg-current"
+                    transition={{ duration: reduce ? 0 : 0.3, ease: EASE }}
+                />
+            )}
+        </>
+    );
+
+    let trigger;
+    if (!hasMenu) {
+        trigger = (
+            <Link ref={triggerRef} to={item.to} aria-current={active ? "page" : undefined} className={linkClass}>
+                {label}
+            </Link>
+        );
+    } else if (!item.hash) {
+        /* No section or page to go to (Industries): the label is a disclosure button on every route. */
+        trigger = (
+            <button
+                ref={triggerRef}
+                type="button"
+                aria-expanded={isOpen}
+                aria-controls={isOpen ? panelId : undefined}
+                aria-current={active ? "page" : undefined}
+                onClick={openAndFocusFirst}
+                onKeyDown={handleTriggerKeyDown}
+                className={cx(linkClass, "cursor-pointer")}
+            >
+                {label}
+            </button>
+        );
+    } else if (isHome) {
+        trigger = (
+            <a
+                ref={triggerRef}
+                href={item.hash}
+                aria-expanded={isOpen}
+                aria-controls={isOpen ? panelId : undefined}
+                onClick={(event) => {
+                    event.preventDefault();
+                    onClose();
+                    scrollToTarget(item.hash);
+                }}
+                onKeyDown={handleTriggerKeyDown}
+                className={linkClass}
+            >
+                {label}
+            </a>
+        );
+    } else {
+        trigger = (
+            <Link
+                ref={triggerRef}
+                to="/"
+                state={{ scrollTo: item.hash }}
+                aria-current={active ? "page" : undefined}
+                aria-expanded={isOpen}
+                aria-controls={isOpen ? panelId : undefined}
+                onClick={onClose}
+                onKeyDown={handleTriggerKeyDown}
+                className={linkClass}
+            >
+                {label}
+            </Link>
+        );
+    }
+
+    return (
+        <li
+            className="relative flex h-[72px] items-center"
+            onMouseEnter={() => {
+                onHover(item.key);
+                if (hasMenu) onOpen(item.key);
+            }}
+            onMouseLeave={() => {
+                onHover(null);
+                if (hasMenu) onScheduleClose();
+            }}
+            onFocus={() => onHover(item.key)}
+            onBlur={(event) => {
+                if (event.currentTarget.contains(event.relatedTarget)) return;
+                onHover(null);
+                if (hasMenu) onClose();
+            }}
+            onKeyDown={handleItemKeyDown}
+        >
+            {trigger}
+            {hasMenu && (
+                <AnimatePresence>
+                    {isOpen && (
+                        <MotionDiv
+                            key="panel"
+                            initial={{ opacity: 0, y: 8, x: "-50%" }}
+                            animate={{ opacity: 1, y: 0, x: "-50%" }}
+                            exit={{ opacity: 0, y: 8, x: "-50%" }}
+                            transition={{ duration: reduce ? 0 : 0.2, ease: EASE }}
+                            className="absolute left-1/2 top-full pt-2"
+                        >
+                            <div
+                                ref={panelRef}
+                                id={panelId}
+                                className="grid w-[560px] min-w-[280px] grid-cols-2 gap-1 rounded-2xl border border-line bg-surface p-2 text-left text-ink shadow-[0_24px_60px_-24px] shadow-ink/35"
+                            >
+                                {item.items.map((entry) => (
+                                    <DropdownItem key={entry.title} entry={entry} onNavigate={onClose} />
+                                ))}
+                            </div>
+                        </MotionDiv>
+                    )}
+                </AnimatePresence>
+            )}
+        </li>
+    );
+}
+
+function DesktopNav({ isHome, activeKey, reduce }) {
+    const [hovered, setHovered] = useState(null);
+    const [openKey, setOpenKey] = useState(null);
+    const closeTimer = useRef(null);
+
+    const cancelClose = () => {
+        if (closeTimer.current !== null) {
+            window.clearTimeout(closeTimer.current);
+            closeTimer.current = null;
+        }
+    };
+    const open = (key) => {
+        cancelClose();
+        setOpenKey(key);
+    };
+    const scheduleClose = () => {
+        cancelClose();
+        closeTimer.current = window.setTimeout(() => {
+            closeTimer.current = null;
+            setOpenKey(null);
+        }, CLOSE_DELAY);
+    };
+    const close = () => {
+        cancelClose();
+        setOpenKey(null);
+    };
+
+    useEffect(
+        () => () => {
+            if (closeTimer.current !== null) window.clearTimeout(closeTimer.current);
+        },
+        [],
+    );
+
+    const highlighted = hovered ?? openKey ?? activeKey;
+
+    return (
+        <nav aria-label="Primary" className="col-start-2 hidden h-full justify-center lg:flex">
+            <ul className="flex items-center gap-8">
+                {NAV.map((item) => (
+                    <NavItem
+                        key={item.key}
+                        item={item}
+                        isHome={isHome}
+                        active={activeKey === item.key}
+                        isOpen={openKey === item.key}
+                        highlighted={highlighted === item.key}
+                        reduce={reduce}
+                        onHover={setHovered}
+                        onOpen={open}
+                        onScheduleClose={scheduleClose}
+                        onClose={close}
+                    />
+                ))}
+            </ul>
+        </nav>
+    );
+}
+
+function MobileLabel({ active, children }) {
+    return (
+        <span className={cx("type-display text-4xl", active ? "text-accent-bright" : "text-paper")}>{children}</span>
+    );
+}
+
+function MobileGroup({ item, active, expanded, reduce, onToggle, onNavigate }) {
+    const panelId = useId();
+    return (
+        <>
+            <button
+                type="button"
+                aria-expanded={expanded}
+                aria-controls={expanded ? panelId : undefined}
+                onClick={onToggle}
+                className="flex w-full items-center justify-between gap-6 py-5 text-left"
+            >
+                <MobileLabel active={active}>
+                    {item.label}
+                </MobileLabel>
+                <ChevronDown
+                    size={20}
+                    aria-hidden="true"
+                    className={cx("shrink-0 text-muted-dark transition-transform duration-300", expanded && "rotate-180")}
+                />
+            </button>
+            <AnimatePresence initial={false}>
+                {expanded && (
+                    <MotionDiv
+                        key="panel"
+                        id={panelId}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: reduce ? 0 : 0.35, ease: EASE }}
+                        className="overflow-hidden"
+                    >
+                        <ul className="grid gap-1 pb-5 sm:grid-cols-2">
+                            {item.items.map((entry) => {
+                                const Icon = entry.icon;
+                                return (
+                                    <li key={entry.title}>
+                                        <Link
+                                            to={entry.path}
+                                            onClick={onNavigate}
+                                            className="flex items-start gap-3 rounded-xl px-2 py-2.5 transition-colors duration-200 hover:bg-paper/5"
+                                        >
+                                            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-line-dark bg-ink-2 text-paper">
+                                                <Icon size={16} strokeWidth={1.75} aria-hidden="true" />
+                                            </span>
+                                            <span className="flex min-w-0 flex-col gap-0.5">
+                                                <span className="text-sm font-medium leading-snug text-paper">{entry.title}</span>
+                                                <span className="text-xs leading-snug text-muted-dark">{entry.desc}</span>
+                                            </span>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </MotionDiv>
+                )}
+            </AnimatePresence>
+        </>
+    );
+}
+
+function MobileMenu({ menuId, activeKey, reduce, onNavigate, onBookClick }) {
+    const [expanded, setExpanded] = useState(null);
+
+    return (
+        <nav id={menuId} aria-label="Mobile" className="flex min-h-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 overflow-y-auto">
+                <Container className="py-4">
+                    <MotionUl
+                        variants={staggerParent(0.06, 0.2)}
+                        initial="hidden"
+                        animate="show"
+                        className="flex flex-col border-b border-line-dark"
+                    >
+                        {NAV.map((item) => {
+                            const active = activeKey === item.key;
+                            return (
+                                <MotionLi key={item.key} variants={staggerChild} className="border-t border-line-dark">
+                                    {item.items ? (
+                                        <MobileGroup
+                                            item={item}
+                                                                                       active={active}
+                                            expanded={expanded === item.key}
+                                            reduce={reduce}
+                                            onToggle={() => setExpanded((current) => (current === item.key ? null : item.key))}
+                                            onNavigate={onNavigate}
+                                        />
+                                    ) : (
+                                        <Link
+                                            to={item.to}
+                                            aria-current={active ? "page" : undefined}
+                                            onClick={onNavigate}
+                                            className="flex items-center justify-between gap-6 py-5"
+                                        >
+                                            <MobileLabel active={active}>
+                                                {item.label}
+                                            </MobileLabel>
+                                            <ArrowUpRight size={20} aria-hidden="true" className="shrink-0 text-muted-dark" />
+                                        </Link>
+                                    )}
+                                </MotionLi>
+                            );
+                        })}
+                    </MotionUl>
+                </Container>
+            </div>
+            <Container className="border-t border-line-dark pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+                <Button
+                    variant="accent"
+                    tone="dark"
+                    className="w-full"
+                    onClick={() => {
+                        onNavigate();
+                        onBookClick?.();
+                    }}
+                >
+                    Book a call
+                </Button>
+            </Container>
+        </nav>
+    );
+}
 
 export default function Navbar({ onBookClick }) {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const location = useLocation();
-  const dropdownRef = useRef(null);
-  const isHomePage = location.pathname === "/";
+    const location = useLocation();
+    const navigate = useNavigate();
+    const reduce = useReducedMotion();
+    const menuId = useId();
+    const toggleRef = useRef(null);
+    const overlayRef = useRef(null);
+    /* Set by a logo tap while the mobile menu is open. Lenis is stopped until the menu
+       effect's cleanup restarts it and ignores scrollTo before then, so the jump runs there. */
+    const scrollTopOnClose = useRef(false);
 
-  useEffect(() => {
-    // Close mobile menu ONLY if open and user scrolls significantly
-    const onScroll = () => {
-      if (open && window.scrollY > 200) { // Increased threshold to 200px
-        setOpen(false);
-      }
+    const { pathname } = location;
+    const isHome = pathname === "/";
+    const scrolled = useSyncExternalStore(subscribeScroll, getScrolled, getScrolledServer);
+    /* Membership first (E-commerce sits under Services but routes to /industries/…), then the prefix rule. */
+    const activeKey =
+        NAV.find((item) => item.items?.some((entry) => pathname === entry.path || pathname === `${entry.path}/`))?.key ??
+        NAV.find((item) => pathname.startsWith(item.match))?.key ??
+        null;
+
+    /* The menu remembers the route it opened on, so a route change closes it without an effect. */
+    const [menu, setMenu] = useState({ open: false, path: pathname });
+    const menuOpen = menu.open && menu.path === pathname;
+    const closeMenu = () => setMenu((current) => (current.open ? { ...current, open: false } : current));
+    const toggleMenu = () => setMenu({ open: !menuOpen, path: pathname });
+
+    /* Every page opens with a dark header band, so the bar is transparent at the top of any route. */
+    const overDark = !scrolled && !menuOpen;
+
+    /* On "/" the Link would only push a duplicate history entry; jump to the top instead. */
+    const onLogoClick = (event) => {
+        event.preventDefault();
+        if (menuOpen) {
+            scrollTopOnClose.current = true;
+            closeMenu();
+        } else {
+            scrollToTop();
+        }
     };
 
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [open]);
+    useEffect(() => {
+        if (!menuOpen) return undefined;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        // Stop Lenis so wheel input over the fixed header (which has no data-lenis-prevent)
+        // is cancelled instead of driving window.scrollTo from its raf. Lenis sets and
+        // clears html.lenis-stopped itself while stopped. Only restart it if we stopped it;
+        // body overflow:hidden stays as the reduced-motion / no-Lenis fallback.
+        const lenis = window.__lenis;
+        const stoppedLenis = Boolean(lenis && !lenis.isStopped);
+        if (stoppedLenis) lenis.stop();
 
-  /* ---------------- CLICK OUTSIDE CLOSE ---------------- */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      // Only close on click-outside if we are in desktop view
-      if (window.innerWidth >= 1024 && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setActiveDropdown(null);
-      }
-    };
+        const close = () => setMenu((current) => ({ ...current, open: false }));
+        // Escape closes. Tab / Shift+Tab cycle between the header toggle and the overlay's
+        // focusables so focus never walks into the page painted underneath the menu.
+        const onKeyDown = (event) => {
+            if (event.key === "Escape") {
+                close();
+                toggleRef.current?.focus();
+                return;
+            }
+            if (event.key !== "Tab") return;
+            const scope = [toggleRef.current, ...(overlayRef.current?.querySelectorAll(FOCUSABLE) ?? [])].filter(Boolean);
+            if (scope.length === 0) return;
+            const first = scope[0];
+            const last = scope[scope.length - 1];
+            const active = document.activeElement;
+            const outside = !scope.includes(active);
+            if (event.shiftKey ? outside || active === first : outside || active === last) {
+                event.preventDefault();
+                (event.shiftKey ? last : first).focus();
+            }
+        };
+        const desktop = window.matchMedia("(min-width: 1024px)");
+        const onMediaChange = (event) => {
+            if (event.matches) close();
+        };
+        window.addEventListener("keydown", onKeyDown);
+        desktop.addEventListener("change", onMediaChange);
 
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => window.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+        return () => {
+            window.removeEventListener("keydown", onKeyDown);
+            desktop.removeEventListener("change", onMediaChange);
+            document.body.style.overflow = previousOverflow;
+            if (stoppedLenis) window.__lenis?.start();
+            if (scrollTopOnClose.current) {
+                scrollTopOnClose.current = false;
+                scrollToTop();
+            }
+        };
+    }, [menuOpen]);
 
-  const navLinks = [
-    { name: "SERVICES", href: isHomePage ? "#services" : "/", hasDropdown: true },
-    { name: "INDUSTRIES", href: isHomePage ? "#industries" : "/", hasDropdown: true },
-    { name: "CASE STUDIES", href: "/case-studies" },
-    { name: "BLOG", href: "/blog" },
-    { name: "ABOUT US", href: "/about" },
-  ];
+    /* Arriving on the homepage from a "Services" link on another page. */
+    useEffect(() => {
+        const target = location.state?.scrollTo;
+        if (!isHome || !target) return undefined;
+        const id = window.setTimeout(() => {
+            scrollToTarget(target);
+            navigate("/", { replace: true, state: null });
+        }, 80);
+        return () => window.clearTimeout(id);
+    }, [isHome, location.state, navigate]);
 
-  const handleNavClick = (href) => {
-    setOpen(false);
-    if (href.startsWith("#")) {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+    const headerTone = menuOpen
+        ? "border-line bg-paper text-ink"
+        : overDark
+          ? "border-transparent bg-transparent text-paper"
+          : "border-line bg-paper/85 text-ink backdrop-blur-md";
 
-  /* ---------------- DROPDOWN ---------------- */
-  const DropdownContent = ({ items, type }) => (
-    <motion.div
-      ref={dropdownRef}
-      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-      className="absolute top-[90%] left-1/2 -translate-x-1/2 mt-2 w-64 bg-white border border-brand-dark/10 rounded-2xl shadow-2xl overflow-hidden p-2 z-50"
-    >
-      <div className="grid grid-cols-1 gap-1">
-        {items.map((item, idx) => {
-          const Icon = item.icon;
-          const isExternal = item.path?.startsWith("http");
-          const isInternal = item.path?.startsWith("/");
-
-          if (isInternal) {
-            return (
-              <Link
-                key={idx}
-                to={item.path}
-                onClick={() => {
-                  setActiveDropdown(null);
-                  setOpen(false);
-                }}
-                className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-bg transition-all duration-300 group/item"
-              >
-                <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
-                  <Icon size={18} />
-                </div>
-                <div className="text-xs font-bold text-brand-dark tracking-wide">
-                  {item.title}
-                </div>
-              </Link>
-            );
-          }
-
-          if (isExternal) {
-            return (
-              <a
-                key={idx}
-                href={item.path}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-bg transition-all duration-300 group/item"
-              >
-                <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
-                  <Icon size={18} />
-                </div>
-                <div className="text-xs font-bold text-brand-dark tracking-wide">
-                  {item.title}
-                </div>
-              </a>
-            );
-          }
-
-          return (
-            <div
-              key={idx}
-              className="flex items-center gap-3 p-3 rounded-xl transition-all duration-300  cursor-default"
-            >
-              <div className="p-2 bg-brand-dark/5 rounded-lg text-brand-dark group-hover/item:bg-brand-dark group-hover/item:text-white transition-colors">
-                <Icon size={18} />
-              </div>
-              <div className="text-xs font-bold text-brand-dark tracking-wide">
-                {item.title}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
-
-  return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-brand-dark/10 "
-    >
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 md:px-12">
-
-        {/* LOGO */}
-        <Link to="/" className="flex items-center gap-4 group">
-          <div className="h-20 w-20 md:h-20 md:w-20 overflow-hidden ">
-            <img
-              src={devgrowthlogo}
-              alt="Devgrowth Solutions Logo"
-              className="h-full w-full object-contain rounded-xl"
-            />
-          </div>
-          <span className="hidden md:block text-xl font-bold text-brand-dark whitespace-nowrap">
-            Devgrowth Solutions
-          </span>
-        </Link>
-
-        {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <div
-              key={link.name}
-              className="relative flex items-center h-full group"
-              onMouseEnter={() => link.hasDropdown && setActiveDropdown(link.name)}
-              onMouseLeave={() => link.hasDropdown && setActiveDropdown(null)}
-            >
-              {link.href.startsWith("/") ? (
-                <Link
-                  to={link.href}
-                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
-                >
-                  {link.name}
-                  {link.hasDropdown && (
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-300 ${activeDropdown === link.name ? "rotate-180" : ""
-                        }`}
-                    />
-                  )}
-                  {/* Fixed Underline Animation */}
-                  <span className={`absolute bottom-2 left-0 h-0.5 bg-brand-dark transition-all duration-300 origin-left ${activeDropdown === link.name ? "w-full" : "w-0 group-hover:w-full"
-                    }`} />
-                </Link>
-              ) : (
-                <a
-                  href={link.href}
-                  className="relative flex items-center gap-1 text-[12px] font-bold text-brand-dark hover:text-brand-dark transition-all duration-300 tracking-widest px-1 py-4"
-                >
-                  {link.name}
-                  {link.hasDropdown && (
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-300 ${activeDropdown === link.name ? "rotate-180" : ""
-                        }`}
-                    />
-                  )}
-                  {/* Fixed Underline Animation */}
-                  <span className={`absolute bottom-2 left-0 h-0.5 bg-brand-dark transition-all duration-300 origin-left ${activeDropdown === link.name ? "w-full" : "w-0 group-hover:w-full"
-                    }`} />
-                </a>
-              )}
-
-              <AnimatePresence>
-                {activeDropdown === link.name && (
-                  <DropdownContent
-                    items={link.name === "SERVICES" ? services : industries}
-                    type={link.name === "SERVICES" ? "services" : "industries"}
-                  />
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </nav>
-
-        {/* CTA */}
-        <div className="hidden md:flex items-center gap-6">
-          <motion.button
-            whileHover={{
-              scale: 1.05,
-
-            }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onBookClick}
-            className="flex items-center gap-3 px-8 py-3 rounded-full bg-brand-dark text-white font-bold transition-all shadow-lg cursor-pointer border border-white/10"
-          >
-            <motion.div
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-2 h-2 rounded-full bg-brand-accent shadow-[0_0_8px_rgba(255,255,255,0.8)]"
-            />
-            <span className="text-[14px] tracking-tight">Book a 30 mins call</span>
-          </motion.button>
-        </div>
-
-        {/* MOBILE BUTTON */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="lg:hidden text-brand-dark p-2 hover:bg-brand-dark/5 rounded-full transition-colors z-[60]"
-        >
-          {open ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {open && (
-          <motion.nav
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 right-0 bg-white border-t border-brand-dark/10 shadow-2xl lg:hidden z-50 overflow-y-auto max-h-[calc(100vh-80px)]"
-          >
-            <div className="flex flex-col p-8 gap-8 pb-32">
-              {navLinks.map((link) => (
-                <div key={link.name} className="flex flex-col gap-4">
-                  {link.href.startsWith("/") && !link.hasDropdown ? (
-                    <Link
-                      to={link.href}
-                      onClick={() => setOpen(false)}
-                      className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left"
-                    >
-                      <motion.span
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
-                      >
-                        {link.name}
-                      </motion.span>
-                    </Link>
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + navLinks.indexOf(link) * 0.05 }}
-                      className="flex justify-between items-center text-3xl font-black text-brand-dark uppercase tracking-tighter w-full text-left cursor-pointer select-none"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (link.hasDropdown) {
-                          setActiveDropdown(activeDropdown === link.name ? null : link.name);
-                        } else {
-                          handleNavClick(link.href);
-                        }
-                      }}
-                    >
-                      <span>{link.name}</span>
-                      {link.hasDropdown && (
-                        <div className="p-2">
-                          <ChevronDown
-                            size={28}
-                            className={`transition-transform duration-500 ${activeDropdown === link.name ? "rotate-180" : ""
-                              }`}
-                          />
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-
-                  <AnimatePresence>
-                    {link.hasDropdown &&
-                      activeDropdown === link.name && (
-                        <motion.div
-                          key="accordion"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{
-                            height: "auto",
-                            opacity: 1,
-                          }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="flex flex-col gap-1 pl-6 border-l-2 border-brand-dark/10 ml-2 overflow-hidden"
+    return (
+        <>
+            <header className={cx("fixed inset-x-0 top-0 z-50 h-[72px] border-b transition-colors duration-300 ease-out", headerTone)}>
+                <Container className="grid h-full grid-cols-[1fr_auto_1fr] items-center">
+                    <Logo overDark={overDark} onClick={isHome ? onLogoClick : undefined} />
+                    <DesktopNav isHome={isHome} activeKey={activeKey} reduce={reduce} />
+                    <div className="col-start-3 flex items-center justify-end gap-3">
+                        <Button
+                            variant="accent"
+                            tone={overDark ? "dark" : "light"}
+                            onClick={onBookClick}
+                            className="max-lg:hidden"
                         >
-                          {(link.name === "SERVICES"
-                            ? services
-                            : industries
-                          ).map((item, idx) => {
-                            const ItemIcon = item.icon;
-                            const isInternal = item.path?.startsWith("/");
+                            Book a call
+                        </Button>
+                        <button
+                            ref={toggleRef}
+                            type="button"
+                            aria-label={menuOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={menuOpen}
+                            aria-controls={menuOpen ? menuId : undefined}
+                            onClick={toggleMenu}
+                            className={cx(
+                                "-mr-2 inline-flex size-10 items-center justify-center rounded-full transition-colors duration-300 lg:hidden",
+                                overDark ? "hover:bg-paper/10" : "hover:bg-accent-soft",
+                            )}
+                        >
+                            {menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+                        </button>
+                    </div>
+                </Container>
+            </header>
 
-                            if (isInternal) {
-                              return (
-                                <Link
-                                  key={idx}
-                                  to={item.path}
-                                  onClick={() => setOpen(false)}
-                                  className="flex items-center gap-4 py-4 text-sm font-bold text-brand-dark/60 hover:text-brand-dark transition-colors group"
-                                >
-                                  <div className="p-2 bg-brand-dark/5 rounded-lg group-hover:bg-brand-dark group-hover:text-white transition-colors">
-                                    <ItemIcon size={18} />
-                                  </div>
-                                  <span>{item.title}</span>
-                                </Link>
-                              );
-                            }
-
-                            return (
-                              <div
-                                key={idx}
-                                className="flex items-center gap-4 py-4 text-sm font-bold text-brand-dark/40 transition-colors group opacity-60 cursor-default"
-                              >
-                                <div className="p-2 bg-brand-dark/5 rounded-lg">
-                                  <ItemIcon size={18} />
-                                </div>
-                                <span>{item.title}</span>
-                              </div>
-                            );
-                          })}
-                        </motion.div>
-                      )}
-                  </AnimatePresence>
-                </div>
-              ))}
-
-              <div className="pt-4 flex flex-col gap-4">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setOpen(false);
-                    onBookClick();
-                  }}
-                  className="w-full flex justify-center items-center gap-3 rounded-2xl bg-brand-dark py-5 text-lg font-black text-white shadow-xl cursor-pointer active:scale-95 transition-transform"
-                >
-                  <div className="w-2.5 h-2.5 rounded-full bg-brand-accent shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
-                  Book a 30 mins call
-                </motion.button>
-              </div>
-            </div>
-          </motion.nav>
-        )}
-      </AnimatePresence>
-
-    </header>
-  );
+            <AnimatePresence>
+                {menuOpen && (
+                    <MotionDiv
+                        key="mobile-menu"
+                        ref={overlayRef}
+                        data-lenis-prevent=""
+                        initial={{ y: "-100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "-100%" }}
+                        transition={{ duration: reduce ? 0 : 0.5, ease: EASE }}
+                        className="band-dark fixed inset-0 z-[45] flex flex-col pt-[72px] lg:hidden"
+                    >
+                        <MobileMenu
+                            menuId={menuId}
+                            activeKey={activeKey}
+                            reduce={reduce}
+                            onNavigate={closeMenu}
+                            onBookClick={() => {
+                                /* The menu button is about to unmount; park focus on the always-mounted
+                                   toggle so BookingModal has something real to return focus to. */
+                                toggleRef.current?.focus();
+                                onBookClick?.();
+                            }}
+                        />
+                    </MotionDiv>
+                )}
+            </AnimatePresence>
+        </>
+    );
 }

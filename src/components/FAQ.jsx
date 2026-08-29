@@ -1,6 +1,14 @@
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useId, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Plus } from "lucide-react";
+import Container from "./ui/Container";
+import SectionHeading from "./ui/SectionHeading";
+import Reveal from "./motion/Reveal";
+import { EASE } from "./motion/constants";
+import cx from "../lib/cx";
+
+/** Alias so the repo ESLint config (no react plugin) sees the `motion` import as used. */
+const MotionDiv = motion.div;
 
 const faqs = [
     {
@@ -34,87 +42,79 @@ const faqs = [
 ];
 
 export default function FAQ() {
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [open, setOpen] = useState(null);
+    const baseId = useId();
+    const reduced = useReducedMotion();
+    const panelTransition = { duration: reduced ? 0 : 0.45, ease: EASE };
 
     return (
-        <section id="faq" className="py-24 md:py-32 bg-brand-bg relative overflow-hidden">
+        <section id="faq" aria-labelledby="faq-heading" className="band-light section-pad border-b border-line">
+            <Container>
+                <div className="mx-auto max-w-[880px]">
+                    <SectionHeading
+                        id="faq-heading"
+                        eyebrow="FAQ"
+                        title={
+                            <>
+                                You ask, <em>we answer</em>.
+                            </>
+                        }
+                    />
 
-            {/* Background Pattern */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.3]"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 75, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 75, 0.05) 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
-                }}
-            />
+                    <Reveal className="mt-12">
+                        <ul>
+                            {faqs.map((faq, i) => {
+                                const isOpen = open === faq.question;
+                                const buttonId = `${baseId}-q${i}`;
+                                const panelId = `${baseId}-a${i}`;
 
-            <div className="relative z-10 mx-auto max-w-4xl px-4 md:px-6">
+                                return (
+                                    <li key={faq.question} className="border-t border-line last:border-b">
+                                        <h3>
+                                            <button
+                                                type="button"
+                                                id={buttonId}
+                                                aria-expanded={isOpen}
+                                                aria-controls={panelId}
+                                                onClick={() => setOpen(isOpen ? null : faq.question)}
+                                                className="flex w-full cursor-pointer items-start justify-between gap-6 py-6 text-left text-lg font-medium text-ink"
+                                            >
+                                                <span>{faq.question}</span>
+                                                <Plus
+                                                    size={20}
+                                                    aria-hidden="true"
+                                                    className={cx(
+                                                        "mt-1 shrink-0 transition-[rotate,color] duration-300 ease-out-expo",
+                                                        isOpen ? "rotate-45 text-accent" : "text-muted",
+                                                    )}
+                                                />
+                                            </button>
+                                        </h3>
 
-                {/* Heading */}
-                <div className="text-center mb-20">
-                    <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
-                        Common Questions
-                    </span>
-                    <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
-                        You ask, <br />
-                        <span className="italic font-light text-brand-dark">We answer.</span>
-                    </h2>
-                    <p className="mt-8 text-xl text-brand-dark/60 max-w-2xl mx-auto font-medium">
-                        Find answers to frequently asked questions about our services.
-                    </p>
+                                        <AnimatePresence initial={false}>
+                                            {isOpen && (
+                                                <MotionDiv
+                                                    key={panelId}
+                                                    id={panelId}
+                                                    role="region"
+                                                    aria-labelledby={buttonId}
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={panelTransition}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <p className="max-w-[60ch] pb-6 leading-relaxed text-muted">{faq.answer}</p>
+                                                </MotionDiv>
+                                            )}
+                                        </AnimatePresence>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </Reveal>
                 </div>
-
-                {/* FAQ items */}
-                <div className="space-y-4">
-                    {faqs.map((faq, index) => {
-                        const isOpen = activeIndex === index;
-
-                        return (
-                            <div
-                                key={index}
-                                className={`rounded-3xl border transition-all duration-500 overflow-hidden ${isOpen
-                                    ? "border-brand-dark/20 bg-brand-accent/40 shadow-xl"
-                                    : "border-brand-dark/5 bg-brand-accent/20 hover:border-brand-dark/20"
-                                    }`}
-                            >
-                                <button
-                                    onClick={() =>
-                                        setActiveIndex(isOpen ? null : index)
-                                    }
-                                    whileTap={{ scale: 0.99 }}
-                                    className="flex w-full items-center justify-between px-6 md:px-8 py-6 text-left"
-                                >
-                                    <span className={`text-base md:text-lg font-bold transition-colors ${isOpen ? "text-brand-dark" : "text-brand-dark/80 group-hover:text-brand-dark"}`}>
-                                        {faq.question}
-                                    </span>
-
-                                    <div className={`p-2 rounded-full transition-all duration-300 ${isOpen ? "bg-brand-dark text-white rotate-180" : "bg-brand-dark/5 text-brand-dark/40"}`}>
-                                        <ChevronDown size={18} />
-                                    </div>
-                                </button>
-
-                                <AnimatePresence>
-                                    {isOpen && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: "auto", opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                                            className="overflow-hidden"
-                                        >
-                                            <p className="px-6 md:px-8 pb-8 text-brand-dark/70 text-base leading-relaxed border-t border-brand-dark/10 pt-4 font-medium">
-                                                {faq.answer}
-                                            </p>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+            </Container>
         </section>
     );
 }
-
-
-

@@ -1,62 +1,48 @@
-import { motion } from "framer-motion";
-import { Sparkles, Zap, Layers, PenTool } from "lucide-react";
+import Container from "./ui/Container";
+import cx from "../lib/cx";
 
-const FloatingIcon = ({ icon: Icon, x, y, delay = 0, color = "text-brand-dark/10" }) => (
-    <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scale: [1, 1.1, 1],
-            y: [0, -15, 0],
-            x: [0, 8, 0],
-        }}
-        transition={{
-            duration: 5 + Math.random() * 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay
-        }}
-        style={{ position: 'absolute', left: x, top: y }}
-        className={`z-0 pointer-events-none ${color}`}
-    >
-        <Icon className="w-5 h-5 md:w-8 md:h-8" />
-    </motion.div>
-);
+const HAIRLINES = ["first", "second", "third", "fourth", "fifth"];
 
-export default function PageHeaderBackground() {
+/**
+ * Quiet backdrop for inner-page heroes. Mount it `absolute inset-0` behind the
+ * hero content (the parent needs `relative`, the content needs `relative` too so
+ * it stacks above): a soft radial wash at the top, five hairlines that echo the
+ * container rhythm, and a bottom rule. Nothing moves.
+ *
+ *   <section className="relative band-light">
+ *     <PageHeaderBackground />
+ *     <Container className="relative">…</Container>
+ *   </section>
+ *
+ *   <PageHeaderBackground tone="dark" />   // on a band-dark hero
+ */
+export default function PageHeaderBackground({ tone = "light" }) {
+    const dark = tone === "dark";
+
     return (
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            {/* Grid Lines */}
-            <div className="absolute inset-0 blur-[1px] opacity-40">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `linear-gradient(to right, #64748b4a 0.5px, transparent 0.5px)`,
-                        backgroundSize: '60px 100%'
-                    }}
-                />
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `linear-gradient(to bottom, #64748b4a 0.5px, transparent 0.5px)`,
-                        backgroundSize: '100% 60px'
-                    }}
-                />
-            </div>
-
-            {/* Radial Glow */}
+        <div
+            aria-hidden="true"
+            className={cx(
+                "pointer-events-none absolute inset-0 overflow-hidden border-b",
+                dark ? "border-line-dark" : "border-line",
+            )}
+        >
             <div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 blur-[120px]"
-                style={{
-                    background: "radial-gradient(circle, rgba(79, 70, 229, 0.15) 20%, rgba(79, 70, 229, 0) 70%)"
-                }}
+                className={cx(
+                    "absolute inset-x-0 top-0 h-3/4 opacity-60",
+                    "bg-radial-[80%_100%_at_50%_0%] to-transparent to-70%",
+                    dark ? "from-ink-2" : "from-accent-soft",
+                )}
             />
-
-            {/* Floating Icons */}
-            <FloatingIcon icon={Sparkles} x="10vw" y="20vh" delay={0.1} />
-            <FloatingIcon icon={Zap} x="85vw" y="15vh" delay={0.2} />
-            <FloatingIcon icon={Layers} x="15vw" y="60vh" delay={0.3} />
-            <FloatingIcon icon={PenTool} x="80vw" y="55vh" delay={0.15} />
+            {/* `relative` keeps the hairlines above the wash. */}
+            <Container className="relative flex h-full justify-between">
+                {HAIRLINES.map((id) => (
+                    <span
+                        key={id}
+                        className={cx("h-full w-px opacity-60", dark ? "bg-line-dark" : "bg-line")}
+                    />
+                ))}
+            </Container>
         </div>
     );
 }

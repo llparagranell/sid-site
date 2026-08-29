@@ -1,217 +1,203 @@
-import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import Container from "./ui/Container";
+import SectionHeading from "./ui/SectionHeading";
+import Reveal from "./motion/Reveal";
+import { EASE, VIEWPORT } from "./motion/constants";
+import { scrollToTarget } from "../lib/scroll";
+import cx from "../lib/cx";
 
 const items = [
     {
         id: "clients",
-        title: "Putting Clients First",
+        title: "Clients first",
         description: [
-            "At Devgrowth Solutions, every project starts with understanding your vision, business goals, and market challenges. We listen before we build.",
-            "Whether you're a startup, founder, or SME, we align technology decisions with your growth roadmap. Our priority is delivering market-ready MVPs that solve real problems and create measurable impact from day one.",
+            "Every build starts with your goals and the market you are selling into. We listen before we write code.",
+            "For startups and SMEs alike, the aim is an MVP that solves one real problem and can be measured from day one.",
         ],
-        image:
-            "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80",
     },
     {
         id: "innovation",
-        title: "Innovation Drives Us",
+        title: "Tools chosen on purpose",
         description: [
-            "We embrace modern technologies and forward-thinking strategies to build scalable digital products. Using Flutter, React, MERN, Next.js, WordPress, Shopify, and AI solutions, we craft high-performance applications.",
-            "Innovation for us means building smarter, faster, and future-ready MVPs that give startups a competitive advantage.",
+            "We build on React, Next.js, Flutter and the MERN stack, with WordPress or Shopify when a platform beats a custom build.",
+            "A newer tool earns its place by paying off in the product, not by being new.",
         ],
-        image:
-            "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80",
     },
     {
         id: "partners",
-        title: "Partners, Not Vendors",
+        title: "Long-term, not hand-off",
         description: [
-            "We don’t just deliver projects — we build long-term partnerships. From ideation to launch and beyond, we provide end-to-end support to ensure your product succeeds.",
-            "Our team collaborates closely with founders and SMEs, offering strategic guidance, technical expertise, and continuous improvements to help you scale confidently.",
+            "We stay on after launch. Support, iteration and the next feature are part of the engagement, not an upsell.",
+            "You get direct access to the engineers doing the work, so decisions are made with you, not relayed to you.",
         ],
-        image:
-            "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80",
     },
     {
         id: "quality",
-        title: "Quality & Trust First",
+        title: "Quality you can inspect",
         description: [
-            "Quality is at the core of everything we build. From clean code architecture to intuitive UI/UX design, we ensure reliability, security, and performance.",
-            "We follow structured development processes and transparent communication, so you always stay informed. Our commitment to trust ensures your product is built to perform today and scale tomorrow.",
+            "Clean architecture, readable code and a UI that behaves the way it looks. Security and performance are checked before launch, not after.",
+            "You see the process as it happens: a written plan, a shared board, and a weekly update you can act on.",
         ],
-        image:
-            "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
     },
     {
         id: "learning",
-        title: "Continuous Learning",
+        title: "We keep learning",
         description: [
-            "Technology evolves rapidly, and so do we. Our team continuously upgrades skills in AI, cloud solutions, and modern development frameworks to deliver cutting-edge solutions.",
-            "By staying ahead of trends and tools, we ensure that every MVP we build is not just current but future-ready and adaptable to market changes.",
+            "Tooling changes fast, so the team keeps its AI, cloud and framework skills current.",
+            "That is what keeps what we ship maintainable a year from now.",
         ],
-        image:
-            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
     },
 ];
 
+const WATERMARK = "DEVGROWTH · SOLUTIONS · DEVGROWTH · SOLUTIONS";
+const SIGNATURE = "Develop. Grow. Dominate.";
+// nowrap keeps the line one row tall while its letter-spacing tightens; the
+// transient overflow at the start sits at ~0 opacity and is clipped by the section.
+const SIGNATURE_CLASS = "type-display italic text-3xl md:text-5xl text-ink whitespace-nowrap";
+
+// This repo's ESLint has no jsx-uses-vars, so `<motion.p>` reads as an unused import.
+const MotionParagraph = motion.p;
+
+const domId = (id) => `philosophy-${id}`;
+
+/** Brand line: letter-spacing tightens as it fades in, once. Static under reduced motion. */
+function Signature() {
+    const reduceMotion = useReducedMotion();
+
+    if (reduceMotion) {
+        return <p className={SIGNATURE_CLASS}>{SIGNATURE}</p>;
+    }
+
+    return (
+        <MotionParagraph
+            className={SIGNATURE_CLASS}
+            initial={{ letterSpacing: "0.35em", opacity: 0 }}
+            whileInView={{ letterSpacing: "0em", opacity: 1 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 1.2, ease: EASE }}
+        >
+            {SIGNATURE}
+        </MotionParagraph>
+    );
+}
+
 export default function WorkPhilosophy() {
-    const [active, setActive] = useState(items[0]);
-    const scrollRef = useRef(null);
+    const [activeId, setActiveId] = useState(items[0].id);
+    const listRef = useRef(null);
 
-    /* ---- Intersection Observer for Active Section ---- */
     useEffect(() => {
-        const sections = scrollRef.current.querySelectorAll("[data-section]");
+        const root = listRef.current;
+        if (!root || typeof IntersectionObserver === "undefined") return undefined;
 
+        const targets = Array.from(root.querySelectorAll("[data-item]"));
+        const inBand = new Set();
         const observer = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const item = items.find(
-                            (i) => i.id === entry.target.dataset.section
-                        );
-                        if (item) setActive(item);
-                    }
-                });
+                for (const entry of entries) {
+                    const id = entry.target.dataset.item;
+                    if (entry.isIntersecting) inBand.add(id);
+                    else inBand.delete(id);
+                }
+                // Topmost item inside the band wins; DOM order is vertical order,
+                // so no geometry reads are needed here.
+                const next = targets.find((el) => inBand.has(el.dataset.item));
+                if (next) setActiveId(next.dataset.item);
             },
-            { threshold: 0.5 }
+            { rootMargin: "-40% 0px -40% 0px" },
         );
 
-        sections.forEach((s) => observer.observe(s));
-
+        targets.forEach((el) => observer.observe(el));
         return () => observer.disconnect();
     }, []);
 
     return (
-        <section
-            id="about"
-            className="bg-brand-bg relative py-16 sm:py-24 overflow-hidden"
-        >
-            {/* Background Grid Pattern */}
+        // overflow-clip, not overflow-hidden: hidden would make the section a scroll
+        // container and stop the lg:sticky list from sticking; clip only clips.
+        <section id="about" className="band-light section-pad border-b border-line relative overflow-clip">
             <div
-                className="absolute inset-0 z-0 pointer-events-none opacity-40"
-                style={{
-                    backgroundImage:
-                        "linear-gradient(to right, rgba(148,163,184,0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.2) 1px, transparent 1px)",
-                    backgroundSize: "40px 40px",
-                }}
-            />
+                aria-hidden="true"
+                className="pointer-events-none select-none absolute top-1/3 -left-[10%] origin-top-left -rotate-12 type-display text-[18vw] leading-none whitespace-nowrap text-ink opacity-[0.04]"
+            >
+                {WATERMARK}
+            </div>
 
-            <div className="mx-auto max-w-7xl px-4 sm:px-16 relative z-10">
+            <Container className="relative flex flex-col gap-16">
+                <div className="flex flex-col gap-10">
+                    <Signature />
 
-                {/* ===== Sticky Header ===== */}
-                <div className="sticky top-20 z-30 bg-brand-bg/95 backdrop-blur-md border-b border-brand-dark/10 pb-8 mb-16">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <span className="inline-block mb-6 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-dark">
-                                Our Methodology
-                            </span>
-                            <h2 className="text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tighter">
-                                Work <br className="hidden sm:block" />
-                                <span className="text-brand-dark italic font-light">
-                                    Philosophy
-                                </span>
-                            </h2>
-                        </div>
-                        {/* <div className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-brand-dark uppercase tracking-widest opacity-40">
-                                Phase
-                            </span>
-                            <span className="text-6xl md:text-8xl font-black text-brand-dark/10 leading-none">
-                                {String(items.indexOf(active) + 1).padStart(2, "0")}
-                            </span>
-                        </div> */}
-                    </div>
+                    <SectionHeading
+                        eyebrow="How we work"
+                        title={
+                            <>
+                                Partners, <em>not</em> vendors.
+                            </>
+                        }
+                        lede="Five things we hold ourselves to on every build."
+                    />
                 </div>
 
-                {/* ===== Main Grid Layout ===== */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 h-auto sm:h-[80vh]">
-
-                    {/* ===== LEFT SIDEBAR (Sticky) ===== */}
-                    <div className="lg:col-span-3 hidden lg:block">
-                        <div className="sticky top-82">
-                            <ul className="space-y-8">
-                                {items.map((item) => (
+                <div className="grid gap-16 lg:grid-cols-[280px_1fr]">
+                    <nav
+                        aria-label="Work philosophy"
+                        className="hidden self-start lg:sticky lg:top-28 lg:block"
+                    >
+                        <ul className="flex flex-col gap-1">
+                            {items.map((item) => {
+                                const active = item.id === activeId;
+                                return (
                                     <li key={item.id}>
                                         <button
-                                            onClick={() => {
-                                                const el = scrollRef.current.querySelector(`[data-section="${item.id}"]`);
-                                                el?.scrollIntoView({ behavior: 'smooth' });
-                                            }}
-                                            className={`block border-b-2 pb-3 text-[16px] font-bold uppercase  transition-all text-left w-full ${active.id === item.id
-                                                ? "text-brand-dark border-brand-dark"
-                                                : "text-brand-muted border-brand-dark/10 hover:text-brand-dark/40"
-                                                }`}
+                                            type="button"
+                                            aria-current={active ? "true" : undefined}
+                                            onClick={() => scrollToTarget(`#${domId(item.id)}`)}
+                                            className={cx(
+                                                "type-eyebrow flex min-h-10 w-full cursor-pointer items-center gap-3 text-left transition-colors duration-300",
+                                                active ? "text-ink" : "text-muted hover:text-ink",
+                                            )}
                                         >
+                                            <span
+                                                aria-hidden="true"
+                                                className={cx(
+                                                    "h-1.5 w-1.5 shrink-0 transition-colors duration-300",
+                                                    active ? "bg-accent" : "bg-line",
+                                                )}
+                                            />
                                             {item.title}
                                         </button>
                                     </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+                                );
+                            })}
+                        </ul>
+                    </nav>
 
-                    {/* ===== CENTER CONTENT (SCROLLABLE ONLY) ===== */}
-                    <div
-                        ref={scrollRef}
-                        className="lg:col-span-5 overflow-y-auto pr-4 scrollbar-hide"
-                    >
-                        <div className="space-y-24 py-10">
-                            {items.map((item) => (
-                                <div
-                                    key={item.id}
-                                    data-section={item.id}
-                                    className=" flex flex-col justify-center"
-                                >
-                                    <h3 className="text-2xl md:text-3xl font-black text-brand-dark mb-6 leading-tight tracking-tight">
-                                        {item.title}
-                                    </h3>
-
-                                    <div className="space-y-6">
-                                        {item.description.map((text, i) => (
-                                            <p
-                                                key={i}
-                                                className="text-brand-dark/80 leading-relaxed text-lg font-medium"
-                                            >
-                                                {text}
-                                            </p>
-                                        ))}
-                                    </div>
-
-                                    {/* Mobile Image */}
-                                    <div className="mt-10 lg:hidden rounded-2xl overflow-hidden shadow-xl">
-                                        <img src={item.image} alt={item.title} className="w-full h-64 object-cover" />
-                                    </div>
+                    <div ref={listRef} className="flex flex-col gap-16">
+                        {items.map((item) => (
+                            <Reveal
+                                key={item.id}
+                                as="article"
+                                id={domId(item.id)}
+                                data-item={item.id}
+                                className="flex scroll-mt-22 flex-col gap-6 border-t border-line pt-10"
+                            >
+                                <h3 className="font-sans text-2xl md:text-3xl font-semibold tracking-tight">
+                                    {item.title}
+                                </h3>
+                                <div className="flex flex-col gap-5">
+                                    {item.description.map((text) => (
+                                        <p
+                                            key={text}
+                                            className="max-w-[56ch] text-base md:text-lg leading-relaxed text-muted"
+                                        >
+                                            {text}
+                                        </p>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
+                            </Reveal>
+                        ))}
                     </div>
-
-                    {/* ===== RIGHT IMAGE (Sticky) ===== */}
-                    <div className="lg:col-span-4 hidden lg:block">
-                        <div className="sticky top-82">
-                            <div className="relative">
-                                <motion.div
-                                    key={active.image + "_overlay"}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="absolute inset-0 bg-brand-dark/5 rounded-[40px] z-10 pointer-events-none"
-                                />
-                                <motion.img
-                                    key={active.image}
-                                    src={active.image}
-                                    alt={active.title}
-                                    initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-                                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                                    transition={{ duration: 0.8, ease: "circOut" }}
-                                    className="h-[500px] w-full rounded-[40px] object-cover shadow-2xl transition-all duration-1000 border border-brand-dark/10 z-0"
-                                />
-                                <div className="absolute -bottom-6 -right-6 h-32 w-32 bg-brand-accent/20 rounded-full blur-3xl -z-10" />
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
+            </Container>
         </section>
     );
 }

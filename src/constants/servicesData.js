@@ -29,7 +29,7 @@ export const services = [
     {
         icon: Sparkles,
         title: "AI & Machine Learning",
-        desc: "Intelligent solutions powered by artificial intelligence and ML.",
+        desc: "One well-scoped model or AI feature, shipped inside your product and measured.",
         points: ["Predictive models", "NLP & CV", "Model deployment"],
         layoutId: "icon-Sparkles",
         path: "/services/ai-machine-learning"
@@ -46,7 +46,7 @@ export const services = [
     {
         icon: Palette,
         title: "UI/UX Design",
-        desc: "Beautiful, intuitive designs that users love.",
+        desc: "Screens tested with real users before anything gets built.",
         points: ["User research", "Prototyping", "Design systems"],
         path: "/services/ui-ux-design"
     },
@@ -54,8 +54,8 @@ export const services = [
         icon: ShoppingCart,
         title: "E-commerce",
         desc: "High-conversion digital storefronts and marketplaces.",
-        points: ["User research", "Prototyping", "Design systems"],
-        path: "/services/ecommercesolutions"
+        points: ["Storefronts", "Payments & checkout", "Inventory & orders"],
+        path: "/industries/ecommercesolutions"
     },
     {
         icon: Database,
@@ -67,7 +67,7 @@ export const services = [
     {
         icon: Code2,
         title: "Custom Software",
-        desc: "Tailored software solutions for unique business needs.",
+        desc: "Internal tools, APIs and integrations built around how your business runs.",
         points: ["Custom apps", "APIs", "Integrations"],
         path: "/services/custom-software"
     },

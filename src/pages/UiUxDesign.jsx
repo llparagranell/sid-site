@@ -1,39 +1,75 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import {
-    PenTool, Layers, Search, Smartphone, Monitor,
-    CheckCircle2, RefreshCcw, Code2, Figma, Eye
+    CheckCircle2,
+    Code2,
+    Eye,
+    Layers,
+    Monitor,
+    PenTool,
+    RefreshCcw,
+    Search,
+    Smartphone,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import BookingModal from "../components/BookingModal";
 import PageHeaderBackground from "../components/PageHeaderBackground";
+import Container from "../components/ui/Container";
+import Eyebrow from "../components/ui/Eyebrow";
+import SectionHeading from "../components/ui/SectionHeading";
+import Button from "../components/ui/Button";
+import Reveal, { Stagger } from "../components/motion/Reveal";
+import { staggerChild } from "../components/motion/constants";
+import cx from "../lib/cx";
+
+const MotionItem = motion.li;
+
+const PHILOSOPHY_IMAGE =
+    "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80";
+
+const philosophy = [
+    "At DevGrowth Solutions, we believe design is more than just how something looks — it's how it works, how it feels, and how easily users can interact with it.",
+    "We design websites and mobile apps that are clean, intuitive, and aligned with your brand. Every button, every screen, and every interaction is carefully planned to improve usability and drive engagement.",
+    "Good design isn't decoration. It's strategy.",
+];
+
+const systemHighlights = [
+    { title: "Atomic Design Approach", icon: Layers },
+    { title: "Design-to-Code Sync", icon: Code2 },
+];
+
+const swatches = [
+    { id: "accent", className: "bg-accent-bright" },
+    { id: "paper", className: "bg-paper/20" },
+    { id: "ink", className: "bg-ink-3" },
+];
 
 const serviceTypes = [
     {
         title: "User Experience (UX) Research & Strategy",
         desc: "Before designing, we understand your users. We design with clarity — not assumptions.",
         points: ["User research & competitor analysis", "User journey mapping", "Wireframing", "Usability strategy"],
-        icon: Search
+        icon: Search,
     },
     {
         title: "User Interface (UI) Design",
         desc: "Modern, clean, and brand-focused visual design. Every screen is designed to feel effortless.",
         points: ["Mobile app interface design", "Website interface design", "Dashboard & SaaS design", "High-fidelity prototypes"],
-        icon: Monitor
+        icon: Monitor,
     },
     {
         title: "Mobile & Web App Design",
         desc: "We design digital products optimized for real users on real devices — looking great and working even better.",
         points: ["iOS & Android app UI", "Responsive web design", "Interactive prototypes", "Accessibility considerations"],
-        icon: Smartphone
+        icon: Smartphone,
     },
     {
         title: "UI/UX Redesign & Optimization",
         desc: "Already have a product? We help improve it. Small design improvements create big business impact.",
         points: ["UX audit & usability testing", "Interface redesign", "Conversion optimization", "Design consistency enhancements"],
-        icon: RefreshCcw
-    }
+        icon: RefreshCcw,
+    },
 ];
 
 const techStack = [
@@ -54,233 +90,325 @@ const processSteps = [
     { id: "06", title: "Continuous Improvement", desc: "Optimizing based on real user behavior and analytics.", icon: RefreshCcw },
 ];
 
-const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } };
-const itemVariants = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
-
+/**
+ * UI/UX Design service page. Bands alternate dark / light from a dark page header
+ * down to a dark closing CTA that hands off to the dark Footer.
+ *
+ * No overflow-x on the wrapper: body already clips horizontal overflow, and an
+ * overflow-x-hidden ancestor would break the sticky process column.
+ */
 export default function UiUxDesign() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
-    const toggleBooking = () => setIsBookingOpen(!isBookingOpen);
+    const openBooking = () => setIsBookingOpen(true);
+    const closeBooking = () => setIsBookingOpen(false);
 
     return (
-        <div className="relative min-h-screen bg-brand-bg font-sans selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
-            <Navbar onBookClick={toggleBooking} />
+        <div className="relative min-h-screen bg-paper text-ink font-sans">
+            <Navbar onBookClick={openBooking} />
 
-            <section className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-brand-bg">
-                <PageHeaderBackground />
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
-                    <div className="text-center">
-                        <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-block mb-6 text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40">UI/UX DESIGN</motion.span>
-                        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-brand-dark mb-6">
-                            Designing Experiences <br />
-                            <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.4 }} className="italic font-light text-brand-dark/70">That Users Love.</motion.span>
-                        </motion.h1>
-                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="text-brand-dark/60 font-medium text-lg max-w-2xl mx-auto mb-10">
-                            We create intuitive, modern, and meaningful digital experiences that turn visitors into loyal users.
-                        </motion.p>
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
-                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={toggleBooking} className="bg-brand-dark text-white px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-sm shadow-2xl transition-all cursor-pointer flex items-center gap-3">
-                                Start Your Design Project <PenTool size={18} />
-                            </motion.button>
-                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={toggleBooking} className="bg-white border-2 border-brand-dark/10 text-brand-dark px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-sm transition-all cursor-pointer">
-                                Book Free Consultation
-                            </motion.button>
-                        </motion.div>
-                    </div>
-                </div>
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute -top-20 -left-20 w-96 h-96 border border-brand-dark/5 rounded-full pointer-events-none opacity-20" />
-            </section>
-
-            <section className="py-24 md:py-40 bg-brand-dark text-white relative overflow-hidden">
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.1]" style={{ backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)`, backgroundSize: '100px 100px' }} />
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-none mb-10 text-brand-accent italic font-light">
-                                Thoughtful Design <br /><span className="text-white not-italic font-black">That Solves</span><br />Real Problems.
-                            </h2>
-                            <motion.div initial={{ width: 0 }} whileInView={{ width: 100 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }} className="h-1 bg-brand-accent mb-10" />
-                            <div className="space-y-6 text-lg text-white/60 font-medium leading-relaxed">
-                                <p>At Devgrowth Solutions, we believe design is more than just how something looks — it's how it works, how it feels, and how easily users can interact with it.</p>
-                                <p>We design websites and mobile apps that are clean, intuitive, and aligned with your brand. Every button, every screen, and every interaction is carefully planned to improve usability and drive engagement.</p>
-                                <p>Good design isn't decoration. It's strategy.</p>
-                            </div>
-                        </motion.div>
-                        <div className="relative flex justify-center">
-                            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease: "backOut" }}>
-                                <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-[340px] h-[340px] border-[12px] border-white/10 rounded-[48px] overflow-hidden bg-brand-bg relative shadow-2xl mx-auto">
-                                    <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80" alt="UI/UX Design" className="w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-700" />
-                                    <div className="absolute inset-0 bg-brand-dark/40 flex items-center justify-center">
-                                        <div className="p-6 bg-brand-accent/90 backdrop-blur-md rounded-2xl text-brand-dark text-center shadow-2xl">
-                                            <PenTool size={32} className="mx-auto mb-2" />
-                                            <span className="text-xs font-black uppercase tracking-widest">Design That Converts</span>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Design System Showcase (Unique Component) */}
-            <section className="py-24 bg-brand-bg relative overflow-hidden border-b border-brand-dark/5">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="w-full lg:w-1/2 order-2 lg:order-1">
-                            <div className="p-10 rounded-[48px] bg-brand-dark shadow-2xl relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(162,237,219,0.1),transparent_70%)]" />
-
-                                <div className="relative z-10 space-y-10">
-                                    <div className="flex justify-between items-center">
-                                        <div className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase">Design Tokens</div>
-                                        <div className="h-2 w-2 rounded-full bg-brand-accent shadow-[0_0_10px_rgba(162,237,219,0.5)]" />
-                                    </div>
-
-                                    {/* Interactive UI Elements Simulation */}
-                                    <div className="space-y-8">
-                                        <div className="flex items-center gap-6">
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                className="bg-brand-accent text-brand-dark px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest"
-                                            >
-                                                Primary
-                                            </motion.button>
-                                            <motion.button
-                                                whileHover={{ backgroundColor: "rgba(255,255,255,0.1)" }}
-                                                className="border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest"
-                                            >
-                                                Outline
-                                            </motion.button>
-                                        </div>
-
-                                        <div className="flex items-center gap-4">
-                                            {[1, 2, 3].map((_, i) => (
-                                                <div key={i} className={`h-8 w-8 rounded-full border border-white/10 ${i === 0 ? 'bg-brand-accent' : i === 1 ? 'bg-white/20' : 'bg-brand-dark/40'}`} />
-                                            ))}
-                                            <div className="h-px w-20 bg-white/10 ml-4" />
-                                        </div>
-
-                                        <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4">
-                                            <div className="h-2 w-2/3 bg-white/20 rounded-full" />
-                                            <div className="h-2 w-1/2 bg-white/10 rounded-full" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full lg:w-1/2 order-1 lg:order-2">
-                            <motion.span
-                                initial={{ opacity: 0, y: 10 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                className="inline-block mb-4 text-xs font-bold tracking-[0.3em] text-brand-dark opacity-30 uppercase"
-                            >
-                                Design Systems
-                            </motion.span>
-                            <h3 className="text-4xl md:text-5xl font-black text-brand-dark tracking-tighter mb-8 leading-tight">
-                                Scalable Design <br />
-                                <span className="italic font-light">Frameworks.</span>
-                            </h3>
-                            <p className="text-brand-dark/60 text-lg font-medium leading-relaxed mb-10">
-                                We don't just design screens; we build comprehensive design systems. This ensures your product remains visually consistent as it grows, making it easier for developers to build and users to navigate.
+            <main>
+                {/* ---- Page header ---- */}
+                <header className="band-dark relative overflow-hidden pt-36 pb-20 md:pt-44 md:pb-28">
+                    <PageHeaderBackground tone="dark" />
+                    <Container className="relative z-10">
+                        <Reveal className="flex flex-col items-start gap-6 md:gap-8">
+                            <Eyebrow tone="dark">UI/UX Design</Eyebrow>
+                            <h1 className="type-display text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] text-paper max-w-[14ch]">
+                                Designing Experiences That Users{" "}
+                                <em className="italic text-accent-bright">Love</em>.
+                            </h1>
+                            <p className="text-muted-dark text-lg md:text-xl max-w-[56ch] leading-relaxed">
+                                We create intuitive, modern, and meaningful digital experiences that turn visitors into
+                                loyal users.
                             </p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {[
-                                    { title: "Atomic Design Approach", icon: Layers },
-                                    { title: "Design-to-Code Sync", icon: Code2 },
-                                ].map((item, i) => (
-                                    <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-brand-dark/[0.03] border border-brand-dark/5">
-                                        <item.icon size={18} className="text-brand-dark/40" />
-                                        <span className="text-xs font-bold text-brand-dark/70 tracking-tight">{item.title}</span>
-                                    </div>
-                                ))}
+                            <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
+                                <Button tone="dark" variant="accent" arrow onClick={openBooking}>
+                                    Start Your Design Project
+                                </Button>
+                                <Button tone="dark" variant="ghost" onClick={openBooking}>
+                                    Book Free Consultation
+                                </Button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        </Reveal>
+                    </Container>
+                </header>
 
-            <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-                        <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">OUR CORE OFFERINGS</span>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Our UI/UX <br /><span className="italic font-light">Design Services.</span></h2>
-                    </motion.div>
-                    <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {serviceTypes.map((service, idx) => (
-                            <motion.div key={idx} variants={itemVariants} whileHover={{ y: -8, boxShadow: "0 30px 60px rgba(0,0,0,0.06)" }} className="p-12 rounded-[48px] bg-white border border-brand-dark/5 hover:border-brand-accent/20 transition-all duration-500 group">
-                                <motion.div whileHover={{ rotate: 10, scale: 1.1 }} className="h-16 w-16 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500"><service.icon size={32} /></motion.div>
-                                <h3 className="text-3xl font-black text-brand-dark mb-4 tracking-tighter">{service.title}</h3>
-                                <p className="text-brand-dark/50 font-medium leading-relaxed mb-8 text-lg">{service.desc}</p>
-                                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {service.points.map((point, pIdx) => (
-                                        <li key={pIdx} className="flex items-center gap-3 text-sm font-bold text-brand-dark/70"><CheckCircle2 size={16} className="text-brand-accent flex-shrink-0" />{point}</li>
+                {/* ---- Philosophy ---- */}
+                <section
+                    aria-labelledby="philosophy-heading"
+                    className="band-light section-pad border-b border-line"
+                >
+                    <Container>
+                        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-20">
+                            <div className="flex flex-col gap-8">
+                                <SectionHeading
+                                    id="philosophy-heading"
+                                    title={
+                                        <>
+                                            Thoughtful Design That Solves <em>Real Problems</em>.
+                                        </>
+                                    }
+                                />
+                                <Reveal delay={0.1} className="flex flex-col gap-5">
+                                    {philosophy.map((paragraph, i) => (
+                                        <p
+                                            key={paragraph}
+                                            className={cx(
+                                                "max-w-[56ch] text-base md:text-lg leading-relaxed",
+                                                i === philosophy.length - 1 ? "font-semibold text-ink" : "text-muted",
+                                            )}
+                                        >
+                                            {paragraph}
+                                        </p>
                                     ))}
-                                </ul>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
+                                </Reveal>
+                            </div>
 
-            <section className="py-24 md:py-40 bg-brand-accent/10 relative overflow-hidden">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 text-center">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-3xl mx-auto mb-20">
-                        <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">TOOLS WE USE</span>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter mb-8">Design Tools <br /><span className="italic font-light">& Technologies.</span></h2>
-                        <p className="text-brand-dark/60 font-medium text-lg">Modern design tools to create scalable and developer-friendly designs.</p>
-                    </motion.div>
-                    <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
-                        {techStack.map((tech, idx) => (
-                            <motion.div key={idx} variants={itemVariants} whileHover={{ scale: 1.05, y: -5 }} className="p-8 rounded-[32px] bg-white shadow-sm border border-brand-dark/5 flex flex-col items-center justify-center group hover:bg-brand-dark transition-all duration-500">
-                                <tech.icon className="text-brand-dark group-hover:text-brand-accent mb-4 transition-colors" size={28} />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40 group-hover:text-white/40 block mb-1">{tech.category}</span>
-                                <span className="text-xs font-bold group-hover:text-white transition-colors text-center">{tech.name}</span>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
-
-            <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-                        <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">HOW WE WORK</span>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Our UI/UX <br /><span className="italic font-light">Design Process.</span></h2>
-                    </motion.div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {processSteps.map((step, idx) => (
-                            <motion.div key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6, delay: idx * 0.1 }} className="relative p-10 rounded-[40px] bg-white border border-brand-dark/5 hover:shadow-2xl transition-all duration-500 group overflow-hidden">
-                                <span className="absolute top-8 right-10 text-5xl font-black text-brand-dark/5 group-hover:text-brand-accent/20 transition-colors">{step.id}</span>
-                                <div className="relative z-10">
-                                    <div className="h-12 w-12 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500"><step.icon size={24} /></div>
-                                    <h3 className="text-xl font-black text-brand-dark mb-4 tracking-tighter leading-tight">{step.title}</h3>
-                                    <p className="text-brand-dark/50 font-medium text-sm leading-relaxed">{step.desc}</p>
-                                </div>
-                                <motion.div className="absolute bottom-0 left-0 h-1.5 bg-brand-dark group-hover:bg-brand-accent transition-colors" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 + idx * 0.1 }} />
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="py-20 sm:py-28 md:py-40 bg-brand-bg">
-                <div className="w-full sm:mx-auto sm:max-w-7xl sm:px-6 lg:px-16">
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} className="relative w-full rounded-none sm:rounded-[80px] bg-brand-dark px-5 sm:px-12 md:px-20 py-20 sm:py-24 md:py-32 text-center overflow-hidden shadow-2xl">
-                        <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 8, repeat: Infinity }} className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(162,237,219,0.15),transparent_70%)]" />
-                        <div className="relative z-10">
-                            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight md:leading-[0.9] tracking-tight mb-8 sm:mb-10 uppercase">
-                                We don't just design screens. <br />We design<span className="text-brand-accent italic font-light lowercase"> experiences</span> that build trust.
-                            </h2>
-                            <motion.button whileHover={{ scale: 1.08, boxShadow: "0 0 40px rgba(162, 237, 219, 0.4)" }} whileTap={{ scale: 0.95 }} onClick={toggleBooking} className="bg-brand-accent text-brand-dark px-8 sm:px-12 py-4 sm:py-6 rounded-2xl sm:rounded-3xl text-sm sm:text-base font-black uppercase tracking-widest transition-all shadow-xl cursor-pointer flex items-center gap-3 mx-auto mt-8 sm:mt-10">
-                                Start Your Design Project <PenTool size={18} />
-                            </motion.button>
+                            <Reveal
+                                as="figure"
+                                delay={0.15}
+                                className="relative overflow-hidden rounded-2xl border border-line bg-surface"
+                            >
+                                <img
+                                    src={PHILOSOPHY_IMAGE}
+                                    alt="Hand-drawn interface sketches and colour swatches laid out on a designer's desk"
+                                    loading="lazy"
+                                    className="aspect-[4/5] w-full object-cover sm:aspect-square lg:aspect-[4/5]"
+                                />
+                                <figcaption className="type-eyebrow absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-2 text-ink">
+                                    <PenTool size={14} aria-hidden="true" className="text-accent" />
+                                    Design That Converts
+                                </figcaption>
+                            </Reveal>
                         </div>
-                    </motion.div>
-                </div>
-            </section>
+                    </Container>
+                </section>
+
+                {/* ---- Design systems ---- */}
+                <section
+                    aria-labelledby="systems-heading"
+                    className="band-dark section-pad border-b border-line-dark"
+                >
+                    <Container>
+                        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
+                            <div className="flex flex-col gap-8">
+                                <SectionHeading
+                                    id="systems-heading"
+                                    tone="dark"
+                                    eyebrow="Design Systems"
+                                    title={
+                                        <>
+                                            Scalable Design <em>Frameworks</em>.
+                                        </>
+                                    }
+                                    lede="We don't just design screens; we build comprehensive design systems. This ensures your product remains visually consistent as it grows, making it easier for developers to build and users to navigate."
+                                />
+                                <Reveal delay={0.1}>
+                                    <ul className="grid gap-4 sm:grid-cols-2">
+                                        {systemHighlights.map(({ title, icon: Icon }) => (
+                                            <li
+                                                key={title}
+                                                className="flex items-center gap-4 rounded-2xl border border-line-dark bg-ink-2 p-4"
+                                            >
+                                                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-ink-3 text-accent-bright">
+                                                    <Icon size={18} aria-hidden="true" />
+                                                </span>
+                                                <span className="font-sans text-base font-semibold tracking-tight text-paper">
+                                                    {title}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </Reveal>
+                            </div>
+
+                            {/* Static mock of a token sheet. role="img" keeps the sample controls out of the tab order. */}
+                            <Reveal delay={0.15} className="lg:order-first">
+                                <div
+                                    role="img"
+                                    aria-label="Sample design tokens: primary and outline buttons, three colour swatches and placeholder text"
+                                    className="flex flex-col gap-8 rounded-2xl border border-line-dark bg-ink-2 p-6 md:p-8"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <span className="type-eyebrow text-muted-dark">Design Tokens</span>
+                                        <span className="size-2 rounded-full bg-accent-bright" />
+                                    </div>
+
+                                    <div className="flex flex-wrap items-center gap-4">
+                                        <span className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white">
+                                            Primary
+                                        </span>
+                                        <span className="inline-flex items-center rounded-full border border-line-dark px-5 py-2.5 text-sm font-semibold text-paper">
+                                            Outline
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-4">
+                                        {swatches.map((swatch) => (
+                                            <span
+                                                key={swatch.id}
+                                                className={cx("size-8 rounded-full border border-paper/10", swatch.className)}
+                                            />
+                                        ))}
+                                        <span className="h-px w-20 bg-line-dark" />
+                                    </div>
+
+                                    <div className="flex flex-col gap-4 rounded-xl border border-line-dark bg-paper/5 p-6">
+                                        <span className="h-2 w-2/3 rounded-full bg-paper/20" />
+                                        <span className="h-2 w-1/2 rounded-full bg-paper/10" />
+                                    </div>
+                                </div>
+                            </Reveal>
+                        </div>
+                    </Container>
+                </section>
+
+                {/* ---- Services ---- */}
+                <section
+                    aria-labelledby="services-heading"
+                    className="band-light section-pad border-b border-line"
+                >
+                    <Container className="flex flex-col gap-12 md:gap-16">
+                        <SectionHeading
+                            id="services-heading"
+                            eyebrow="Our core offerings"
+                            title={
+                                <>
+                                    Our UI/UX <em>Design Services</em>.
+                                </>
+                            }
+                        />
+                        <Stagger as="ul" className="grid gap-4 md:grid-cols-2 md:gap-6">
+                            {serviceTypes.map(({ title, desc, points, icon: Icon }) => (
+                                <MotionItem
+                                    key={title}
+                                    variants={staggerChild}
+                                    className="flex flex-col gap-5 rounded-2xl border border-line bg-surface p-6 transition-colors duration-300 hover:border-ink md:p-8"
+                                >
+                                    <span className="flex size-10 items-center justify-center rounded-lg bg-accent-soft text-accent">
+                                        <Icon size={20} aria-hidden="true" />
+                                    </span>
+                                    <h3 className="font-sans text-xl md:text-2xl font-semibold tracking-tight">{title}</h3>
+                                    <p className="text-base md:text-lg leading-relaxed text-muted">{desc}</p>
+                                    <ul className="grid gap-3 border-t border-line pt-5 sm:grid-cols-2">
+                                        {points.map((point) => (
+                                            <li key={point} className="flex items-start gap-2.5 text-sm text-ink">
+                                                <CheckCircle2 size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-accent" />
+                                                <span>{point}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </MotionItem>
+                            ))}
+                        </Stagger>
+                    </Container>
+                </section>
+
+                {/* ---- Tools ---- */}
+                <section
+                    aria-labelledby="tools-heading"
+                    className="band-dark section-pad border-b border-line-dark"
+                >
+                    <Container className="flex flex-col gap-12 md:gap-16">
+                        <SectionHeading
+                            id="tools-heading"
+                            tone="dark"
+                            eyebrow="Tools we use"
+                            title={
+                                <>
+                                    Design Tools &amp; <em>Technologies</em>.
+                                </>
+                            }
+                            lede="Modern design tools to create scalable and developer-friendly designs."
+                        />
+                        <Stagger as="ul" className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+                            {techStack.map(({ name, category, icon: Icon }) => (
+                                <MotionItem
+                                    key={name}
+                                    variants={staggerChild}
+                                    className="flex flex-col items-start gap-5 rounded-2xl border border-line-dark bg-ink-2 p-5 transition-colors duration-300 hover:border-muted-dark md:p-6"
+                                >
+                                    <span className="flex size-10 items-center justify-center rounded-lg bg-ink-3 text-accent-bright">
+                                        <Icon size={20} aria-hidden="true" />
+                                    </span>
+                                    <div className="flex flex-col gap-1.5">
+                                        <span className="type-eyebrow text-muted-dark">{category}</span>
+                                        <span className="font-sans text-base font-semibold tracking-tight text-paper">{name}</span>
+                                    </div>
+                                </MotionItem>
+                            ))}
+                        </Stagger>
+                    </Container>
+                </section>
+
+                {/* ---- Process ---- */}
+                <section
+                    aria-labelledby="process-heading"
+                    className="band-light section-pad border-b border-line"
+                >
+                    <Container>
+                        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+                            <div className="self-start lg:sticky lg:top-28">
+                                <SectionHeading
+                                    id="process-heading"
+                                    eyebrow="How we work"
+                                    title={
+                                        <>
+                                            Our UI/UX Design <em>Process</em>.
+                                        </>
+                                    }
+                                />
+                            </div>
+
+                            <ol role="list" className="divide-y divide-line border-t border-line">
+                                {processSteps.map(({ id, title, desc, icon: Icon }) => (
+                                    <Reveal
+                                        as="li"
+                                        key={id}
+                                        className="grid grid-cols-[auto_1fr] gap-5 py-7 md:gap-6 md:py-8"
+                                    >
+                                        <span className="flex size-10 items-center justify-center rounded-lg bg-accent-soft text-accent">
+                                            <Icon size={18} aria-hidden="true" />
+                                        </span>
+                                        <div className="flex flex-col gap-2">
+                                            <span className="type-mono text-sm text-muted">{id}</span>
+                                            <h3 className="font-sans text-xl md:text-2xl font-semibold tracking-tight">{title}</h3>
+                                            <p className="max-w-[56ch] text-base md:text-lg leading-relaxed text-muted">{desc}</p>
+                                        </div>
+                                    </Reveal>
+                                ))}
+                            </ol>
+                        </div>
+                    </Container>
+                </section>
+
+                {/* ---- Closing CTA (Footer carries its own top rule) ---- */}
+                <section aria-labelledby="cta-heading" className="band-dark section-pad">
+                    <Container className="flex flex-col items-center gap-10 text-center">
+                        <SectionHeading
+                            id="cta-heading"
+                            tone="dark"
+                            align="center"
+                            size="lg"
+                            titleClassName="max-w-[22ch]"
+                            title={
+                                <>
+                                    We don&apos;t just design screens. We design <em>experiences</em> that build trust.
+                                </>
+                            }
+                        />
+                        <Reveal delay={0.1}>
+                            <Button tone="dark" variant="accent" arrow onClick={openBooking}>
+                                Start Your Design Project
+                            </Button>
+                        </Reveal>
+                    </Container>
+                </section>
+            </main>
 
             <Footer />
-            <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+
+            <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
         </div>
     );
 }

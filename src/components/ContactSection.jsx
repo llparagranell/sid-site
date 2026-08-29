@@ -1,103 +1,95 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useId, useState } from "react";
+import Container from "./ui/Container";
+import SectionHeading from "./ui/SectionHeading";
+import Button from "./ui/Button";
+import Reveal from "./motion/Reveal";
+import cx from "../lib/cx";
+
+const FORM_ACTION = "https://formspree.io/f/paragrane000@gmail.com";
+
+const bullets = [
+    "Clear communication & timelines",
+    "Transparent pricing",
+    "Long-term collaboration & support",
+];
+
+const fieldClass =
+    "w-full rounded-xl border border-line-dark bg-ink px-4 py-3.5 text-paper " +
+    "placeholder:text-muted-dark outline-none transition-colors duration-300 focus:border-accent-bright";
 
 export default function ContactSection() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         company: "",
-        details: ""
+        details: "",
     });
+    const uid = useId();
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-
-
     return (
-        <section
-            id="contact"
-            className="bg-brand-dark relative overflow-hidden py-24 md:py-32"
-        >
-            {/* Background Pattern */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.1]"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-                    backgroundSize: '100px 100px'
-                }}
-            />
+        <section id="contact" aria-labelledby="contact-heading" className="band-dark section-pad">
+            <Container>
+                <div className="grid gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+                    <div className="flex flex-col gap-10">
+                        <SectionHeading
+                            id="contact-heading"
+                            tone="dark"
+                            eyebrow="Contact"
+                            title={
+                                <>
+                                    Tell us what you&apos;re <em>building</em>.
+                                </>
+                            }
+                            lede="We reply within a business day with next steps — usually a 30-minute call and a written scope after it."
+                        />
 
-            <div className="mx-auto max-w-7xl px-0 sm:px-10 lg:px-16 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                        <Reveal delay={0.1} className="flex flex-col gap-8">
+                            <ul className="flex flex-col gap-3">
+                                {bullets.map((line) => (
+                                    <li key={line} className="flex items-start gap-3 text-muted-dark">
+                                        <span aria-hidden="true" className="mt-2.5 h-1 w-1 shrink-0 bg-accent-bright" />
+                                        <span>{line}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <a
+                                href="mailto:contact@devgrowth.com"
+                                className="type-eyebrow normal-case -my-4 self-start py-4 text-paper transition-colors duration-300 hover:text-accent-bright"
+                            >
+                                contact@devgrowth.com
+                            </a>
+                        </Reveal>
+                    </div>
 
-                    {/* Left: Content */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7 }}
-                        className="max-w-xl mx-auto lg:mx-0 text-left px-6 sm:px-0"
-                    >
-                        <span className="inline-block mb-6 rounded-full border border-white/10 bg-brand-accent/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-accent">
-                            Let's connect
-                        </span>
-
-                        <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
-                            Let's build something{" "}
-                            <span className="italic font-light text-brand-accent">
-                                meaningful?
-                            </span>
-                        </h2>
-
-                        <p className="mt-6 text-base md:text-lg text-white/60 font-medium leading-relaxed block">
-                            We are always ready to have a discussion about your project,
-                            ideas, or challenges. Tell us what you're building, and we'll
-                            explore how we can help bring it to life.
-                        </p>
-
-                        <ul className="mt-10 space-y-4 text-white/50 font-bold block">
-                            <li className="flex items-start gap-3">
-                                <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-accent shrink-0" />
-                                <span className="text-sm md:text-base">Clear communication & timelines</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-accent shrink-0" />
-                                <span className="text-sm md:text-base">Transparent pricing</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <div className="h-2 w-2 mt-1.5 rounded-full bg-brand-accent shrink-0" />
-                                <span className="text-sm md:text-base">Long-term collaboration & support</span>
-                            </li>
-                        </ul>
-                    </motion.div>
-
-                    {/* Right: Form */}
-                    <motion.form
-                        action="https://formspree.io/f/paragrane000@gmail.com"
+                    <Reveal
+                        as="form"
+                        action={FORM_ACTION}
                         method="POST"
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7 }}
-                        className="w-full rounded-3xl sm:rounded-[3rem] border border-white/10 bg-white/5 backdrop-blur-sm p-6 sm:p-14 shadow-2xl"
+                        delay={0.1}
+                        className="flex flex-col gap-5 rounded-2xl border border-line-dark bg-ink-2 p-6 md:p-8"
                     >
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <Input
+                        <div className="grid gap-5 sm:grid-cols-2">
+                            <Field
+                                id={`${uid}-name`}
                                 label="Full name"
                                 name="name"
+                                autoComplete="name"
                                 value={formData.name}
                                 onChange={handleChange}
                                 placeholder="Full Name"
                                 required
                             />
-                            <Input
+                            <Field
+                                id={`${uid}-email`}
                                 label="Email address"
                                 name="email"
                                 type="email"
+                                autoComplete="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="you@example.com"
@@ -105,62 +97,54 @@ export default function ContactSection() {
                             />
                         </div>
 
-                        <div className="mt-6">
-                            <Input
-                                label="Company"
-                                name="company"
-                                value={formData.company}
-                                onChange={handleChange}
-                                placeholder="Your company name"
-                            />
-                        </div>
+                        <Field
+                            id={`${uid}-company`}
+                            label="Company"
+                            name="company"
+                            autoComplete="organization"
+                            value={formData.company}
+                            onChange={handleChange}
+                            placeholder="Your company name"
+                        />
 
-                        <div className="mt-6">
-                            <label className="block text-sm font-bold text-white/80 mb-2">
-                                Project details
-                            </label>
-                            <textarea
-                                name="details"
-                                value={formData.details}
-                                onChange={handleChange}
-                                rows={5}
-                                placeholder="Tell us about your project..."
-                                required
-                                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-4 focus:ring-brand-accent/10 transition-all font-medium"
-                            />
-                        </div>
+                        <Field
+                            id={`${uid}-details`}
+                            label="Project details"
+                            name="details"
+                            as="textarea"
+                            rows={5}
+                            value={formData.details}
+                            onChange={handleChange}
+                            placeholder="Tell us about your project..."
+                            required
+                        />
 
-                        <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                            <button
-                                type="submit"
-                                className="flex-1 rounded-xl bg-brand-accent px-6 py-4 text-base font-bold text-brand-dark transition hover:bg-brand-accent/90 shadow-xl cursor-pointer"
-                            >
-                                Send via Email
-                            </button>
+                        <div className="flex flex-col gap-4 pt-3 sm:flex-row sm:items-center sm:justify-between">
+                            <Button type="submit" tone="dark" variant="accent" arrow className="w-full sm:w-auto">
+                                Send message
+                            </Button>
+                            <p className="type-eyebrow leading-normal text-muted-dark">No spam. No newsletter. Just a reply.</p>
                         </div>
-                    </motion.form>
+                    </Reveal>
                 </div>
-            </div>
+            </Container>
         </section>
     );
 }
 
-function Input({ label, type = "text", name, value, onChange, placeholder, required = false }) {
+function Field({ id, label, as = "input", type = "text", className, ...rest }) {
+    const Tag = as;
     return (
-        <div>
-            <label className="block text-sm font-bold text-white/80 mb-2">
+        <div className="flex flex-col gap-2">
+            <label htmlFor={id} className="type-eyebrow text-muted-dark">
                 {label}
             </label>
-            <input
-                type={type}
-                name={name}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                required={required}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-4 focus:ring-brand-accent/10 transition-all font-medium"
+            <Tag
+                id={id}
+                type={as === "input" ? type : undefined}
+                className={cx(fieldClass, as === "textarea" && "min-h-32 resize-y", className)}
+                {...rest}
             />
         </div>
     );
 }
-
