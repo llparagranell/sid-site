@@ -1,5 +1,4 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
-import CubeFallback from "./CubeFallback";
 import { PRELOADING_FLAG, stagePose } from "./stage";
 
 const HeroCube = lazy(() => import("./HeroCube"));
@@ -162,7 +161,10 @@ export default function CubeStage() {
             className="fixed top-0 left-0 will-change-transform"
             style={{ width: base, height: base, zIndex: Z_PAGE, pointerEvents: "none" }}
         >
-            <Suspense fallback={<CubeFallback className="h-full w-full" />}>
+            {/* No SVG stand-in on the stage: until the three.js chunk is ready the box stays
+                empty (the preloader's logo and line carry the wait), so the flat cube never
+                flashes before the real one assembles. */}
+            <Suspense fallback={null}>
                 <HeroCube className="h-full w-full" />
             </Suspense>
         </div>
