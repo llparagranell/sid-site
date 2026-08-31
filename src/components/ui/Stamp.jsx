@@ -24,7 +24,7 @@ export default function Stamp({ children, tone = "light", color = "accent", rota
         <span
             className={cx(
                 "stamp-ring inline-block select-none rounded-[4px] border-2 border-current px-3 py-2",
-                "type-eyebrow tracking-[0.22em] leading-none",
+                "type-eyebrow text-[11px] uppercase tracking-[0.22em] leading-none",
                 GAP[tone] ?? GAP.light,
                 inkClass(tone, color),
                 className,

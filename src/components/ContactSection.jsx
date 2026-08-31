@@ -23,7 +23,7 @@ const fieldClass =
     "w-full appearance-none rounded-none border-0 border-b-2 border-line-dark bg-transparent px-0 py-3 text-base text-paper " +
     "placeholder:text-muted-dark outline-none transition-colors duration-300 focus:border-paper focus-visible:outline-none!";
 
-const labelClass = "type-mono text-[11px] uppercase tracking-[0.16em] text-muted-dark";
+const labelClass = "type-mono text-xs text-muted-dark";
 
 export default function ContactSection() {
     const [formData, setFormData] = useState({
@@ -120,7 +120,7 @@ export default function ContactSection() {
                         >
                             Send message
                         </Button>
-                        <p className="type-mono text-[11px] uppercase leading-normal tracking-[0.16em] text-muted-dark">
+                        <p className="type-mono text-xs leading-normal text-muted-dark">
                             No spam. No newsletter. Just a reply.
                         </p>
                     </div>

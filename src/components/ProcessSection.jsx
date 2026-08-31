@@ -119,7 +119,7 @@ export default function ProcessSection() {
                                     <span className="type-mono text-xs text-muted-dark lg:col-start-1 lg:row-start-1">
                                         {step.index}
                                     </span>
-                                    <span className="type-mono text-[11px] uppercase tracking-[0.16em] text-muted-dark lg:col-start-3 lg:row-start-1 lg:text-right">
+                                    <span className="type-mono text-xs text-muted-dark lg:col-start-3 lg:row-start-1 lg:text-right">
                                         {step.when}
                                     </span>
                                 </div>
@@ -130,7 +130,7 @@ export default function ProcessSection() {
                                     <p className="mt-2 max-w-[56ch] text-base leading-relaxed text-muted-dark">
                                         {step.description}
                                     </p>
-                                    <p className="type-mono mt-3 text-[11px] uppercase tracking-[0.16em] text-muted-dark">
+                                    <p className="type-mono mt-3 text-xs text-muted-dark">
                                         Focus — {step.focus}
                                     </p>
                                 </div>

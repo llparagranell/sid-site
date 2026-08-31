@@ -57,7 +57,7 @@ export default function FAQ() {
                     <h2 id="faq-heading" className="type-display italic text-3xl text-ink lg:text-4xl">
                         You ask, we answer.
                     </h2>
-                    <p className="type-mono text-[11px] uppercase tracking-[0.16em] text-muted">Seven questions</p>
+                    <p className="type-mono text-xs text-muted">Seven questions</p>
                 </div>
 
                 {/* role="list" restores list semantics that Preflight's `list-style: none` drops in Safari. */}

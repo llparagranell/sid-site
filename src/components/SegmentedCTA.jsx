@@ -143,7 +143,7 @@ export default function SegmentedCTA({ onBookClick }) {
                 {/* The sheet: white, hairline, no radius. A dashed tear-off rule along the top and an
                     ink stamp in the corner are this section's two devices. */}
                 <div className="relative mt-6 border border-line bg-surface p-6 lg:mt-0 lg:p-10">
-                    <p className="type-mono flex items-center gap-3 border-b border-dashed border-line pb-3 text-[10px] uppercase tracking-[0.16em] text-muted">
+                    <p className="type-mono flex items-center gap-3 border-b border-dashed border-line pb-3 text-xs text-muted">
                         <Scissors size={12} aria-hidden="true" className="shrink-0" />
                         Scope sheet — keep this page
                     </p>
@@ -180,7 +180,7 @@ export default function SegmentedCTA({ onBookClick }) {
                                 >
                                     {/* Column title. On phones the active tab already says it, so it only
                                         shows from lg where the tabs are gone. */}
-                                    <p className="type-mono hidden text-[11px] uppercase tracking-[0.16em] text-muted lg:block">
+                                    <p className="type-mono hidden text-xs text-muted lg:block">
                                         {audience}
                                     </p>
                                     <h3 className="font-sans text-xl font-semibold tracking-tight text-ink lg:mt-2">
@@ -220,7 +220,7 @@ export default function SegmentedCTA({ onBookClick }) {
                             {CONTACT_EMAIL}
                         </a>
                     </p>
-                    <p className="type-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+                    <p className="type-mono text-xs text-muted">
                         Jabalpur, India · Remote-first
                     </p>
                 </div>

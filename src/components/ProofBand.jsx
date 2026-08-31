@@ -60,7 +60,7 @@ export default function ProofBand() {
             <Container className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-10">
                 {/* Tracking is a touch tighter below md so both halves of the dateline fit one 390px line;
                     flex-wrap drops the coordinates to a second line on narrower phones instead of breaking a word. */}
-                <p className="type-mono flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-[11px] uppercase tracking-[0.12em] text-muted md:tracking-[0.16em] lg:shrink-0 lg:flex-col lg:flex-nowrap lg:items-start lg:justify-start lg:gap-1.5">
+                <p className="type-mono flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-xs text-muted lg:shrink-0 lg:flex-col lg:flex-nowrap lg:items-start lg:justify-start lg:gap-1.5">
                     <span>Jabalpur, India</span>
                     <span>23.18° N · 79.99° E · IST</span>
                 </p>

@@ -69,7 +69,7 @@ export default function TechStack() {
                             >
                                 Chosen per project, <HandUnderline>not</HandUnderline> a fixed menu.
                             </h2>
-                            <p className="type-mono mt-3 text-[11px] uppercase tracking-[0.16em] text-muted">
+                            <p className="type-mono mt-3 text-xs text-muted">
                                 {TOOL_COUNT} tools · {CATEGORIES.length} categories
                             </p>
                         </caption>
@@ -78,7 +78,7 @@ export default function TechStack() {
                                 <tr key={c.id} className="border-t border-line last:border-b">
                                     <th
                                         scope="row"
-                                        className="type-mono w-[6.5rem] py-4 pr-3 text-left align-top text-[11px] font-medium uppercase leading-relaxed tracking-[0.16em] text-muted lg:w-[12rem] lg:py-5"
+                                        className="type-mono w-[6.5rem] py-4 pr-3 text-left align-top text-xs font-medium leading-relaxed text-muted lg:w-[12rem] lg:py-5"
                                     >
                                         {c.label}
                                     </th>
