@@ -1,6 +1,7 @@
 import { Component, useCallback, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { EASE } from "./motion/constants";
+import { ASSEMBLED_EVENT, stageEnabled } from "./hero/stage";
 import logo from "../assets/footerLogo-removebg-preview.png";
 
 // Aliased once at module scope: the project ESLint config does not count `<motion.x>`
@@ -35,6 +36,13 @@ const WORD_DURATION = 0.45;
 const EXIT_AT_MS = 1150;
 const EXIT_DURATION = 0.7;
 const HARD_TIMEOUT_MS = 3000;
+
+/* With the cube stage (desktop): the entrance assembly IS the loading animation, so the
+   curtain holds for the assembled event — never less than the minimum beat, never past
+   the cap (a slow three.js chunk must not hold the page hostage). */
+const CUBE_MIN_SHOW_MS = 1400;
+const CUBE_CAP_MS = 2600;
+const CUBE_HARD_TIMEOUT_MS = 3600;
 
 /** Scroll input Lenis listens for on `window` (bubble phase, passive: false). */
 const GUARDED_EVENTS = ["wheel", "touchmove"];
@@ -99,10 +107,12 @@ class PreloaderBoundary extends Component {
 
 export default function Preloader() {
     const [enabled] = useState(shouldRun);
+    const [withCube] = useState(() => stageEnabled());
     const [visible, setVisible] = useState(true);
     const [killed, setKilled] = useState(false);
 
     const doneRef = useRef(false);
+    const assembledCleanupRef = useRef(null);
     const stoppedLenisRef = useRef(false);
     const bodyOverflowRef = useRef("");
     const timersRef = useRef([]);
@@ -170,18 +180,35 @@ export default function Preloader() {
         }
         try {
             lock();
-            timersRef.current = [
-                window.setTimeout(() => setVisible(false), EXIT_AT_MS),
-                window.setTimeout(finish, HARD_TIMEOUT_MS),
-            ];
+            if (withCube) {
+                const startedAt = performance.now();
+                const exit = () => setVisible(false);
+                const onAssembled = () => {
+                    const wait = Math.max(0, CUBE_MIN_SHOW_MS - (performance.now() - startedAt));
+                    timersRef.current.push(window.setTimeout(exit, wait));
+                };
+                window.addEventListener(ASSEMBLED_EVENT, onAssembled, { once: true });
+                assembledCleanupRef.current = () => window.removeEventListener(ASSEMBLED_EVENT, onAssembled);
+                timersRef.current = [
+                    window.setTimeout(exit, CUBE_CAP_MS),
+                    window.setTimeout(finish, CUBE_HARD_TIMEOUT_MS),
+                ];
+            } else {
+                timersRef.current = [
+                    window.setTimeout(() => setVisible(false), EXIT_AT_MS),
+                    window.setTimeout(finish, HARD_TIMEOUT_MS),
+                ];
+            }
         } catch {
             timersRef.current.push(window.setTimeout(finish, 0));
         }
         return () => {
             clearTimers();
+            assembledCleanupRef.current?.();
+            assembledCleanupRef.current = null;
             if (!doneRef.current) unlock();
         };
-    }, [enabled, lock, unlock, finish, clearTimers]);
+    }, [enabled, withCube, lock, unlock, finish, clearTimers]);
 
     if (!enabled || killed) return null;
 
@@ -197,7 +224,9 @@ export default function Preloader() {
                         exit={{ y: "-100%" }}
                         transition={{ duration: EXIT_DURATION, ease: EASE }}
                     >
-                        <div className="flex items-center gap-4 sm:gap-6">
+                        {/* With the cube assembling centre-screen above the curtain, the
+                            wordmark steps down into the lower third instead of colliding. */}
+                        <div className={"flex items-center gap-4 sm:gap-6" + (withCube ? " translate-y-[27vh]" : "")}>
                             <MotionImg
                                 src={logo}
                                 alt=""

@@ -8,6 +8,7 @@ import { EASE } from "./motion/constants";
 import { scrollToTarget } from "../lib/scroll";
 import cx from "../lib/cx";
 import CubeFallback from "./hero/CubeFallback";
+import { stageEnabled } from "./hero/stage";
 
 /* One import specifier, one chunk: warmed early by `loadHeroCube()`, rendered through `lazy`. */
 const loadHeroCube = () => import("./hero/HeroCube");
@@ -166,17 +167,20 @@ class CubeBoundary extends Component {
 function HeroContent({ onBookClick }) {
     const reduced = Boolean(useReducedMotionConfig());
     const ready = usePreloaderDone();
-    /* The WebGL cube renders at every size (27 meshes is cheap even on phones); the SVG
-       stands in only under reduced motion, without WebGL, or while the chunk loads. */
-    const wantsCube = !reduced;
+    /* On fine-pointer desktops the cube lives on the fixed CubeStage overlay (mounted by
+       Home): it assembles behind the preloader, glides into this column's empty square and
+       later drifts with the scroll. Everywhere else it renders in-flow here as before; the
+       SVG stands in under reduced motion, without WebGL, or while the chunk loads. */
+    const [stageOn] = useState(() => stageEnabled());
+    const wantsCube = !reduced && !stageOn;
     const cubeClass = "h-full w-full";
 
     // Fetch the chunk right away so it is cached by the time the entrance starts;
     // the canvas itself mounts with the entrance so its assembly is not spent behind the preloader.
     useEffect(() => {
-        if (!wantsCube) return;
+        if (reduced) return;
         loadHeroCube().catch(() => {});
-    }, [wantsCube]);
+    }, [reduced]);
 
     const fallback = <CubeFallback className={cubeClass} />;
 
@@ -257,7 +261,9 @@ function HeroContent({ onBookClick }) {
                     className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[560px]"
                 >
                     <div className="relative h-full w-full">
-                        {wantsCube && ready ? (
+                        {stageOn ? (
+                            <div data-cube-dock="hero" className="h-full w-full" />
+                        ) : wantsCube && ready ? (
                             <CubeBoundary fallback={fallback}>
                                 <Suspense fallback={fallback}>
                                     <HeroCube className={cubeClass} />

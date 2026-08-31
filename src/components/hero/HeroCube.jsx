@@ -15,6 +15,7 @@ import {
 import { toCreasedNormals } from "three/addons/utils/BufferGeometryUtils.js";
 import cx from "../../lib/cx";
 import CubeFallback from "./CubeFallback";
+import { ASSEMBLED_EVENT, stagePose } from "./stage";
 
 /* ------------------------------------------------------------------------------------------
    Scene constants
@@ -331,6 +332,8 @@ function createSim() {
         parallaxBlend: 1,
         leanX: 0,
         leanY: 0,
+        scrollYaw: 0,
+        assembledSent: false,
     };
 }
 
@@ -509,6 +512,22 @@ function usePointerInput(wrapperRef, simRef, invalidateRef, enabled, reducedMoti
 }
 
 /** Window-level pointer position for the parallax lean; off under reduced motion. */
+const SCROLL_YAW_RATE = 0.00055; // rad per scrolled px: a gentle turn as the page moves
+
+/** Scroll-linked yaw: the cube turns with the page, layered on top of drag and idle spin. */
+function useScrollYaw(simRef, enabled, reducedMotion) {
+    useEffect(() => {
+        if (!enabled || reducedMotion) return undefined;
+        const sim = simRef.current;
+        const onScroll = () => {
+            sim.scrollYaw = window.scrollY * SCROLL_YAW_RATE;
+        };
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [simRef, enabled, reducedMotion]);
+}
+
 function useParallax(simRef, enabled, reducedMotion) {
     useEffect(() => {
         if (!enabled || reducedMotion) return undefined;
@@ -635,6 +654,15 @@ const CubeGroup = memo(function CubeGroup({ reducedMotion, simRef }) {
                 sim.phase = PHASE_SETTLED;
                 sim.phaseStart = sim.elapsed;
                 sim.explodesHandled = sim.explodeRequests;
+                if (!sim.assembledSent) {
+                    sim.assembledSent = true;
+                    // The preloader holds its curtain for this (see hero/stage.js).
+                    try {
+                        window.dispatchEvent(new CustomEvent(ASSEMBLED_EVENT));
+                    } catch {
+                        // A blocked CustomEvent must never break the render loop.
+                    }
+                }
             }
         } else if (sim.phase === PHASE_SETTLED) {
             state.camera.position.z = CAMERA_Z;
@@ -691,7 +719,8 @@ const CubeGroup = memo(function CubeGroup({ reducedMotion, simRef }) {
 
         tilt.rotation.set(sim.pitch + sim.leanX, sim.leanY, 0);
         tilt.position.y = Math.sin(sim.elapsed * FLOAT_SPEED) * FLOAT_AMPLITUDE;
-        spin.rotation.y = sim.yaw;
+        tilt.scale.setScalar(stagePose.zoom);
+        spin.rotation.y = sim.yaw + sim.scrollYaw;
     });
 
     return (
@@ -777,6 +806,7 @@ export default function HeroCube({ className }) {
 
     usePointerInput(wrapperRef, simRef, invalidateRef, enabled, reducedMotion);
     useParallax(simRef, enabled, reducedMotion);
+    useScrollYaw(simRef, enabled, reducedMotion);
 
     if (!enabled) return <CubeFallback className={className} />;
 

@@ -13,6 +13,8 @@ import ContactSection from "../components/ContactSection";
 import FAQ from "../components/FAQ";
 import Footer from "../components/Footer";
 import BookingModal from "../components/BookingModal";
+import CubeStage from "../components/hero/CubeStage";
+import { stageEnabled } from "../components/hero/stage";
 
 /**
  * Homepage. Bands run dark / light / dark / light / dark / light / light (grain) /
@@ -25,6 +27,9 @@ import BookingModal from "../components/BookingModal";
  */
 export default function Home() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
+    // The fixed cube overlay (assembles behind the preloader, settles into the hero,
+    // drifts with the scroll) — desktop fine-pointer only; see hero/stage.js.
+    const [stageOn] = useState(() => stageEnabled());
     const openBooking = () => setIsBookingOpen(true);
     const closeBooking = () => setIsBookingOpen(false);
 
@@ -54,6 +59,7 @@ export default function Home() {
 
             <Footer />
 
+            {stageOn && <CubeStage />}
             <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
         </div>
     );
