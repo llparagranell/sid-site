@@ -189,7 +189,7 @@ function HeroContent({ onBookClick }) {
             aria-labelledby="hero-title"
             initial={reduced ? "show" : "hidden"}
             animate={ready || reduced ? "show" : "hidden"}
-            className="band-dark relative flex items-center overflow-hidden border-b border-line-dark pt-24 pb-12 md:pt-32 md:pb-16 lg:min-h-[100svh]"
+            className="band-dark relative flex items-center overflow-hidden border-b border-line-dark pt-28 pb-16 md:pt-32 md:pb-20 lg:min-h-[100svh] lg:pb-24"
         >
             <Container className="grid gap-10 md:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                 <div className="flex flex-col items-start gap-5 md:gap-8">
@@ -227,15 +227,30 @@ function HeroContent({ onBookClick }) {
                         to grow.
                     </MotionP>
 
+                    {/* One booking CTA per viewport: the Navbar's "Book a call" from lg up, the
+                        ghost button here below lg where that navbar button is hidden. */}
                     <MotionDiv
                         custom={3}
                         variants={rise}
                         className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
                     >
-                        <Button variant="accent" tone="dark" arrow onClick={() => scrollToTarget("#contact")}>
+                        <Button
+                            variant="accent"
+                            tone="dark"
+                            size="lg"
+                            arrow
+                            className="w-full sm:w-auto"
+                            onClick={() => scrollToTarget("#contact")}
+                        >
                             Start a project
                         </Button>
-                        <Button variant="ghost" tone="dark" onClick={onBookClick}>
+                        <Button
+                            variant="ghost"
+                            tone="dark"
+                            size="lg"
+                            className="w-full sm:w-auto lg:hidden"
+                            onClick={onBookClick}
+                        >
                             Book a 30-min call
                         </Button>
                     </MotionDiv>

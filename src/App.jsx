@@ -16,6 +16,7 @@ const CaseStudies = lazy(() => import("./pages/CaseStudies"));
 const WebDevelopment = lazy(() => import("./pages/WebDevelopment"));
 const MobileAppDevelopment = lazy(() => import("./pages/MobileAppDevelopment"));
 const AiMachineLearning = lazy(() => import("./pages/AiMachineLearning"));
+const AiAutomation = lazy(() => import("./pages/AiAutomation"));
 const CloudSolutions = lazy(() => import("./pages/CloudSolutions"));
 const UiUxDesign = lazy(() => import("./pages/UiUxDesign"));
 const DatabaseManagement = lazy(() => import("./pages/DatabaseManagement"));
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="/services/web-development" element={<WebDevelopment />} />
             <Route path="/services/mobile-app-development" element={<MobileAppDevelopment />} />
             <Route path="/services/ai-machine-learning" element={<AiMachineLearning />} />
+            <Route path="/services/ai-automation" element={<AiAutomation />} />
             <Route path="/services/cloud-solutions" element={<CloudSolutions />} />
             <Route path="/services/ui-ux-design" element={<UiUxDesign />} />
             <Route path="/services/database-management" element={<DatabaseManagement />} />

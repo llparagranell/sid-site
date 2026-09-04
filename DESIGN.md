@@ -116,7 +116,8 @@ These rules make the fix permanent. They sit above §5–§7 for the homepage se
   of numbers; `#work` — a rubber stamp over a strip of phone frames; `#services` — a labelled
   hairline with the h2 knocked out of it; `#process` — a numeral bleeding off the column;
   `#stack` — a table whose caption is the h2; `#about` — a first-person sentence and a drop cap;
-  `#why` — edit marks (struck line, replacement beneath), h2 as the conclusion; `#start` — a scope
+  `#why` — an uppercase display h2 over a ledger of edit marks (struck line, replacement beside,
+  large struck/ruled column heads); `#start` — a scope
   sheet with serif tabs; `#contact` — `SectionHeading`; `#faq` — a numbered index under an italic
   aside; Footer — a sign-off line. Adding a section means choosing a new opener, not reusing one.
 - **No cards, no chips.** Icon-in-tinted-square tiles, pill chips and `rounded-2xl` boxes around

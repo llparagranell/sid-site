@@ -29,7 +29,7 @@ const NAV = [
     { key: "about", label: "About", to: "/about", match: "/about" },
 ];
 
-/* Intrinsic size of the jpeg mark, so the 36px slot is reserved before it loads. */
+/* Intrinsic size of the jpeg mark, so the 48px slot is reserved before it loads. */
 const MARK_SIZE = { width: 391, height: 243 };
 
 const subscribeScroll = (callback) => {
@@ -46,7 +46,7 @@ function Logo({ overDark, onClick }) {
                 inverted to light and screen-blended so its white background disappears into the ink. */}
             <span
                 className={cx(
-                    "flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border transition-colors duration-300",
+                    "flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border transition-colors duration-300",
                     overDark ? "border-transparent bg-transparent" : "border-line bg-surface",
                 )}
             >
@@ -61,7 +61,7 @@ function Logo({ overDark, onClick }) {
                     )}
                 />
             </span>
-            <span aria-hidden="true" className="whitespace-nowrap text-[15px] font-semibold tracking-tight">
+            <span aria-hidden="true" className="whitespace-nowrap text-lg font-semibold tracking-tight">
                 DevGrowth Solutions
             </span>
         </Link>
@@ -126,7 +126,7 @@ function NavItem({ item, isHome, active, isOpen, highlighted, reduce, onHover, o
     };
 
     const linkClass = cx(
-        "type-eyebrow relative inline-flex items-center gap-1.5 whitespace-nowrap py-2 transition-opacity duration-300",
+        "type-eyebrow text-sm relative inline-flex items-center gap-1.5 whitespace-nowrap py-2 transition-opacity duration-300",
         highlighted ? "opacity-100" : "opacity-70 hover:opacity-100",
     );
 
@@ -135,7 +135,7 @@ function NavItem({ item, isHome, active, isOpen, highlighted, reduce, onHover, o
             <span>{item.label}</span>
             {hasMenu && (
                 <ChevronDown
-                    size={12}
+                    size={14}
                     aria-hidden="true"
                     className={cx("transition-transform duration-300", isOpen && "rotate-180")}
                 />
@@ -212,7 +212,7 @@ function NavItem({ item, isHome, active, isOpen, highlighted, reduce, onHover, o
 
     return (
         <li
-            className="relative flex h-[72px] items-center"
+            className="relative flex h-20 items-center"
             onMouseEnter={() => {
                 onHover(item.key);
                 if (hasMenu) onOpen(item.key);
@@ -556,7 +556,7 @@ export default function Navbar({ onBookClick }) {
 
     return (
         <>
-            <header className={cx("fixed inset-x-0 top-0 z-50 h-[72px] border-b transition-colors duration-300 ease-out", headerTone)}>
+            <header className={cx("fixed inset-x-0 top-0 z-50 h-20 border-b transition-colors duration-300 ease-out", headerTone)}>
                 <Container className="grid h-full grid-cols-[1fr_auto_1fr] items-center">
                     <Logo overDark={overDark} onClick={isHome ? onLogoClick : undefined} />
                     <DesktopNav isHome={isHome} activeKey={activeKey} reduce={reduce} />
@@ -564,6 +564,7 @@ export default function Navbar({ onBookClick }) {
                         <Button
                             variant="accent"
                             tone={overDark ? "dark" : "light"}
+                            size="lg"
                             onClick={onBookClick}
                             className="max-lg:hidden"
                         >
@@ -597,7 +598,7 @@ export default function Navbar({ onBookClick }) {
                         animate={{ y: 0 }}
                         exit={{ y: "-100%" }}
                         transition={{ duration: reduce ? 0 : 0.5, ease: EASE }}
-                        className="band-dark fixed inset-0 z-[45] flex flex-col pt-[72px] lg:hidden"
+                        className="band-dark fixed inset-0 z-[45] flex flex-col pt-20 lg:hidden"
                     >
                         <MobileMenu
                             menuId={menuId}

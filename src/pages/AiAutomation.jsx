@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-    Sparkles, Brain, Database, Cloud, Code2, Rocket,
-    Search, BarChart3, Cpu, RefreshCcw, ShieldCheck,
-    TrendingUp, CheckCircle2, Layers, Zap,
+    Bot, MessageSquare, Workflow, Plug, Zap, Search,
+    Map, FlaskConical, ShieldCheck, CheckCircle2,
+    Code2, Cloud, Database, Layers, RefreshCcw,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -18,119 +18,120 @@ import { staggerChild } from "../components/motion/constants";
 
 const MotionLi = motion.li;
 
-const OVERVIEW_IMAGE = {
-    src: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=600&q=80",
-    alt: "Abstract render of a machine learning model",
-};
-
 const serviceTypes = [
     {
-        title: "Custom AI Solution Development",
-        desc: "We build tailored AI systems aligned with your business needs — from automation engines to decision-support systems.",
-        points: ["Business process automation", "Intelligent decision systems", "Custom AI model integration", "Scalable architecture"],
-        icon: Brain,
+        title: "Chatbots & AI Assistants",
+        desc: "Support and lead-capture bots that answer from your own docs and know when to hand off to a person.",
+        points: ["Website & WhatsApp bots", "Answers from your knowledge base", "Lead qualification", "Human handoff built in"],
+        icon: MessageSquare,
     },
     {
-        title: "Machine Learning Model Development",
-        desc: "Designing and training ML models that learn from your data and improve over time.",
-        points: ["Predictive analytics", "Classification & regression models", "Recommendation systems", "Model optimization & tuning"],
-        icon: TrendingUp,
+        title: "AI Agents & Copilots",
+        desc: "Agents that read, draft and act inside the tools your team already uses, with approval steps where they matter.",
+        points: ["Inbox & ticket triage", "Document drafting", "CRM updates", "Approvals stay human"],
+        icon: Bot,
     },
     {
-        title: "AI for Startups (AI-Enabled MVPs)",
-        desc: "Rapid development of AI-powered MVPs to validate innovative product ideas.",
-        points: ["AI-based feature integration", "Rapid prototyping", "Data pipeline setup", "Investor-ready AI products"],
-        icon: Rocket,
+        title: "Workflow Automation",
+        desc: "Pipelines that move data between your systems without copy-paste, on a schedule or on a trigger.",
+        points: ["Lead routing", "Invoice & order processing", "Report generation", "Scheduled jobs & alerts"],
+        icon: Workflow,
     },
     {
-        title: "ML Integration & Deployment",
-        desc: "Getting trained models into your existing systems and keeping them healthy in production.",
-        points: ["CRM & ERP AI integration", "API-based AI services", "Inference infrastructure", "Monitoring & retraining"],
-        icon: Zap,
+        title: "LLM & API Integration",
+        desc: "Language models wired into your existing product — grounded in your data and monitored in production.",
+        points: ["OpenAI & Claude APIs", "RAG over your data", "Prompt & eval pipelines", "Usage and cost monitoring"],
+        icon: Plug,
     },
 ];
 
 const techStack = [
-    { name: "Python", category: "AI & ML", icon: Code2 },
-    { name: "TensorFlow", category: "AI & ML", icon: Brain },
-    { name: "Scikit-learn", category: "AI & ML", icon: Cpu },
-    { name: "OpenAI APIs", category: "AI & ML", icon: Sparkles },
-    { name: "Pandas", category: "Data & Analytics", icon: BarChart3 },
-    { name: "NumPy", category: "Data & Analytics", icon: BarChart3 },
-    { name: "Power BI", category: "Data & Analytics", icon: BarChart3 },
+    { name: "OpenAI APIs", category: "Models", icon: Bot },
+    { name: "Claude API", category: "Models", icon: Bot },
+    { name: "LangChain", category: "Orchestration", icon: Workflow },
+    { name: "n8n", category: "Orchestration", icon: Workflow },
+    { name: "Zapier / Make", category: "Orchestration", icon: Zap },
+    { name: "Python", category: "Backend", icon: Code2 },
     { name: "Node.js", category: "Backend", icon: Code2 },
     { name: "FastAPI", category: "Backend", icon: Code2 },
+    { name: "Postgres + pgvector", category: "Data", icon: Database },
+    { name: "WhatsApp API", category: "Channels", icon: MessageSquare },
     { name: "Docker", category: "Deployment", icon: Layers },
-    { name: "AWS AI", category: "Cloud", icon: Cloud },
-    { name: "Google Cloud AI", category: "Cloud", icon: Cloud },
+    { name: "AWS", category: "Cloud", icon: Cloud },
 ];
 
 const processSteps = [
-    { id: "01", title: "Problem Understanding & Strategy", desc: "Identifying business challenges and defining AI opportunities.", icon: Search },
-    { id: "02", title: "Data Collection & Preparation", desc: "Data cleaning, transformation, and pipeline setup.", icon: Database },
-    { id: "03", title: "Model Design & Training", desc: "Developing and training machine learning models.", icon: Brain },
-    { id: "04", title: "Testing & Validation", desc: "Performance evaluation, accuracy testing, and optimization.", icon: ShieldCheck },
-    { id: "05", title: "Deployment & Integration", desc: "Integrating AI models into production systems.", icon: Code2 },
-    { id: "06", title: "Monitoring & Improvement", desc: "Tracking performance and improving models over time.", icon: TrendingUp },
-    { id: "07", title: "Scaling & Optimization", desc: "Enhancing infrastructure for growth and high-load environments.", icon: RefreshCcw },
-];
-
-const architectureStats = [
-    { label: "Architecture", value: "Custom" },
-    { label: "Optimization", value: "Hyper-tuned" },
+    { id: "01", title: "Audit the Workflow", desc: "We map how the work happens today and where the hours actually go.", icon: Search },
+    { id: "02", title: "Pick the Highest-Return Step", desc: "One process, chosen for saved hours per week — not for demo value.", icon: Map },
+    { id: "03", title: "Prototype in a Week", desc: "A working automation on real examples from your business, not mock data.", icon: FlaskConical },
+    { id: "04", title: "Wire the Integrations", desc: "Connecting your CRM, inbox, sheets and internal tools through their APIs.", icon: Plug },
+    { id: "05", title: "Test Against Real Cases", desc: "Accuracy checked on past work before anything touches a customer.", icon: ShieldCheck },
+    { id: "06", title: "Launch with Guardrails", desc: "Fallbacks, human review steps and alerts for anything the automation is unsure about.", icon: Zap },
+    { id: "07", title: "Measure & Extend", desc: "Hours saved and error rates tracked, then the next workflow queued.", icon: RefreshCcw },
 ];
 
 /* ------------------------------------------------------------------------
-   Static blueprint of a 3–4–3 network. Nothing moves; the card reveals once.
+   Static blueprint of one automation run: trigger, agent, three actions.
+   Nothing moves; the card reveals once. Labels are 15 SVG units so they stay
+   ~10px even when the 480-unit viewBox renders at phone width.
    ------------------------------------------------------------------------ */
-const LAYERS = [
-    { id: "input", x: 80, nodes: [80, 160, 240] },
-    { id: "hidden", x: 240, nodes: [60, 125, 190, 255] },
-    { id: "output", x: 400, nodes: [80, 160, 240] },
-];
+const PIPELINE = {
+    trigger: { x: 70, y: 160, w: 92, label: "Trigger" },
+    agent: { x: 240, y: 160, w: 100, label: "AI agent" },
+    actions: [
+        { x: 406, y: 80, w: 124, label: "Reply sent" },
+        { x: 406, y: 160, w: 124, label: "CRM updated" },
+        { x: 406, y: 240, w: 124, label: "Human review" },
+    ],
+};
 
-const EDGES = LAYERS.slice(0, -1).flatMap((from, i) => {
-    const to = LAYERS[i + 1];
-    return from.nodes.flatMap((y1) =>
-        to.nodes.map((y2) => ({
-            id: `${from.id}-${y1}-${to.id}-${y2}`,
-            d: `M${from.x} ${y1} L${to.x} ${y2}`,
-        })),
-    );
-});
-
-function NetworkDiagram() {
+function PipelineDiagram() {
+    const { trigger, agent, actions } = PIPELINE;
     return (
         <div className="flex flex-col overflow-hidden rounded-2xl border border-line-dark bg-ink-2">
             <svg
-                aria-hidden="true"
+                role="img"
+                aria-label="One automation run: a trigger reaches the AI agent, which sends the reply, updates the CRM, or hands the case to human review."
                 viewBox="0 0 480 320"
                 className="w-full text-accent-bright"
                 fill="none"
             >
                 <g stroke="currentColor" strokeWidth="1" className="opacity-30">
-                    {EDGES.map((edge) => (
-                        <path key={edge.id} d={edge.d} />
+                    <path d={`M${trigger.x + trigger.w / 2} ${trigger.y} L${agent.x - agent.w / 2} ${agent.y}`} />
+                    {actions.map((action) => (
+                        <path
+                            key={action.label}
+                            d={`M${agent.x + agent.w / 2} ${agent.y} L${action.x - action.w / 2} ${action.y}`}
+                        />
                     ))}
                 </g>
-                {LAYERS.map((layer) =>
-                    layer.nodes.map((y) => (
-                        <circle
-                            key={`${layer.id}-${y}`}
-                            cx={layer.x}
-                            cy={y}
-                            r="6"
+                {[trigger, agent, ...actions].map((node) => (
+                    <g key={node.label}>
+                        <rect
+                            x={node.x - node.w / 2}
+                            y={node.y - 22}
+                            width={node.w}
+                            height="44"
+                            rx="6"
                             strokeWidth="1.5"
                             className="fill-ink-2 stroke-accent-bright"
                         />
-                    )),
-                )}
+                        <text
+                            x={node.x}
+                            y={node.y + 5}
+                            textAnchor="middle"
+                            className="fill-paper type-mono text-[15px]"
+                        >
+                            {node.label}
+                        </text>
+                    </g>
+                ))}
             </svg>
             <div className="flex items-center justify-between gap-4 border-t border-line-dark px-5 py-4">
-                <span className="type-eyebrow text-muted-dark">Architecture Status</span>
+                <span className="type-eyebrow text-muted-dark">One run, end to end</span>
                 <span className="type-eyebrow flex items-center gap-2 text-accent-bright">
                     <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent-bright" />
-                    Optimizing
+                    Unattended
                 </span>
             </div>
         </div>
@@ -151,7 +152,7 @@ function IconBox({ icon: Icon, tone = "light" }) {
     );
 }
 
-export default function AiMachineLearning() {
+export default function AiAutomation() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
     const openBooking = () => setIsBookingOpen(true);
     const closeBooking = () => setIsBookingOpen(false);
@@ -166,22 +167,17 @@ export default function AiMachineLearning() {
                     <PageHeaderBackground tone="dark" />
                     <Container className="relative z-10">
                         <Reveal className="flex flex-col items-start gap-8">
-                            <Eyebrow tone="dark">AI &amp; Machine Learning</Eyebrow>
+                            <Eyebrow tone="dark">AI Automation</Eyebrow>
                             <h1 className="type-display text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] text-paper max-w-[14ch]">
-                                Building <em className="italic text-accent-bright">intelligent</em> AI solutions that drive
-                                growth.
+                                Put the repeat work on <em className="italic text-accent-bright">autopilot</em>.
                             </h1>
                             <p className="text-muted-dark text-lg md:text-xl max-w-[56ch] leading-relaxed">
-                                AI-powered systems designed to automate, optimize, and scale your operations.
+                                Chatbots, AI agents and automated workflows that handle the routine, so your team
+                                handles the exceptions.
                             </p>
-                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                                <Button tone="dark" variant="accent" arrow onClick={openBooking}>
-                                    Build your AI solution
-                                </Button>
-                                <Button tone="dark" variant="ghost" onClick={openBooking}>
-                                    Book free AI consultation
-                                </Button>
-                            </div>
+                            <Button tone="dark" variant="accent" arrow onClick={openBooking}>
+                                Automate a workflow
+                            </Button>
                         </Reveal>
                     </Container>
                 </header>
@@ -196,7 +192,7 @@ export default function AiMachineLearning() {
                                     eyebrow="Overview"
                                     title={
                                         <>
-                                            Transforming data into <em>intelligent</em> business decisions.
+                                            Hours of manual work, handled by <em>software</em>.
                                         </>
                                     }
                                 />
@@ -205,83 +201,30 @@ export default function AiMachineLearning() {
                                     className="flex max-w-[56ch] flex-col gap-5 text-base leading-relaxed text-muted md:text-lg"
                                 >
                                     <p>
-                                        At DevGrowth Solutions, we design and develop AI-powered systems that turn complex
-                                        data into actionable insights. From predictive analytics to intelligent automation,
-                                        our solutions help businesses reduce manual effort, increase efficiency, and unlock
-                                        scalable growth.
+                                        Most teams lose their week to the same loop: answer the query, copy the
+                                        details, update the sheet, chase the follow-up. Each step is small; together
+                                        they are a full-time job.
                                     </p>
                                     <p>
-                                        Whether you're a startup exploring AI integration or an enterprise looking to
-                                        optimize operations, we build intelligent systems tailored to your business goals.
+                                        We build automations that run that loop for you — a bot that answers from
+                                        your docs, an agent that drafts and files, a pipeline that moves data
+                                        between your tools. Always scoped to one workflow first, measured in hours
+                                        saved per week.
                                     </p>
                                     <p>
-                                        Our focus is not just implementing AI — it's delivering measurable impact,
-                                        automation, and long-term competitive advantage.
+                                        Anything the automation is unsure about goes to a person. You get the speed
+                                        without losing the judgment.
                                     </p>
                                 </Reveal>
                             </div>
 
                             <Reveal delay={0.15} className="flex flex-col gap-4">
-                                <div className="overflow-hidden rounded-2xl border border-line bg-surface">
-                                    <img
-                                        src={OVERVIEW_IMAGE.src}
-                                        alt={OVERVIEW_IMAGE.alt}
-                                        loading="lazy"
-                                        className="aspect-square w-full object-cover"
-                                    />
-                                </div>
+                                <PipelineDiagram />
                                 <div className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4">
-                                    <IconBox icon={Brain} />
-                                    <span className="type-eyebrow text-ink">Intelligent Systems</span>
+                                    <IconBox icon={Workflow} />
+                                    <span className="type-eyebrow text-ink">Runs while you sleep</span>
                                 </div>
                             </Reveal>
-                        </div>
-                    </Container>
-                </section>
-
-                {/* Neural network architectures */}
-                <section
-                    aria-labelledby="architecture-heading"
-                    className="band-dark section-pad border-b border-line-dark"
-                >
-                    <Container>
-                        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
-                            <Reveal className="order-2 lg:order-1">
-                                <NetworkDiagram />
-                            </Reveal>
-
-                            <div className="order-1 flex flex-col gap-8 lg:order-2">
-                                <SectionHeading
-                                    id="architecture-heading"
-                                    tone="dark"
-                                    eyebrow="Advanced Engineering"
-                                    title={
-                                        <>
-                                            Neural network <em>architectures</em>.
-                                        </>
-                                    }
-                                />
-                                <Reveal delay={0.1} className="flex flex-col gap-8">
-                                    <p className="max-w-[56ch] text-base leading-relaxed text-muted-dark md:text-lg">
-                                        We don't just use APIs. We design custom neural architectures tailored to your
-                                        specific data patterns, ensuring maximum accuracy and performance for complex
-                                        decision-making tasks.
-                                    </p>
-                                    <dl className="grid gap-4 sm:grid-cols-2">
-                                        {architectureStats.map((stat) => (
-                                            <div
-                                                key={stat.label}
-                                                className="flex flex-col gap-2 rounded-2xl border border-line-dark bg-ink-2 p-6"
-                                            >
-                                                <dt className="type-eyebrow text-muted-dark">{stat.label}</dt>
-                                                <dd className="font-sans text-xl font-semibold tracking-tight text-paper md:text-2xl">
-                                                    {stat.value}
-                                                </dd>
-                                            </div>
-                                        ))}
-                                    </dl>
-                                </Reveal>
-                            </div>
                         </div>
                     </Container>
                 </section>
@@ -291,10 +234,10 @@ export default function AiMachineLearning() {
                     <Container className="flex flex-col gap-12 md:gap-16">
                         <SectionHeading
                             id="services-heading"
-                            eyebrow="Our core offerings"
+                            eyebrow="What we automate"
                             title={
                                 <>
-                                    AI &amp; ML <em>services</em>.
+                                    AI automation <em>services</em>.
                                 </>
                             }
                         />
@@ -333,10 +276,10 @@ export default function AiMachineLearning() {
                         <SectionHeading
                             id="stack-heading"
                             tone="dark"
-                            eyebrow="Our AI stack"
+                            eyebrow="Our automation stack"
                             title={
                                 <>
-                                    Modern AI technologies for <em>intelligent</em> systems.
+                                    Proven tools, wired to <em>your</em> systems.
                                 </>
                             }
                         />
@@ -375,7 +318,7 @@ export default function AiMachineLearning() {
                                     eyebrow="How we work"
                                     title={
                                         <>
-                                            Our AI &amp; ML implementation <em>process</em>.
+                                            From audit to <em>unattended</em>.
                                         </>
                                     }
                                 />
@@ -414,13 +357,13 @@ export default function AiMachineLearning() {
                             align="center"
                             title={
                                 <>
-                                    We don't just build AI systems. We engineer <em>intelligent</em> solutions.
+                                    Start with one workflow. Measure the hours it <em>returns</em>.
                                 </>
                             }
                         />
                         <Reveal delay={0.1}>
                             <Button tone="dark" variant="accent" arrow onClick={openBooking}>
-                                Build your AI solution
+                                Automate a workflow
                             </Button>
                         </Reveal>
                     </Container>

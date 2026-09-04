@@ -1,4 +1,4 @@
-// Derived from site content, not a live source: products mirror src/components/Projects.jsx; the counts come from src/constants/servicesData.js (8 entries), src/constants/industryData.js (6 active entries) and the one-week scope promise in src/components/Hero.jsx, ProcessSection.jsx and SegmentedCTA.jsx — update here when any of those change.
+// Derived from site content, not a live source: products mirror src/components/Projects.jsx; the counts come from src/constants/servicesData.js (9 entries), src/constants/industryData.js (6 active entries) and the one-week scope promise in src/components/Hero.jsx, ProcessSection.jsx and SegmentedCTA.jsx — update here when any of those change.
 
 export const products = [
     {
@@ -20,7 +20,7 @@ export const products = [
 
 export const stats = [
     { value: 3, suffix: "", label: "products on Google Play" },
-    { value: 8, suffix: "", label: "service lines" },
+    { value: 9, suffix: "", label: "service lines" },
     { value: 6, suffix: "", label: "industries we build for" },
     { value: 7, suffix: "", label: "days to a written scope" },
 ];

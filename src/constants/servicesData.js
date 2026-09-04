@@ -2,6 +2,7 @@ import {
     Layers,
     PenTool,
     Sparkles,
+    Bot,
     Zap,
     ShoppingCart,
     Palette,
@@ -33,6 +34,13 @@ export const services = [
         points: ["Predictive models", "NLP & CV", "Model deployment"],
         layoutId: "icon-Sparkles",
         path: "/services/ai-machine-learning"
+    },
+    {
+        icon: Bot,
+        title: "AI Automation",
+        desc: "Chatbots, AI agents and automated workflows that take repeat work off your team.",
+        points: ["Chatbots & AI agents", "Workflow automation", "LLM & API integrations"],
+        path: "/services/ai-automation"
     },
     {
         icon: Zap,

@@ -3,13 +3,20 @@ import { ArrowUpRight } from "lucide-react";
 import cx from "../../lib/cx";
 
 const base =
-    "group inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-sm font-semibold " +
+    "group inline-flex items-center justify-center gap-2.5 rounded-full font-semibold " +
     "transition-[background-color,color,border-color,transform] duration-300 ease-out " +
     "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent " +
     "disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer select-none";
 
+/* Size lives here, not in the base string, so a caller's font-size is never
+   silently outranked by a base `text-sm` in the compiled cascade. */
+const sizes = {
+    md: "px-6 py-3.5 text-sm",
+    lg: "px-9 py-4 text-base",
+};
+
 /**
- * variant: primary | accent | ghost   tone: light | dark (the band it sits on)
+ * variant: primary | accent | ghost   tone: light | dark (the band it sits on)   size: md | lg
  * Renders <Link> for `to`, <a> for `href`, otherwise <button>.
  */
 const styles = {
@@ -29,6 +36,7 @@ export default function Button({
     children,
     variant = "primary",
     tone = "light",
+    size = "md",
     arrow = false,
     icon: Icon,
     to,
@@ -37,7 +45,7 @@ export default function Button({
     type = "button",
     ...rest
 }) {
-    const classes = cx(base, styles[tone]?.[variant] ?? styles.light.primary, className);
+    const classes = cx(base, sizes[size] ?? sizes.md, styles[tone]?.[variant] ?? styles.light.primary, className);
     const content = (
         <>
             {Icon && <Icon size={16} aria-hidden="true" />}

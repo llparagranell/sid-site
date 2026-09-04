@@ -57,22 +57,30 @@ const STRUCK = "line-through decoration-muted-dark decoration-[1.5px]";
 const REPLACEMENT = "border-l-2 border-paper pl-4 md:border-l md:border-line-dark md:pl-12";
 
 /**
- * #why — edit marks. No heading opener: the ledger starts on a key set exactly like an entry
- * (struck "Without", ruled "With"), each entry is a struck line with its replacement, and the
- * conclusion sits at the bottom. Static: no motion, no accent.
+ * #why — edit marks under a display h2. The heading opens the section, the column heads are set
+ * large (struck "Without", ruled "With"), and each entry is a struck line with its replacement.
+ * Static: no motion, no accent.
  */
 export default function ComparisonSection() {
     return (
         <section id="why" aria-labelledby="why-heading" className="band-dark section-pad-tight border-b border-line-dark">
             <Container>
-                <h2 id="why-heading" className="sr-only">
+                <h2
+                    id="why-heading"
+                    className="type-display uppercase text-3xl text-paper sm:text-4xl md:text-5xl lg:text-6xl"
+                >
                     The DevGrowth difference
                 </h2>
 
-                {/* The key. Stacked on phones like the entries below it; column heads from md. */}
-                <p className="type-eyebrow flex flex-col gap-2 border-b border-line-dark pb-3 text-muted-dark md:grid md:grid-cols-2 md:gap-x-12">
-                    <s className={STRUCK}>Without DevGrowth</s>
-                    <span className={cx(REPLACEMENT, "text-paper")}>With DevGrowth</span>
+                {/* The key. Stacked on phones like the entries below it; column heads from md.
+                    The head strike is its own class set: 1.5px would vanish on display-size type. */}
+                <p className="mt-10 flex flex-col gap-3 border-b border-line-dark pb-4 md:mt-14 md:grid md:grid-cols-2 md:gap-x-12">
+                    <s className="line-through decoration-muted-dark decoration-2 type-display text-2xl text-muted-dark md:text-3xl">
+                        Without DevGrowth
+                    </s>
+                    <span className={cx(REPLACEMENT, "type-display text-2xl text-paper md:text-3xl")}>
+                        With DevGrowth
+                    </span>
                 </p>
 
                 <ol className="divide-y divide-line-dark border-b border-line-dark">
@@ -92,15 +100,12 @@ export default function ComparisonSection() {
                     ))}
                 </ol>
 
-                <div className="mt-10 flex flex-col gap-6 md:mt-12 md:flex-row md:items-end md:justify-between md:gap-8">
-                    <p aria-hidden="true" className="type-display max-w-[20ch] text-3xl text-paper md:text-4xl lg:text-5xl">
-                        That is the DevGrowth difference.
-                    </p>
+                <div className="mt-10 flex md:mt-12 md:justify-end">
                     <Button
                         tone="dark"
                         variant="primary"
                         arrow
-                        className="w-full min-h-12 md:w-auto md:shrink-0"
+                        className="w-full min-h-12 md:w-auto"
                         onClick={() => scrollToTarget("#contact")}
                     >
                         Book your free consultation

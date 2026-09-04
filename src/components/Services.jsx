@@ -31,8 +31,9 @@ const GROUP_DEFS = [
     {
         id: "ai",
         word: "AI",
-        description: "Predictive models, language and vision features, and the pipelines to run them in production.",
-        titles: ["AI & Machine Learning"],
+        description:
+            "Predictive models, language and vision features, chatbots and automated workflows — and the pipelines to run them in production.",
+        titles: ["AI & Machine Learning", "AI Automation"],
     },
 ];
 
@@ -44,7 +45,7 @@ const NOTES = {
 
 const byTitle = new Map(services.map((service) => [service.title, service]));
 
-// One running index across all groups (Build 01–04, Design 05, Scale 06–07, AI 08).
+// One running index across all groups (Build 01–04, Design 05, Scale 06–07, AI 08–09).
 const GROUPS = GROUP_DEFS.reduce((groups, { titles, ...group }) => {
     const offset = groups.reduce((sum, g) => sum + g.items.length, 0);
     const items = titles

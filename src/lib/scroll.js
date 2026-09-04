@@ -7,7 +7,7 @@ export function scrollToTarget(target, options = {}) {
     const el = typeof target === "string" ? document.querySelector(target) : target;
     if (!el) return;
     if (window.__lenis) {
-        window.__lenis.scrollTo(el, { offset: -88, duration: 1.2, ...options });
+        window.__lenis.scrollTo(el, { offset: -96, duration: 1.2, ...options });
     } else {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
