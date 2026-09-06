@@ -4,6 +4,7 @@ import {
     Bot, MessageSquare, Workflow, Plug, Zap, Search,
     Map, FlaskConical, ShieldCheck, CheckCircle2,
     Code2, Cloud, Database, Layers, RefreshCcw,
+    Server, KeyRound, ScrollText,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -20,10 +21,10 @@ const MotionLi = motion.li;
 
 const serviceTypes = [
     {
-        title: "Chatbots & AI Assistants",
-        desc: "Support and lead-capture bots that answer from your own docs and know when to hand off to a person.",
-        points: ["Website & WhatsApp bots", "Answers from your knowledge base", "Lead qualification", "Human handoff built in"],
-        icon: MessageSquare,
+        title: "n8n Workflow Automation",
+        desc: "Workflows that move data between your systems without copy-paste, on a schedule or on a trigger.",
+        points: ["Lead routing", "Invoice & order processing", "Report generation", "Scheduled jobs & alerts"],
+        icon: Workflow,
     },
     {
         title: "AI Agents & Copilots",
@@ -32,25 +33,49 @@ const serviceTypes = [
         icon: Bot,
     },
     {
-        title: "Workflow Automation",
-        desc: "Pipelines that move data between your systems without copy-paste, on a schedule or on a trigger.",
-        points: ["Lead routing", "Invoice & order processing", "Report generation", "Scheduled jobs & alerts"],
-        icon: Workflow,
+        title: "Chatbots & AI Assistants",
+        desc: "Support and lead-capture bots that answer from your own docs and know when to hand off to a person.",
+        points: ["Website & WhatsApp bots", "Answers from your knowledge base", "Lead qualification", "Human handoff built in"],
+        icon: MessageSquare,
     },
     {
         title: "LLM & API Integration",
         desc: "Language models wired into your existing product — grounded in your data and monitored in production.",
-        points: ["OpenAI & Claude APIs", "RAG over your data", "Prompt & eval pipelines", "Usage and cost monitoring"],
+        points: ["OpenAI & Claude APIs", "RAG over your data", "Custom n8n nodes", "Usage and cost monitoring"],
         icon: Plug,
     },
 ];
 
+/* Why n8n is the engine, in the studio's terms: what the client actually keeps. */
+const n8nReasons = [
+    {
+        title: "Self-hosted, on your infrastructure",
+        desc: "n8n runs on your server or ours. Your customer data never has to sit inside a third-party automation vendor.",
+        icon: Server,
+    },
+    {
+        title: "Hundreds of integrations, plus code",
+        desc: "Your CRM, inbox, sheets, payments and databases connect out of the box. Anything missing, we write as a custom node.",
+        icon: Plug,
+    },
+    {
+        title: "You own the workflows",
+        desc: "Every automation is exportable JSON in your account. No per-task pricing, no lock-in, no rebuild if you move on.",
+        icon: KeyRound,
+    },
+    {
+        title: "Built to be debugged",
+        desc: "Every run is logged step by step, so a failed automation shows you exactly where it stopped and why.",
+        icon: ScrollText,
+    },
+];
+
 const techStack = [
+    { name: "n8n", category: "Orchestration", icon: Workflow },
+    { name: "LangChain", category: "Orchestration", icon: Workflow },
+    { name: "Zapier / Make", category: "Orchestration", icon: Zap },
     { name: "OpenAI APIs", category: "Models", icon: Bot },
     { name: "Claude API", category: "Models", icon: Bot },
-    { name: "LangChain", category: "Orchestration", icon: Workflow },
-    { name: "n8n", category: "Orchestration", icon: Workflow },
-    { name: "Zapier / Make", category: "Orchestration", icon: Zap },
     { name: "Python", category: "Backend", icon: Code2 },
     { name: "Node.js", category: "Backend", icon: Code2 },
     { name: "FastAPI", category: "Backend", icon: Code2 },
@@ -63,11 +88,12 @@ const techStack = [
 const processSteps = [
     { id: "01", title: "Audit the Workflow", desc: "We map how the work happens today and where the hours actually go.", icon: Search },
     { id: "02", title: "Pick the Highest-Return Step", desc: "One process, chosen for saved hours per week — not for demo value.", icon: Map },
-    { id: "03", title: "Prototype in a Week", desc: "A working automation on real examples from your business, not mock data.", icon: FlaskConical },
-    { id: "04", title: "Wire the Integrations", desc: "Connecting your CRM, inbox, sheets and internal tools through their APIs.", icon: Plug },
+    { id: "03", title: "Prototype in a Week", desc: "A working n8n workflow on real examples from your business, not mock data.", icon: FlaskConical },
+    { id: "04", title: "Wire the Integrations", desc: "Connecting your CRM, inbox, sheets and internal tools — n8n nodes where they exist, custom ones where they do not.", icon: Plug },
     { id: "05", title: "Test Against Real Cases", desc: "Accuracy checked on past work before anything touches a customer.", icon: ShieldCheck },
     { id: "06", title: "Launch with Guardrails", desc: "Fallbacks, human review steps and alerts for anything the automation is unsure about.", icon: Zap },
-    { id: "07", title: "Measure & Extend", desc: "Hours saved and error rates tracked, then the next workflow queued.", icon: RefreshCcw },
+    { id: "07", title: "Hand Over the Keys", desc: "The workflows sit in your n8n instance, documented, with your team shown how to read a run.", icon: KeyRound },
+    { id: "08", title: "Measure & Extend", desc: "Hours saved and error rates tracked, then the next workflow queued.", icon: RefreshCcw },
 ];
 
 /* ------------------------------------------------------------------------
@@ -91,7 +117,7 @@ function PipelineDiagram() {
         <div className="flex flex-col overflow-hidden rounded-2xl border border-line-dark bg-ink-2">
             <svg
                 role="img"
-                aria-label="One automation run: a trigger reaches the AI agent, which sends the reply, updates the CRM, or hands the case to human review."
+                aria-label="One n8n run: a trigger reaches the AI agent, which sends the reply, updates the CRM, or hands the case to human review."
                 viewBox="0 0 480 320"
                 className="w-full text-accent-bright"
                 fill="none"
@@ -128,7 +154,7 @@ function PipelineDiagram() {
                 ))}
             </svg>
             <div className="flex items-center justify-between gap-4 border-t border-line-dark px-5 py-4">
-                <span className="type-eyebrow text-muted-dark">One run, end to end</span>
+                <span className="type-eyebrow text-muted-dark">One n8n run, end to end</span>
                 <span className="type-eyebrow flex items-center gap-2 text-accent-bright">
                     <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent-bright" />
                     Unattended
@@ -167,13 +193,13 @@ export default function AiAutomation() {
                     <PageHeaderBackground tone="dark" />
                     <Container className="relative z-10">
                         <Reveal className="flex flex-col items-start gap-8">
-                            <Eyebrow tone="dark">AI Automation</Eyebrow>
+                            <Eyebrow tone="dark">AI Automation · n8n</Eyebrow>
                             <h1 className="type-display text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] text-paper max-w-[14ch]">
                                 Put the repeat work on <em className="italic text-accent-bright">autopilot</em>.
                             </h1>
                             <p className="text-muted-dark text-lg md:text-xl max-w-[56ch] leading-relaxed">
-                                Chatbots, AI agents and automated workflows that handle the routine, so your team
-                                handles the exceptions.
+                                We build automations on n8n — workflows and AI agents that handle the routine, so
+                                your team handles the exceptions. Hosted on your infrastructure, owned by you.
                             </p>
                             <Button tone="dark" variant="accent" arrow onClick={openBooking}>
                                 Automate a workflow
@@ -206,10 +232,10 @@ export default function AiAutomation() {
                                         they are a full-time job.
                                     </p>
                                     <p>
-                                        We build automations that run that loop for you — a bot that answers from
-                                        your docs, an agent that drafts and files, a pipeline that moves data
-                                        between your tools. Always scoped to one workflow first, measured in hours
-                                        saved per week.
+                                        We build automations that run that loop for you, on n8n — a bot that
+                                        answers from your docs, an agent that drafts and files, a workflow that
+                                        moves data between your tools. Always scoped to one process first, measured
+                                        in hours saved per week.
                                     </p>
                                     <p>
                                         Anything the automation is unsure about goes to a person. You get the speed
@@ -222,10 +248,43 @@ export default function AiAutomation() {
                                 <PipelineDiagram />
                                 <div className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4">
                                     <IconBox icon={Workflow} />
-                                    <span className="type-eyebrow text-ink">Runs while you sleep</span>
+                                    <span className="type-eyebrow text-ink">One n8n run, start to finish</span>
                                 </div>
                             </Reveal>
                         </div>
+                    </Container>
+                </section>
+
+                {/* Why n8n — the engine, and what the client keeps */}
+                <section aria-labelledby="engine-heading" className="band-dark section-pad border-b border-line-dark">
+                    <Container className="flex flex-col gap-12 md:gap-16">
+                        <SectionHeading
+                            id="engine-heading"
+                            tone="dark"
+                            eyebrow="The engine"
+                            title={
+                                <>
+                                    Built on <em>n8n</em>, hosted on your terms.
+                                </>
+                            }
+                            lede="An open-source automation platform we run for you — so the workflows stay yours, the data stays where you put it, and the bill does not scale with every task."
+                        />
+
+                        <Stagger as="ul" className="grid gap-4 md:grid-cols-2 md:gap-6">
+                            {n8nReasons.map(({ title, desc, icon }) => (
+                                <MotionLi
+                                    key={title}
+                                    variants={staggerChild}
+                                    className="flex flex-col gap-4 rounded-2xl border border-line-dark bg-ink-2 p-6 transition-colors duration-300 hover:border-muted-dark md:p-8"
+                                >
+                                    <IconBox icon={icon} tone="dark" />
+                                    <h3 className="font-sans text-xl font-semibold tracking-tight text-paper md:text-2xl">
+                                        {title}
+                                    </h3>
+                                    <p className="text-base leading-relaxed text-muted-dark md:text-lg">{desc}</p>
+                                </MotionLi>
+                            ))}
+                        </Stagger>
                     </Container>
                 </section>
 
@@ -279,7 +338,7 @@ export default function AiAutomation() {
                             eyebrow="Our automation stack"
                             title={
                                 <>
-                                    Proven tools, wired to <em>your</em> systems.
+                                    n8n at the centre, wired to <em>your</em> systems.
                                 </>
                             }
                         />
@@ -321,6 +380,7 @@ export default function AiAutomation() {
                                             From audit to <em>unattended</em>.
                                         </>
                                     }
+                                    lede="One workflow at a time. You see a working automation in week one."
                                 />
                             </div>
 

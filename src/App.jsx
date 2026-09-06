@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
 import ScrollToTop from "./components/ScrollToTop";
 import SmoothScroll from "./components/motion/SmoothScroll";
@@ -19,7 +19,6 @@ const AiMachineLearning = lazy(() => import("./pages/AiMachineLearning"));
 const AiAutomation = lazy(() => import("./pages/AiAutomation"));
 const CloudSolutions = lazy(() => import("./pages/CloudSolutions"));
 const UiUxDesign = lazy(() => import("./pages/UiUxDesign"));
-const DatabaseManagement = lazy(() => import("./pages/DatabaseManagement"));
 const CustomSoftware = lazy(() => import("./pages/CustomSoftware"));
 // Industry pages
 const EcommerceSolutions = lazy(() => import("./pages/industries/EcommerceSolutions"));
@@ -53,7 +52,12 @@ export default function App() {
             <Route path="/services/ai-automation" element={<AiAutomation />} />
             <Route path="/services/cloud-solutions" element={<CloudSolutions />} />
             <Route path="/services/ui-ux-design" element={<UiUxDesign />} />
-            <Route path="/services/database-management" element={<DatabaseManagement />} />
+            {/* Database Management was retired as a standalone service; Cloud Solutions covers
+                database setup, migration and tuning. Keep the old URL alive for existing links. */}
+            <Route
+                path="/services/database-management"
+                element={<Navigate to="/services/cloud-solutions" replace />}
+            />
             <Route path="/services/custom-software" element={<CustomSoftware />} />
             {/* Industry routes */}
             <Route path="/industries/ecommercesolutions" element={<EcommerceSolutions />} />

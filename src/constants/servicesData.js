@@ -6,7 +6,6 @@ import {
     Zap,
     ShoppingCart,
     Palette,
-    Database,
     Code2,
 } from "lucide-react";
 
@@ -38,8 +37,8 @@ export const services = [
     {
         icon: Bot,
         title: "AI Automation",
-        desc: "Chatbots, AI agents and automated workflows that take repeat work off your team.",
-        points: ["Chatbots & AI agents", "Workflow automation", "LLM & API integrations"],
+        desc: "n8n workflows and AI agents that take the repeat work off your team.",
+        points: ["n8n workflows", "Chatbots & AI agents", "CRM & tool integrations"],
         path: "/services/ai-automation"
     },
     {
@@ -64,13 +63,6 @@ export const services = [
         desc: "High-conversion digital storefronts and marketplaces.",
         points: ["Storefronts", "Payments & checkout", "Inventory & orders"],
         path: "/industries/ecommercesolutions"
-    },
-    {
-        icon: Database,
-        title: "Database Management",
-        desc: "Robust database design, optimization, and maintenance.",
-        points: ["Schema design", "Backups", "Performance tuning"],
-        path: "/services/database-management"
     },
     {
         icon: Code2,

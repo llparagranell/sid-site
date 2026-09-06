@@ -44,13 +44,13 @@ const CATEGORIES = [
     },
     {
         id: "ai",
-        label: "AI & data",
-        note: "LLM features wired into real product flows. Python for the data work.",
-        items: ["LLM integrations", "Python"],
+        label: "AI & automation",
+        note: "n8n runs the workflows. LLM features wired into real product flows, Python for the data work.",
+        items: ["n8n", "LLM integrations", "Python"],
     },
 ];
 
-const TOOL_COUNT = CATEGORIES.reduce((n, c) => n + c.items.length, 0); // 19
+const TOOL_COUNT = CATEGORIES.reduce((n, c) => n + c.items.length, 0); // 20
 
 export default function TechStack() {
     return (

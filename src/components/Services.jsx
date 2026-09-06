@@ -25,15 +25,15 @@ const GROUP_DEFS = [
     {
         id: "scale",
         word: "Scale",
-        description: "Cloud infrastructure and databases that hold up as traffic, data and the team grow.",
-        titles: ["Cloud Solutions", "Database Management"],
+        description: "Cloud infrastructure, databases and migrations that hold up as traffic, data and the team grow.",
+        titles: ["Cloud Solutions"],
     },
     {
         id: "ai",
         word: "AI",
         description:
-            "Predictive models, language and vision features, chatbots and automated workflows — and the pipelines to run them in production.",
-        titles: ["AI & Machine Learning", "AI Automation"],
+            "n8n workflows, chatbots and agents that run the repeat work — plus predictive models and the pipelines to keep them in production.",
+        titles: ["AI Automation", "AI & Machine Learning"],
     },
 ];
 
@@ -45,7 +45,7 @@ const NOTES = {
 
 const byTitle = new Map(services.map((service) => [service.title, service]));
 
-// One running index across all groups (Build 01–04, Design 05, Scale 06–07, AI 08–09).
+// One running index across all groups (Build 01–04, Design 05, Scale 06, AI 07–08).
 const GROUPS = GROUP_DEFS.reduce((groups, { titles, ...group }) => {
     const offset = groups.reduce((sum, g) => sum + g.items.length, 0);
     const items = titles
