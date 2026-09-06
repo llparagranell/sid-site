@@ -189,10 +189,10 @@ function HeroContent({ onBookClick }) {
             aria-labelledby="hero-title"
             initial={reduced ? "show" : "hidden"}
             animate={ready || reduced ? "show" : "hidden"}
-            className="band-dark relative flex items-center overflow-hidden border-b border-line-dark pt-28 pb-16 md:pt-32 md:pb-20 lg:min-h-[100svh] lg:pb-24"
+            className="band-dark relative flex items-center overflow-hidden border-b border-line-dark pt-28 pb-16 md:pt-32 md:pb-20 lg:min-h-[100svh] lg:pb-24 desk-short:pt-24 desk-short:pb-14"
         >
             <Container className="grid gap-10 md:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-                <div className="flex flex-col items-start gap-5 md:gap-8">
+                <div className="flex flex-col items-start gap-5 md:gap-8 desk-short:gap-6">
                     <MotionDiv custom={0} variants={rise}>
                         <Link
                             to="/case-studies"
@@ -212,7 +212,7 @@ function HeroContent({ onBookClick }) {
                         id="hero-title"
                         custom={1}
                         variants={rise}
-                        className="type-display text-5xl leading-[0.95] text-paper sm:text-6xl md:text-7xl lg:text-[6.5rem] xl:text-[7.25rem]"
+                        className="type-display text-5xl leading-[0.95] text-paper sm:text-6xl md:text-7xl lg:text-[6.5rem] xl:text-[7.25rem] desk-short:text-[4.75rem]"
                     >
                         <span className="sr-only">Engineering MVPs that matter.</span>
                         <span aria-hidden="true">
@@ -273,7 +273,7 @@ function HeroContent({ onBookClick }) {
                     aria-hidden="true"
                     custom={0.2}
                     variants={fade}
-                    className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[560px]"
+                    className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[560px] desk-short:max-w-[400px]"
                 >
                     <div className="relative h-full w-full">
                         {stageOn ? (

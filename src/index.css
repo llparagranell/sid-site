@@ -108,6 +108,14 @@ canvas {
 }
 
 /* ---------------------------------------------------------------------
+   Variants
+   --------------------------------------------------------------------- */
+/* Wide but short desktops — 1366x768, a 13" laptop, any window with a lot of
+   browser chrome. The hero's full-height display scale overflows the fold
+   there, so type, padding and the cube all step down under this variant. */
+@custom-variant desk-short (@media (min-width: 1024px) and (max-height: 940px));
+
+/* ---------------------------------------------------------------------
    Utilities — the shared vocabulary every section is built from
    --------------------------------------------------------------------- */
 @utility type-display {
