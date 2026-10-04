@@ -6,15 +6,14 @@ import HandUnderline from "./ui/HandUnderline";
 import { scrollToTarget, scrollToTop } from "../lib/scroll";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
-import footerLogo from "../assets/logo-lockup-light.png";
+import logoMark from "../assets/logo-mark-light.png";
 
 const EMAIL = "contact@devgrowth.com";
 const CONTACT_HASH = "#contact";
 const CONTACT_PATH = `/${CONTACT_HASH}`;
 
-/* Intrinsic size of the png lockup, so the slot is reserved before it loads. It is a stacked
-   mark (cube over the wordmark), so it needs height: at 112px "Solutions" is still legible. */
-const LOGO_SIZE = { width: 332, height: 320 };
+/* Intrinsic size of the cube mark png, so the slot is reserved before it loads. */
+const MARK_SIZE = { width: 176, height: 192 };
 
 /* Address block, typeset in mono. A line without `href` is plain text (the place). */
 const CONTACT = [
@@ -127,15 +126,22 @@ export default function Footer() {
                 {/* Colophon: who we are, where we are, the map of the site. */}
                 <div className="flex flex-col gap-10 border-t border-line-dark py-12 lg:grid lg:grid-cols-12 lg:gap-10">
                     <div className="lg:col-span-4">
-                        <img
-                            src={footerLogo}
-                            alt="DevGrowth Solutions"
-                            width={LOGO_SIZE.width}
-                            height={LOGO_SIZE.height}
-                            loading="lazy"
-                            decoding="async"
-                            className="h-28 w-auto"
-                        />
+                        {/* Horizontal lockup, same as the Navbar: cube mark beside the two-line wordmark. */}
+                        <div className="flex items-center gap-4">
+                            <img
+                                src={logoMark}
+                                alt=""
+                                width={MARK_SIZE.width}
+                                height={MARK_SIZE.height}
+                                loading="lazy"
+                                decoding="async"
+                                className="h-14 w-auto shrink-0"
+                            />
+                            <p className="flex flex-col leading-none">
+                                <span className="text-2xl font-bold tracking-tight text-paper">DevGrowth</span>
+                                <span className="mt-1 text-base tracking-wide text-muted-dark">Solutions</span>
+                            </p>
+                        </div>
                         <p className="mt-4 max-w-[36ch] text-sm leading-relaxed text-muted-dark">
                             Product engineering studio. MVPs for founders and growing businesses.
                         </p>
