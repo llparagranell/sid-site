@@ -4,7 +4,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
-import logoMark from "../assets/devgrowthlogo.jpeg";
+import logoMark from "../assets/logo-mark.png";
+import logoMarkLight from "../assets/logo-mark-light.png";
 import Container from "./ui/Container";
 import Button from "./ui/Button";
 import { EASE, staggerChild, staggerParent } from "./motion/constants";
@@ -29,8 +30,8 @@ const NAV = [
     { key: "about", label: "About", to: "/about", match: "/about" },
 ];
 
-/* Intrinsic size of the jpeg mark, so the 48px slot is reserved before it loads. */
-const MARK_SIZE = { width: 391, height: 243 };
+/* Intrinsic size of the cube mark png, so its slot is reserved before it loads. */
+const MARK_SIZE = { width: 176, height: 192 };
 
 const subscribeScroll = (callback) => {
     window.addEventListener("scroll", callback, { passive: true });
@@ -42,27 +43,25 @@ const getScrolledServer = () => false;
 function Logo({ overDark, onClick }) {
     return (
         <Link to="/" onClick={onClick} className="col-start-1 flex w-fit items-center gap-3">
-            {/* One jpeg mark for both states: on paper it sits in a white tile; over the dark band it is
-                inverted to light and screen-blended so its white background disappears into the ink. */}
-            <span
-                className={cx(
-                    "flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border transition-colors duration-300",
-                    overDark ? "border-transparent bg-transparent" : "border-line bg-surface",
-                )}
-            >
-                <img
-                    src={logoMark}
-                    alt="DevGrowth Solutions"
-                    width={MARK_SIZE.width}
-                    height={MARK_SIZE.height}
+            {/* Two cut-outs of the same mark: ink faces on paper, paper faces over the dark band.
+                The indigo top face is identical in both, so the swap reads as a light change. */}
+            <img
+                src={overDark ? logoMarkLight : logoMark}
+                alt="DevGrowth Solutions"
+                width={MARK_SIZE.width}
+                height={MARK_SIZE.height}
+                className="h-11 w-auto shrink-0"
+            />
+            <span aria-hidden="true" className="flex flex-col leading-none">
+                <span className="whitespace-nowrap text-lg font-bold tracking-tight">DevGrowth</span>
+                <span
                     className={cx(
-                        "size-full object-contain transition-[filter] duration-300",
-                        overDark && "invert grayscale mix-blend-screen",
+                        "mt-0.5 whitespace-nowrap text-[13px] font-normal tracking-wide transition-colors duration-300",
+                        overDark ? "text-muted-dark" : "text-muted",
                     )}
-                />
-            </span>
-            <span aria-hidden="true" className="whitespace-nowrap text-lg font-semibold tracking-tight">
-                DevGrowth Solutions
+                >
+                    Solutions
+                </span>
             </span>
         </Link>
     );

@@ -6,15 +6,15 @@ import HandUnderline from "./ui/HandUnderline";
 import { scrollToTarget, scrollToTop } from "../lib/scroll";
 import { services } from "../constants/servicesData";
 import { industries } from "../constants/industryData";
-import footerLogo from "../assets/footerLogo-removebg-preview.png";
+import footerLogo from "../assets/logo-lockup-light.png";
 
 const EMAIL = "contact@devgrowth.com";
 const CONTACT_HASH = "#contact";
 const CONTACT_PATH = `/${CONTACT_HASH}`;
 
 /* Intrinsic size of the png lockup, so the slot is reserved before it loads. It is a stacked
-   mark (building over the wordmark), so it needs height: at 80px the wordmark is legible. */
-const LOGO_SIZE = { width: 301, height: 192 };
+   mark (cube over the wordmark), so it needs height: at 112px "Solutions" is still legible. */
+const LOGO_SIZE = { width: 332, height: 320 };
 
 /* Address block, typeset in mono. A line without `href` is plain text (the place). */
 const CONTACT = [
@@ -134,7 +134,7 @@ export default function Footer() {
                             height={LOGO_SIZE.height}
                             loading="lazy"
                             decoding="async"
-                            className="h-20 w-auto"
+                            className="h-28 w-auto"
                         />
                         <p className="mt-4 max-w-[36ch] text-sm leading-relaxed text-muted-dark">
                             Product engineering studio. MVPs for founders and growing businesses.

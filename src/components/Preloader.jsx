@@ -2,7 +2,7 @@ import { Component, useCallback, useLayoutEffect, useRef, useState } from "react
 import { AnimatePresence, motion } from "framer-motion";
 import { EASE } from "./motion/constants";
 import { ASSEMBLED_EVENT, stageEnabled } from "./hero/stage";
-import logo from "../assets/footerLogo-removebg-preview.png";
+import logo from "../assets/logo-mark-light.png";
 
 // Aliased once at module scope: the project ESLint config does not count `<motion.x>`
 // member expressions as a use of `motion`, PascalCase identifiers it does.
@@ -230,7 +230,7 @@ export default function Preloader() {
                             <MotionImg
                                 src={logo}
                                 alt=""
-                                width={301}
+                                width={176}
                                 height={192}
                                 draggable={false}
                                 fetchPriority="high"
