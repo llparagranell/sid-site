@@ -1,92 +1,154 @@
-import { motion } from "framer-motion";
-import { PenTool, Code2, Zap, Rocket } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import Container from "./ui/Container";
+import Button from "./ui/Button";
+import { EASE, VIEWPORT } from "./motion/constants";
+import { scrollToTarget } from "../lib/scroll";
 
-const steps = [
+const MotionSpan = motion.span;
+
+const STEPS = [
     {
-        title: "Planning & Design",
+        id: "discovery",
+        index: "01",
+        title: "Discovery & scope",
+        when: "Within one week",
         description:
-            "We start by understanding your brand, goals, and users, then craft a thoughtful design tailored to your vision.",
-        icon: PenTool,
+            "We start with your business goals, your users and the unit economics that have to work. Within a week you get a written scope, so the build is agreed before it begins.",
+        focus: "Business logic & unit economics",
     },
     {
-        title: "Development",
+        id: "architecture",
+        index: "02",
+        title: "Architecture",
+        when: "Before any code",
         description:
-            "Our team brings designs to life with clean, scalable, and high-performance code.",
-        icon: Code2,
+            "Before any code, we settle the stack, the data model and the user flows. Changing a diagram is cheap; changing a live database is not.",
+        focus: "Scalability & tech stack",
     },
     {
-        title: "Optimization & SEO",
+        id: "build",
+        index: "03",
+        title: "Build",
+        when: "Every week",
         description:
-            "We optimize for speed, accessibility, and SEO so your product performs and ranks well.",
-        icon: Zap,
+            "You see a working demo every week, not a status report. The code stays clean and modular, with performance and accessibility built in from the first commit.",
+        focus: "Rapid build & performance",
     },
     {
-        title: "Launch & Support",
+        id: "launch",
+        index: "04",
+        title: "Launch & scale",
+        when: "Go-live and after",
         description:
-            "After launch, we monitor, refine, and support your product for long-term success.",
-        icon: Rocket,
+            "We set up the cloud, run QA and put monitoring in place before go-live. After launch we stay on to fix, tune and extend the product as it grows.",
+        focus: "Cloud setup, QA & monitoring",
     },
 ];
 
-export default function ProcessSection() {
+/**
+ * The hairline above each move draws itself left to right the first time it scrolls into view.
+ * This is the one section on the homepage that draws a line; the text underneath never moves.
+ * Under reduced motion the rule renders already drawn. `reduced` is read once by the section
+ * and passed down so four rules share one media-query subscription.
+ */
+function DrawnRule({ reduced }) {
     return (
-        <section className="bg-brand-bg relative overflow-hidden py-24 sm:py-32 lg:py-40 border-y border-brand-dark/5">
-
-            {/* Background Transitions / Grids */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 75, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 75, 0.05) 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
-                }}
-            />
-
-            <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center relative z-10">
-
-                {/* Badge */}
-                <span className="inline-block mb-4 rounded-full border border-brand-dark/10 bg-brand-accent px-4 py-1 text-sm text-brand-dark font-bold uppercase tracking-widest text-xs">
-                    How it starts?
-                </span>
-
-                {/* Heading */}
-                <h2 className="mt-6 text-5xl md:text-7xl font-black text-brand-dark leading-[0.9] tracking-tight">
-                    See what you <br />
-                    <span className="italic font-light text-brand-dark">can expect.</span>
-                </h2>
-
-                {/* Steps */}
-                <div className="mt-12 sm:mt-16 space-y-8 sm:space-y-10">
-                    {steps.map((step, i) => {
-                        const Icon = step.icon;
-                        return (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                whileTap={{ scale: 0.98 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: i * 0.1 }}
-                                className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 rounded-3xl bg-brand-accent/20 backdrop-blur-sm px-6 sm:px-8 py-8 text-left border border-brand-dark/5 hover:border-brand-dark/20 transition-all"
-                            >
-                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-dark text-white shadow-lg">
-                                    <Icon size={22} />
-                                </div>
-
-                                <div>
-                                    <h3 className="text-xl font-bold text-brand-dark">
-                                        {step.title}
-                                    </h3>
-                                    <p className="mt-2 text-brand-dark/70 text-base leading-relaxed font-medium">
-                                        {step.description}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-                </div>
-            </div>
-        </section>
+        <MotionSpan
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-px origin-left bg-line-dark"
+            initial={reduced ? false : { scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.9, ease: EASE }}
+        />
     );
 }
 
+export default function ProcessSection() {
+    const reduced = useReducedMotion();
+    return (
+        <section
+            id="process"
+            aria-labelledby="process-heading"
+            className="band-dark section-pad-tight overflow-clip border-b border-line-dark"
+        >
+            <Container>
+                {/* 4/8 at lg, 5/7 from xl: at 1024px the 5/7 split left the description column
+                    under 200px wide, so the list gets more room until the container is full width. */}
+                <div className="lg:grid lg:grid-cols-[4fr_8fr] lg:gap-12 xl:grid-cols-[5fr_7fr] xl:gap-20">
+                    <div className="lg:sticky lg:top-28 lg:self-start">
+                        {/* The numeral is part of the heading: it overhangs the gutter on purpose
+                            (the section clips it) and is read aloud as "Four". */}
+                        <h2 id="process-heading" className="type-display text-paper">
+                            <span
+                                aria-hidden="true"
+                                className="-ml-1 block select-none text-[8rem] leading-[0.8] lg:-ml-14 lg:text-[14rem]"
+                            >
+                                4
+                            </span>
+                            <span className="sr-only">Four </span>
+                            <span className="mt-3 block max-w-[14ch] text-3xl lg:text-5xl">
+                                moves, from handshake to launch.
+                            </span>
+                        </h2>
+                        <p className="mt-4 max-w-[56ch] text-base leading-relaxed text-muted-dark">
+                            No black box. You see the scope before we start, the build every week, and the numbers
+                            after launch.
+                        </p>
+                        {/* Wrapped, not `hidden` on the Button: Tailwind emits Button's base `.inline-flex`
+                            after `.hidden`, so a `hidden` class on the Button itself would lose on phones. */}
+                        <div className="mt-8 hidden lg:block">
+                            <Button tone="dark" variant="primary" arrow onClick={() => scrollToTarget("#contact")}>
+                                Scope my project
+                            </Button>
+                        </div>
+                    </div>
 
+                    {/* role="list" keeps list semantics in VoiceOver once preflight strips the markers.
+                        The list closes with a static rule; only the four rules above each move draw. */}
+                    <ol role="list" className="mt-10 border-b border-line-dark lg:mt-0">
+                        {STEPS.map((step) => (
+                            <li
+                                key={step.id}
+                                className="relative pb-5 pt-5 lg:grid lg:grid-cols-[4rem_1fr_11rem] lg:items-baseline lg:gap-x-6 lg:pb-10 lg:pt-8"
+                            >
+                                <DrawnRule reduced={reduced} />
+                                {/* Phone: index left, timing right on one baseline.
+                                    Desktop: the wrapper dissolves and both become grid cells. */}
+                                <div className="flex items-baseline justify-between lg:contents">
+                                    <span className="type-mono text-xs text-muted-dark lg:col-start-1 lg:row-start-1">
+                                        {step.index}
+                                    </span>
+                                    <span className="type-mono text-xs text-muted-dark lg:col-start-3 lg:row-start-1 lg:text-right">
+                                        {step.when}
+                                    </span>
+                                </div>
+                                <div className="lg:col-start-2 lg:row-start-1">
+                                    <h3 className="mt-3 font-sans text-2xl font-semibold tracking-tight text-paper lg:mt-0">
+                                        {step.title}
+                                    </h3>
+                                    <p className="mt-2 max-w-[56ch] text-base leading-relaxed text-muted-dark">
+                                        {step.description}
+                                    </p>
+                                    <p className="type-mono mt-3 text-xs text-muted-dark">
+                                        Focus — {step.focus}
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
 
+                <Button
+                    tone="dark"
+                    variant="primary"
+                    arrow
+                    className="mt-8 min-h-12 w-full sm:w-auto lg:hidden"
+                    onClick={() => scrollToTarget("#contact")}
+                >
+                    Scope my project
+                </Button>
+            </Container>
+        </section>
+    );
+}

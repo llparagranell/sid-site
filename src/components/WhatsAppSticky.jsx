@@ -1,212 +1,167 @@
-import { useState, useEffect } from "react";
-import { motion as m, AnimatePresence as AP } from "framer-motion";
-import { X, Send } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import { AnimatePresence, MotionConfig, motion as Motion } from "framer-motion";
+import { X } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import Button from "./ui/Button";
+import { EASE } from "./motion/constants";
 
-const WhatsAppIcon = ({ size = 24, className = "" }) => (
-    <svg
-        viewBox="0 0 24 24"
-        width={size}
-        height={size}
-        fill="currentColor"
-        className={className}
-    >
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-    </svg>
-);
+const PHONE_NUMBER = "916260045626";
+const EMPTY_FORM = { name: "", email: "", details: "" };
+
+const fieldClass =
+    "w-full rounded-lg border border-line bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-muted transition-colors duration-300 focus:border-accent";
 
 export default function WhatsAppSticky() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        details: ""
-    });
+    const [open, setOpen] = useState(false);
+    const [form, setForm] = useState(EMPTY_FORM);
+    const rootRef = useRef(null);
+    const triggerRef = useRef(null);
+    const firstFieldRef = useRef(null);
+    const panelId = useId();
+    const titleId = useId();
 
-    // Lock body scroll when modal open
+    /* While open: move focus into the panel and dismiss on any press outside the widget. */
     useEffect(() => {
-        document.body.style.overflow = isOpen ? "hidden" : "unset";
-        return () => (document.body.style.overflow = "unset");
-    }, [isOpen]);
+        if (!open) return undefined;
+        firstFieldRef.current?.focus();
+        const onPointerDown = (event) => {
+            if (!rootRef.current?.contains(event.target)) setOpen(false);
+        };
+        document.addEventListener("pointerdown", onPointerDown);
+        return () => document.removeEventListener("pointerdown", onPointerDown);
+    }, [open]);
 
-    // ESC close
-    useEffect(() => {
-        const handleEsc = (e) => e.key === "Escape" && setIsOpen(false);
-        window.addEventListener("keydown", handleEsc);
-        return () => window.removeEventListener("keydown", handleEsc);
-    }, []);
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const close = () => {
+        setOpen(false);
+        triggerRef.current?.focus();
     };
 
-    const handleWhatsApp = (e) => {
-        e.preventDefault();
-        const phoneNumber = "916260045626";
+    const onPanelKeyDown = (event) => {
+        if (event.key === "Escape") close();
+    };
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setForm((current) => ({ ...current, [name]: value }));
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
         const message = `
 New Inquiry:
 
-Name: ${formData.name}
-Email: ${formData.email}
-Project Details: ${formData.details}
+Name: ${form.name}
+Email: ${form.email}
+Project Details: ${form.details}
         `;
-
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-            message.trim()
-        )}`;
-
-        window.open(whatsappURL, "_blank");
-
-        setIsOpen(false);
-        setFormData({ name: "", email: "", details: "" });
+        const whatsappURL = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(message.trim())}`;
+        window.open(whatsappURL, "_blank", "noopener,noreferrer");
+        setForm(EMPTY_FORM);
+        close();
     };
 
     return (
-        <>
-            {/* Sticky Button */}
-            <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3">
-
-                {/* Tooltip */}
-                <m.div
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 10 }}
-                    className="hidden sm:block bg-white px-4 py-2 rounded-xl shadow-lg border border-black/5 text-sm font-semibold text-gray-700 pointer-events-none"
-                >
-                    Chat with us 👋
-                </m.div>
-
-                {/* Button */}
-                <div className="relative">
-                    {/* Soft Pulse */}
-                    <m.div
-                        animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }}
-                        transition={{ duration: 2.5, repeat: Infinity }}
-                        className="absolute inset-0 bg-[#25D366] rounded-full blur-lg"
-                    />
-
-                    <m.button
-                        whileHover={{ scale: 1.08 }}
-                        whileTap={{ scale: 0.92 }}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        onClick={() => setIsOpen(true)}
-                        className="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full bg-[#25D366] shadow-2xl border-4 border-white/30"
-                    >
-                        <WhatsAppIcon className="text-white w-7 h-7 sm:w-8 sm:h-8" />
-                    </m.button>
-                </div>
-            </div>
-
-            {/* Modal */}
-            <AP>
-                {isOpen && (
-                    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center">
-
-                        {/* Backdrop */}
-                        <m.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsOpen(false)}
-                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-                        />
-
-                        {/* Modal */}
-                        <m.div
-                            initial={{ y: 80, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: 60, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="
-                                relative w-full sm:max-w-md
-                                bg-white
-                                rounded-t-[32px] sm:rounded-[32px]
-                                shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)]
-                                max-h-[90vh]
-                                flex flex-col
-                                overflow-hidden
-                            "
+        <div ref={rootRef} className="fixed right-6 bottom-6 z-30 flex flex-col items-end gap-3">
+            <MotionConfig reducedMotion="user">
+                <AnimatePresence>
+                    {open && (
+                        <Motion.div
+                            key="whatsapp-panel"
+                            id={panelId}
+                            role="dialog"
+                            aria-labelledby={titleId}
+                            onKeyDown={onPanelKeyDown}
+                            data-lenis-prevent
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 12 }}
+                            transition={{ duration: 0.3, ease: EASE }}
+                            className="max-h-[calc(100dvh-7rem)] w-[calc(100vw-3rem)] max-w-sm overflow-y-auto overscroll-contain rounded-2xl border border-line bg-surface p-5 text-ink shadow-lg shadow-ink/10"
                         >
-                            {/* Mobile Handle */}
-                            <div className="sm:hidden flex justify-center pt-3">
-                                <div className="w-10 h-1.5 bg-gray-300 rounded-full" />
-                            </div>
-
-                            {/* Header */}
-                            <div className="relative px-6 sm:px-8 pt-6 pb-5 bg-gradient-to-br from-brand-dark to-black text-white">
-                                <button
-                                    onClick={() => setIsOpen(false)}
-                                    className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 transition"
-                                >
-                                    <X size={18} />
-                                </button>
-
-                                <div className="flex flex-col items-center text-center">
-                                    <div className="w-14 h-14 bg-[#25D366]/10 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm">
-                                        <WhatsAppIcon size={32} className="text-[#25D366]" />
-                                    </div>
-                                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                                        Let's Talk
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="flex flex-col gap-2">
+                                    <span className="type-eyebrow text-muted">WhatsApp</span>
+                                    <h3
+                                        id={titleId}
+                                        className="font-sans text-xl font-semibold tracking-tight text-ink"
+                                    >
+                                        Tell us about your project
                                     </h3>
-                                    <p className="text-white/70 text-sm mt-2">
-                                        Tell us about your project — we reply fast.
+                                    <p className="text-sm leading-relaxed text-muted">
+                                        We reply on WhatsApp.
                                     </p>
                                 </div>
+                                <button
+                                    type="button"
+                                    onClick={close}
+                                    aria-label="Close chat"
+                                    className="-mt-2 -mr-2 inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-line text-muted transition-colors duration-300 hover:border-ink hover:text-ink"
+                                >
+                                    <X size={16} aria-hidden="true" />
+                                </button>
                             </div>
 
-                            {/* Form Body */}
-                            <form
-                                onSubmit={handleWhatsApp}
-                                className="px-6 sm:px-8 py-6 space-y-5 overflow-y-auto"
-                            >
-                                <input
-                                    required
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="Full Name"
-                                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:ring-4 focus:ring-black/5 focus:border-black/20 outline-none"
-                                />
-
-                                <input
-                                    required
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="Email Address"
-                                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:ring-4 focus:ring-black/5 focus:border-black/20 outline-none"
-                                />
-
-                                <textarea
-                                    required
-                                    rows={3}
-                                    name="details"
-                                    value={formData.details}
-                                    onChange={handleChange}
-                                    placeholder="Tell us about your project..."
-                                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm resize-none focus:ring-4 focus:ring-black/5 focus:border-black/20 outline-none"
-                                />
-
-                                <m.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    type="submit"
-                                    className="w-full rounded-xl bg-brand-dark py-4 text-white font-semibold shadow-lg flex items-center justify-center gap-2"
-                                >
-                                    Start Chat
-                                    <Send size={16} />
-                                </m.button>
-
-                                <p className="text-center text-xs text-gray-400">
-                                    Typical response time: under 2 hours
-                                </p>
+                            <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
+                                <label className="flex flex-col gap-1.5">
+                                    <span className="sr-only">Full name</span>
+                                    <input
+                                        ref={firstFieldRef}
+                                        required
+                                        name="name"
+                                        autoComplete="name"
+                                        value={form.name}
+                                        onChange={handleChange}
+                                        placeholder="Full name"
+                                        className={fieldClass}
+                                    />
+                                </label>
+                                <label className="flex flex-col gap-1.5">
+                                    <span className="sr-only">Email address</span>
+                                    <input
+                                        required
+                                        type="email"
+                                        name="email"
+                                        autoComplete="email"
+                                        value={form.email}
+                                        onChange={handleChange}
+                                        placeholder="Email address"
+                                        className={fieldClass}
+                                    />
+                                </label>
+                                <label className="flex flex-col gap-1.5">
+                                    <span className="sr-only">Project details</span>
+                                    <textarea
+                                        required
+                                        rows={3}
+                                        name="details"
+                                        value={form.details}
+                                        onChange={handleChange}
+                                        placeholder="What are you building?"
+                                        className={`${fieldClass} resize-none`}
+                                    />
+                                </label>
+                                <Button type="submit" variant="accent" arrow className="mt-1 w-full">
+                                    Open WhatsApp
+                                </Button>
                             </form>
-                        </m.div>
-                    </div>
-                )}
-            </AP>
-        </>
+                        </Motion.div>
+                    )}
+                </AnimatePresence>
+            </MotionConfig>
+
+            {/* #25D366 is WhatsApp's brand green: the one non-token color allowed on the site, kept for recognition. */}
+            <button
+                ref={triggerRef}
+                type="button"
+                onClick={() => setOpen((current) => !current)}
+                aria-label="Chat on WhatsApp"
+                aria-haspopup="dialog"
+                aria-expanded={open}
+                aria-controls={open ? panelId : undefined}
+                className="inline-flex h-[52px] w-[52px] cursor-pointer items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-ink/20 transition-transform duration-300 ease-out hover:-translate-y-0.5"
+            >
+                <FaWhatsapp size={26} aria-hidden="true" />
+            </button>
+        </div>
     );
 }

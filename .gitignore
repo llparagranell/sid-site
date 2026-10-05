@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only material
+.reference-shots/
+.playwright-mcp/
+src/components/hero/variants/

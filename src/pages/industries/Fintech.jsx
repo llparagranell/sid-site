@@ -1,46 +1,91 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import {
-    CreditCard, Smartphone, ShieldCheck, Cloud, Brain, CheckCircle2,
-    Search, Layers, Code2, Rocket, RefreshCcw, Database
+    Brain,
+    CheckCircle2,
+    Cloud,
+    Code2,
+    CreditCard,
+    Database,
+    RefreshCcw,
+    Rocket,
+    Search,
+    ShieldCheck,
+    Smartphone,
 } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BookingModal from "../../components/BookingModal";
 import PageHeaderBackground from "../../components/PageHeaderBackground";
+import Container from "../../components/ui/Container";
+import Eyebrow from "../../components/ui/Eyebrow";
+import SectionHeading from "../../components/ui/SectionHeading";
+import Button from "../../components/ui/Button";
+import Reveal, { Stagger } from "../../components/motion/Reveal";
+import { staggerChild } from "../../components/motion/constants";
+
+// PascalCase alias: the project ESLint config only counts this as a use of `motion`.
+const MotionItem = motion.li;
 
 const solutions = [
     {
         title: "Payment & Transaction Platforms",
         desc: "Built to handle financial operations smoothly with real-time processing and multi-currency support.",
-        points: ["Secure payment gateway integrations", "Wallet systems", "Real-time transaction processing", "Transaction history & reporting"],
-        icon: CreditCard
+        points: [
+            "Secure payment gateway integrations",
+            "Wallet systems",
+            "Real-time transaction processing",
+            "Transaction history & reporting",
+        ],
+        icon: CreditCard,
     },
     {
         title: "Fintech Mobile Applications",
         desc: "Fast, secure, and user-friendly mobile apps for digital finance.",
-        points: ["Digital wallet apps", "Investment & trading platforms", "Loan management systems", "Secure authentication (OTP, MFA)"],
-        icon: Smartphone
+        points: [
+            "Digital wallet apps",
+            "Investment & trading platforms",
+            "Loan management systems",
+            "Secure authentication (OTP, MFA)",
+        ],
+        icon: Smartphone,
     },
     {
         title: "Security & Data Protection",
         desc: "Security is never optional in fintech. Your users' trust depends on it.",
-        points: ["Encrypted data storage", "Secure API architecture", "Role-based access control", "Fraud detection integrations"],
-        icon: ShieldCheck
+        points: [
+            "Encrypted data storage",
+            "Secure API architecture",
+            "Role-based access control",
+            "Fraud detection integrations",
+        ],
+        icon: ShieldCheck,
     },
     {
         title: "Cloud Infrastructure for Fintech",
         desc: "Designed to perform under pressure with high-availability and real-time architecture.",
-        points: ["Scalable cloud deployment", "High-availability architecture", "Load balancing", "Continuous monitoring"],
-        icon: Cloud
+        points: [
+            "Scalable cloud deployment",
+            "High-availability architecture",
+            "Load balancing",
+            "Continuous monitoring",
+        ],
+        icon: Cloud,
     },
     {
         title: "AI in Fintech",
         desc: "Helping you make data-driven decisions with intelligent features.",
-        points: ["Fraud detection models", "Risk assessment systems", "Credit scoring models", "Predictive analytics"],
-        icon: Brain
-    }
+        points: [
+            "Fraud detection models",
+            "Risk assessment systems",
+            "Credit scoring models",
+            "Predictive analytics",
+        ],
+        icon: Brain,
+    },
 ];
+
+const securityFeatures = ["End-to-End Encryption", "Biometric Ready", "PCI-DSS Compliant", "Audit Logs"];
 
 const whyChoose = [
     "Strong focus on security and stability",
@@ -51,243 +96,372 @@ const whyChoose = [
 ];
 
 const processSteps = [
-    { id: "01", title: "Requirement Discovery", desc: "Understanding your fintech product's goals and compliance needs.", icon: Search },
-    { id: "02", title: "Security-First Architecture", desc: "Designing systems with security and scalability at the core.", icon: ShieldCheck },
-    { id: "03", title: "Development & Integration", desc: "Building payment flows, APIs, and secure user authentication.", icon: Code2 },
-    { id: "04", title: "Performance Testing", desc: "Load testing, penetration testing, and performance validation.", icon: Database },
-    { id: "05", title: "Compliance & Launch", desc: "Ensuring regulatory alignment and controlled deployment.", icon: Rocket },
-    { id: "06", title: "Monitoring & Improvement", desc: "Real-time monitoring, fraud detection, and ongoing optimization.", icon: RefreshCcw },
+    {
+        id: "01",
+        title: "Requirement Discovery",
+        desc: "Understanding your fintech product's goals and compliance needs.",
+        icon: Search,
+    },
+    {
+        id: "02",
+        title: "Security-First Architecture",
+        desc: "Designing systems with security and scalability at the core.",
+        icon: ShieldCheck,
+    },
+    {
+        id: "03",
+        title: "Development & Integration",
+        desc: "Building payment flows, APIs, and secure user authentication.",
+        icon: Code2,
+    },
+    {
+        id: "04",
+        title: "Performance Testing",
+        desc: "Load testing, penetration testing, and performance validation.",
+        icon: Database,
+    },
+    {
+        id: "05",
+        title: "Compliance & Launch",
+        desc: "Ensuring regulatory alignment and controlled deployment.",
+        icon: Rocket,
+    },
+    {
+        id: "06",
+        title: "Monitoring & Improvement",
+        desc: "Real-time monitoring, fraud detection, and ongoing optimization.",
+        icon: RefreshCcw,
+    },
 ];
 
-const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } };
-const itemVariants = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
+const TRUST_IMAGE = "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=600&q=80";
+const WHY_IMAGE = "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80";
+
+const lightCard =
+    "flex flex-col gap-5 rounded-2xl border border-line bg-surface p-6 transition-colors duration-300 hover:border-muted";
+const lightIconBox = "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent";
 
 export default function Fintech() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
-    const toggleBooking = () => setIsBookingOpen(!isBookingOpen);
+    const openBooking = () => setIsBookingOpen(true);
+    const closeBooking = () => setIsBookingOpen(false);
 
     return (
-        <div className="relative min-h-screen bg-brand-bg font-sans selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
-            <Navbar onBookClick={toggleBooking} />
+        <div className="relative min-h-screen overflow-x-clip bg-paper text-ink font-sans">
+            <Navbar onBookClick={openBooking} />
 
-            <section className="relative pt-44 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-brand-bg">
-                <PageHeaderBackground />
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
-                    <div className="text-center">
-                        <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-block mb-6 text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40">FINTECH INDUSTRY</motion.span>
-                        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-brand-dark mb-6">
-                            Secure and Scalable Technology <br />
-                            <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.4 }} className="italic font-light text-brand-dark/70">for Modern Financial Businesses.</motion.span>
-                        </motion.h1>
-                        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="text-brand-dark/60 font-medium text-lg max-w-2xl mx-auto mb-10">
-                            We build reliable digital platforms that help fintech companies innovate while maintaining trust and security.
-                        </motion.p>
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
-                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={toggleBooking} className="bg-brand-dark text-white px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-sm shadow-2xl transition-all cursor-pointer flex items-center gap-3">
-                                Build Your Fintech Platform <CreditCard size={18} />
-                            </motion.button>
-                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={toggleBooking} className="bg-white border-2 border-brand-dark/10 text-brand-dark px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-sm transition-all cursor-pointer">
-                                Book Free Consultation
-                            </motion.button>
-                        </motion.div>
-                    </div>
-                </div>
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute -top-20 -left-20 w-96 h-96 border border-brand-dark/5 rounded-full pointer-events-none opacity-20" />
-            </section>
-
-            <section className="py-24 md:py-40 bg-brand-dark text-white relative overflow-hidden">
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.1]" style={{ backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)`, backgroundSize: '100px 100px' }} />
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-none mb-10 text-brand-accent italic font-light">
-                                Finance Runs on Trust — <br /><span className="text-white not-italic font-black">Technology Must</span><br />Support It.
-                            </h2>
-                            <motion.div initial={{ width: 0 }} whileInView={{ width: 100 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }} className="h-1 bg-brand-accent mb-10" />
-                            <div className="space-y-6 text-lg text-white/60 font-medium leading-relaxed">
-                                <p>In fintech, performance matters. But security matters even more. Whether you're building a payment platform, lending app, or digital banking solution — your users are trusting you with their money and data.</p>
-                                <p>At Devgrowth Solutions, we build fintech systems with stability, security, and scalability at the core. No unnecessary complexity. Just reliable systems that work.</p>
-                            </div>
-                        </motion.div>
-                        <div className="relative flex justify-center">
-                            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease: "backOut" }}>
-                                <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-[340px] h-[420px] border-[12px] border-white/10 rounded-[48px] overflow-hidden bg-brand-bg relative shadow-2xl mx-auto">
-                                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=600&q=80" alt="Fintech Solutions" className="w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-700" />
-                                    <div className="absolute inset-0 bg-brand-dark/40 flex items-end justify-center pb-8">
-                                        <div className="p-4 bg-brand-accent/90 backdrop-blur-md rounded-2xl text-brand-dark text-center shadow-2xl">
-                                            <CreditCard size={24} className="mx-auto mb-1" />
-                                            <span className="text-xs font-black uppercase tracking-widest">Security-First Fintech</span>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Finance Transaction Visual (Unique Component) */}
-            <section className="py-24 bg-brand-bg relative overflow-hidden border-b border-brand-dark/5">
-                <div className="mx-auto max-w-7xl px-6 lg:px-16">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="w-full lg:w-1/2 flex justify-center order-2 lg:order-1">
-                            <div className="relative w-full h-[400px] bg-brand-dark rounded-[48px] overflow-hidden shadow-2xl p-10 flex flex-col items-center justify-center">
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                    className="absolute inset-0 opacity-5"
-                                >
-                                    <div className="w-full h-full border-[40px] border-dashed border-white rounded-full scale-125" />
-                                </motion.div>
-
-                                <div className="relative z-10 text-center">
-                                    <motion.div
-                                        initial={{ scale: 0.5, opacity: 0 }}
-                                        whileInView={{ scale: 1, opacity: 1 }}
-                                        className="w-32 h-32 bg-brand-accent rounded-[32px] flex items-center justify-center text-brand-dark shadow-[0_0_50px_rgba(162,237,219,0.3)] mb-8 mx-auto"
-                                    >
-                                        <ShieldCheck size={56} />
-                                    </motion.div>
-
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-2 justify-center">
-                                            <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                                            <span className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase">Secure Network Active</span>
-                                        </div>
-                                        <div className="font-mono text-brand-accent text-2xl font-black">AES-256</div>
-                                    </div>
-                                </div>
-
-                                {/* Floating Transaction Dots */}
-                                <div className="absolute inset-0 pointer-events-none">
-                                    {[...Array(5)].map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ y: 200, opacity: 0 }}
-                                            animate={{ y: -200, opacity: [0, 1, 0] }}
-                                            transition={{ duration: 3, delay: i * 0.6, repeat: Infinity, ease: "linear" }}
-                                            className="absolute left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-t from-transparent via-brand-accent to-transparent"
-                                            style={{ left: `${30 + i * 10}%` }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full lg:w-1/2 order-1 lg:order-2">
-                            <motion.span
-                                initial={{ opacity: 0, y: 10 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                className="inline-block mb-4 text-xs font-bold tracking-[0.3em] text-brand-dark opacity-30 uppercase"
-                            >
-                                Security Infrastructure
-                            </motion.span>
-                            <h3 className="text-4xl md:text-5xl font-black text-brand-dark tracking-tighter mb-8 leading-tight">
-                                Bank-Grade <br />
-                                <span className="italic font-light">Data Security.</span>
-                            </h3>
-                            <p className="text-brand-dark/60 text-lg font-medium leading-relaxed mb-10">
-                                We don't just add security; we build it into the DNA of your product. Our fintech solutions utilize multi-layer encryption, secure vaulting, and real-time threat monitoring to protect every single transaction.
+            <main>
+                {/* Page header — dark band */}
+                <header className="band-dark relative overflow-hidden pt-36 pb-20 md:pt-44 md:pb-28">
+                    <PageHeaderBackground tone="dark" />
+                    <Container className="relative z-10">
+                        <Reveal className="flex flex-col items-start gap-8">
+                            <Eyebrow tone="dark">Fintech industry</Eyebrow>
+                            <h1 className="type-display text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] text-paper max-w-[14ch]">
+                                Secure and scalable technology for modern{" "}
+                                <em className="italic text-accent-bright">financial</em> businesses.
+                            </h1>
+                            <p className="text-muted-dark text-lg md:text-xl max-w-[56ch]">
+                                We build reliable digital platforms that help fintech companies innovate while
+                                maintaining trust and security.
                             </p>
-                            <div className="grid grid-cols-2 gap-4">
-                                {["End-to-End Encryption", "Biometric Ready", "PCI-DSS Compliant", "Audit Logs"].map((item, i) => (
-                                    <div key={i} className="flex items-center gap-2">
-                                        <CheckCircle2 className="text-brand-accent" size={16} />
-                                        <span className="text-xs font-bold text-brand-dark/70 uppercase tracking-widest">{item}</span>
+                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                                <Button tone="dark" variant="accent" arrow onClick={openBooking}>
+                                    Build your fintech platform
+                                </Button>
+                                <Button tone="dark" variant="ghost" onClick={openBooking}>
+                                    Book free consultation
+                                </Button>
+                            </div>
+                        </Reveal>
+                    </Container>
+                </header>
+
+                {/* Finance runs on trust — light band */}
+                <section
+                    id="fintech-trust"
+                    aria-labelledby="fintech-trust-heading"
+                    className="band-light section-pad border-b border-line"
+                >
+                    <Container>
+                        <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                            <div className="flex flex-col gap-8">
+                                <SectionHeading
+                                    id="fintech-trust-heading"
+                                    eyebrow="Our approach"
+                                    title={
+                                        <>
+                                            Finance runs on <em>trust</em> — technology must support it.
+                                        </>
+                                    }
+                                />
+                                <Reveal
+                                    delay={0.1}
+                                    className="flex max-w-[56ch] flex-col gap-5 text-base md:text-lg leading-relaxed text-muted"
+                                >
+                                    <p>
+                                        In fintech, performance matters. But security matters even more. Whether
+                                        you&apos;re building a payment platform, lending app, or digital banking
+                                        solution — your users are trusting you with their money and data.
+                                    </p>
+                                    <p>
+                                        At DevGrowth Solutions, we build fintech systems with stability, security, and
+                                        scalability at the core. No unnecessary complexity. Just reliable systems that
+                                        work.
+                                    </p>
+                                </Reveal>
+                            </div>
+
+                            <Reveal as="figure" delay={0.15} className="flex flex-col gap-4">
+                                <div className="overflow-hidden rounded-2xl border border-line bg-surface">
+                                    <img
+                                        src={TRUST_IMAGE}
+                                        alt="Fintech solutions"
+                                        loading="lazy"
+                                        className="aspect-[4/5] w-full object-cover"
+                                    />
+                                </div>
+                                <figcaption className="flex items-center gap-3">
+                                    <span className={lightIconBox}>
+                                        <CreditCard size={18} aria-hidden="true" />
+                                    </span>
+                                    <span className="type-eyebrow text-muted">Security-first fintech</span>
+                                </figcaption>
+                            </Reveal>
+                        </div>
+                    </Container>
+                </section>
+
+                {/* Security infrastructure — dark band */}
+                <section
+                    id="fintech-security"
+                    aria-labelledby="fintech-security-heading"
+                    className="band-dark section-pad border-b border-line-dark"
+                >
+                    <Container>
+                        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+                            <Reveal className="order-2 lg:order-1">
+                                <div className="flex flex-col items-center gap-8 rounded-2xl border border-line-dark bg-ink-2 p-10 text-center md:p-14">
+                                    <span className="flex h-16 w-16 items-center justify-center rounded-lg bg-ink-3 text-accent-bright">
+                                        <ShieldCheck size={32} aria-hidden="true" />
+                                    </span>
+                                    <div className="flex flex-col items-center gap-3">
+                                        <p className="type-eyebrow flex items-center gap-2 text-muted-dark">
+                                            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent-bright" />
+                                            Secure network active
+                                        </p>
+                                        <p className="type-mono text-3xl text-paper md:text-4xl">AES-256</p>
                                     </div>
-                                ))}
+                                </div>
+                            </Reveal>
+
+                            <div className="order-1 flex flex-col gap-8 lg:order-2">
+                                <SectionHeading
+                                    id="fintech-security-heading"
+                                    tone="dark"
+                                    eyebrow="Security infrastructure"
+                                    title={
+                                        <>
+                                            Bank-grade data <em>security</em>.
+                                        </>
+                                    }
+                                    lede="We don't just add security; we build it into the DNA of your product. Our fintech solutions utilize multi-layer encryption, secure vaulting, and real-time threat monitoring to protect every single transaction."
+                                />
+                                <Reveal delay={0.1}>
+                                    <ul className="grid gap-3 sm:grid-cols-2">
+                                        {securityFeatures.map((item) => (
+                                            <li
+                                                key={item}
+                                                className="flex items-center gap-3 text-sm font-semibold text-paper"
+                                            >
+                                                <CheckCircle2
+                                                    size={16}
+                                                    aria-hidden="true"
+                                                    className="shrink-0 text-accent-bright"
+                                                />
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </Reveal>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
+                    </Container>
+                </section>
 
-            <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-                        <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">FINTECH SOLUTIONS</span>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Fintech Solutions <br /><span className="italic font-light">We Provide.</span></h2>
-                    </motion.div>
-                    <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {solutions.map((sol, idx) => (
-                            <motion.div key={idx} variants={itemVariants} whileHover={{ y: -8, boxShadow: "0 30px 60px rgba(0,0,0,0.06)" }} className="p-12 rounded-[48px] bg-white border border-brand-dark/5 hover:border-brand-accent/20 transition-all duration-500 group">
-                                <motion.div whileHover={{ rotate: 10, scale: 1.1 }} className="h-16 w-16 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500"><sol.icon size={32} /></motion.div>
-                                <h3 className="text-3xl font-black text-brand-dark mb-4 tracking-tighter">{sol.title}</h3>
-                                <p className="text-brand-dark/50 font-medium leading-relaxed mb-8 text-lg">{sol.desc}</p>
-                                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {sol.points.map((point, pIdx) => (
-                                        <li key={pIdx} className="flex items-center gap-3 text-sm font-bold text-brand-dark/70"><CheckCircle2 size={16} className="text-brand-accent flex-shrink-0" />{point}</li>
-                                    ))}
-                                </ul>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
+                {/* Solutions — light band */}
+                <section
+                    id="fintech-solutions"
+                    aria-labelledby="fintech-solutions-heading"
+                    className="band-light section-pad border-b border-line"
+                >
+                    <Container>
+                        {/* Sticky heading + stacked list: five cards never leave an orphan row the way a 3-up grid does. */}
+                        <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr]">
+                            <div className="flex flex-col items-start gap-8 self-start lg:sticky lg:top-28">
+                                <SectionHeading
+                                    id="fintech-solutions-heading"
+                                    eyebrow="Fintech solutions"
+                                    title={
+                                        <>
+                                            Fintech solutions we <em>provide</em>.
+                                        </>
+                                    }
+                                />
+                            </div>
 
-            <section className="py-24 md:py-40 bg-brand-accent/10 relative overflow-hidden">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-                            <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">WHY CHOOSE US</span>
-                            <h2 className="text-4xl md:text-5xl font-black text-brand-dark tracking-tighter mb-10">Why Fintech Companies <br /><span className="italic font-light">Choose Devgrowth.</span></h2>
-                            <ul className="space-y-5">
-                                {whyChoose.map((item, idx) => (
-                                    <motion.li key={idx} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: idx * 0.1 }} className="flex items-center gap-4 text-lg font-bold text-brand-dark">
-                                        <div className="h-8 w-8 bg-brand-dark rounded-xl flex items-center justify-center flex-shrink-0"><CheckCircle2 size={16} className="text-brand-accent" /></div>
-                                        {item}
-                                    </motion.li>
+                            <ul className="flex flex-col gap-4">
+                                {solutions.map(({ title, desc, points, icon: Icon }) => (
+                                    <Reveal
+                                        as="li"
+                                        key={title}
+                                        className="flex flex-col gap-6 rounded-2xl border border-line bg-surface p-6 transition-colors duration-300 hover:border-muted md:p-8"
+                                    >
+                                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+                                            <span className={lightIconBox}>
+                                                <Icon size={20} aria-hidden="true" />
+                                            </span>
+                                            <div className="flex flex-col gap-3">
+                                                <h3 className="font-sans text-xl md:text-2xl font-semibold tracking-tight">
+                                                    {title}
+                                                </h3>
+                                                <p className="max-w-[56ch] text-base md:text-lg leading-relaxed text-muted">
+                                                    {desc}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <ul className="grid gap-x-8 gap-y-3 border-t border-line pt-6 sm:grid-cols-2">
+                                            {points.map((point) => (
+                                                <li
+                                                    key={point}
+                                                    className="flex items-start gap-3 text-sm md:text-base text-ink"
+                                                >
+                                                    <CheckCircle2
+                                                        size={16}
+                                                        aria-hidden="true"
+                                                        className="mt-1 shrink-0 text-accent"
+                                                    />
+                                                    <span>{point}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </Reveal>
                                 ))}
                             </ul>
-                        </motion.div>
-                        <div className="relative flex justify-center">
-                            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-                                <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80" alt="Fintech" className="w-full max-w-md rounded-[48px] shadow-2xl object-cover h-[400px]" />
-                            </motion.div>
                         </div>
-                    </div>
-                </div>
-            </section>
+                    </Container>
+                </section>
 
-            <section className="py-24 md:py-40 bg-brand-bg relative overflow-hidden">
-                <div className="mx-auto max-w-none sm:max-w-7xl px-6 lg:px-16">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-                        <span className="text-xs font-bold uppercase tracking-[0.3em] text-brand-dark opacity-40 mb-4 block">HOW WE WORK</span>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-dark tracking-tighter">Our Fintech<br /><span className="italic font-light">Development Process.</span></h2>
-                    </motion.div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {processSteps.map((step, idx) => (
-                            <motion.div key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6, delay: idx * 0.1 }} className="relative p-10 rounded-[40px] bg-white border border-brand-dark/5 hover:shadow-2xl transition-all duration-500 group overflow-hidden">
-                                <span className="absolute top-8 right-10 text-5xl font-black text-brand-dark/5 group-hover:text-brand-accent/20 transition-colors">{step.id}</span>
-                                <div className="relative z-10">
-                                    <div className="h-12 w-12 bg-brand-dark/5 rounded-2xl flex items-center justify-center text-brand-dark mb-8 group-hover:bg-brand-dark group-hover:text-white transition-all duration-500"><step.icon size={24} /></div>
-                                    <h3 className="text-xl font-black text-brand-dark mb-4 tracking-tighter leading-tight">{step.title}</h3>
-                                    <p className="text-brand-dark/50 font-medium text-sm leading-relaxed">{step.desc}</p>
-                                </div>
-                                <motion.div className="absolute bottom-0 left-0 h-1.5 bg-brand-dark group-hover:bg-brand-accent transition-colors" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 + idx * 0.1 }} />
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+                {/* Why choose us — dark band */}
+                <section
+                    id="fintech-why"
+                    aria-labelledby="fintech-why-heading"
+                    className="band-dark section-pad border-b border-line-dark"
+                >
+                    <Container>
+                        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+                            <div className="flex flex-col gap-10">
+                                <SectionHeading
+                                    id="fintech-why-heading"
+                                    tone="dark"
+                                    eyebrow="Why choose us"
+                                    title={
+                                        <>
+                                            Why fintech companies <em>choose</em> DevGrowth Solutions.
+                                        </>
+                                    }
+                                />
+                                <Stagger as="ul" className="flex flex-col divide-y divide-line-dark border-y border-line-dark">
+                                    {whyChoose.map((item) => (
+                                        <MotionItem
+                                            key={item}
+                                            variants={staggerChild}
+                                            className="flex items-center gap-4 py-4 text-base md:text-lg text-paper"
+                                        >
+                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink-3 text-accent-bright">
+                                                <CheckCircle2 size={18} aria-hidden="true" />
+                                            </span>
+                                            <span>{item}</span>
+                                        </MotionItem>
+                                    ))}
+                                </Stagger>
+                            </div>
 
-            <section className="py-20 sm:py-28 md:py-40 bg-brand-bg">
-                <div className="w-full sm:mx-auto sm:max-w-7xl sm:px-6 lg:px-16">
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} className="relative w-full rounded-none sm:rounded-[80px] bg-brand-dark px-5 sm:px-12 md:px-20 py-20 sm:py-24 md:py-32 text-center overflow-hidden shadow-2xl">
-                        <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 8, repeat: Infinity }} className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(162,237,219,0.15),transparent_70%)]" />
-                        <div className="relative z-10">
-                            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight md:leading-[0.9] tracking-tight mb-8 sm:mb-10 uppercase">
-                                Financial technology should empower users —<br /><span className="text-brand-accent italic font-light lowercase">not worry them.</span>
-                            </h2>
-                            <motion.button whileHover={{ scale: 1.08, boxShadow: "0 0 40px rgba(162, 237, 219, 0.4)" }} whileTap={{ scale: 0.95 }} onClick={toggleBooking} className="bg-brand-accent text-brand-dark px-8 sm:px-12 py-4 sm:py-6 rounded-2xl sm:rounded-3xl text-sm sm:text-base font-black uppercase tracking-widest transition-all shadow-xl cursor-pointer flex items-center gap-3 mx-auto mt-8 sm:mt-10">
-                                Build Your Fintech Platform <CreditCard size={18} />
-                            </motion.button>
+                            <Reveal
+                                delay={0.1}
+                                className="overflow-hidden rounded-2xl border border-line-dark bg-ink-2"
+                            >
+                                <img
+                                    src={WHY_IMAGE}
+                                    alt="Fintech"
+                                    loading="lazy"
+                                    className="aspect-[4/3] w-full object-cover"
+                                />
+                            </Reveal>
                         </div>
-                    </motion.div>
-                </div>
-            </section>
+                    </Container>
+                </section>
+
+                {/* Process — light band */}
+                <section
+                    id="fintech-process"
+                    aria-labelledby="fintech-process-heading"
+                    className="band-light section-pad border-b border-line"
+                >
+                    <Container className="flex flex-col gap-12">
+                        <SectionHeading
+                            id="fintech-process-heading"
+                            eyebrow="How we work"
+                            title={
+                                <>
+                                    Our fintech development <em>process</em>.
+                                </>
+                            }
+                        />
+                        <Stagger as="ol" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            {processSteps.map(({ id, title, desc, icon: Icon }) => (
+                                <MotionItem key={id} variants={staggerChild} className={lightCard}>
+                                    <div className="flex items-center justify-between">
+                                        <span className={lightIconBox}>
+                                            <Icon size={20} aria-hidden="true" />
+                                        </span>
+                                        <span className="type-mono text-sm text-muted">{id}</span>
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <h3 className="font-sans text-xl font-semibold tracking-tight">{title}</h3>
+                                        <p className="text-base leading-relaxed text-muted">{desc}</p>
+                                    </div>
+                                </MotionItem>
+                            ))}
+                        </Stagger>
+                    </Container>
+                </section>
+
+                {/* Closing CTA — dark band */}
+                <section id="fintech-cta" aria-labelledby="fintech-cta-heading" className="band-dark section-pad">
+                    <Container className="flex flex-col items-start gap-10">
+                        <SectionHeading
+                            id="fintech-cta-heading"
+                            tone="dark"
+                            size="lg"
+                            eyebrow="Next step"
+                            title={
+                                <>
+                                    Financial technology should empower users — <em>not worry them</em>.
+                                </>
+                            }
+                        />
+                        <Reveal delay={0.1}>
+                            <Button tone="dark" variant="accent" arrow onClick={openBooking}>
+                                Build your fintech platform
+                            </Button>
+                        </Reveal>
+                    </Container>
+                </section>
+            </main>
 
             <Footer />
-            <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+            <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
         </div>
     );
 }

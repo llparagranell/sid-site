@@ -1,219 +1,219 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import Container from "./ui/Container";
+import { EASE } from "./motion/constants";
+import cx from "../lib/cx";
 import { services } from "../constants/servicesData";
 
-const TiltCard = ({ service, index }) => {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+const MotionDiv = motion.div;
 
-    const mouseXSpring = useSpring(x);
-    const mouseYSpring = useSpring(y);
+const GROUP_DEFS = [
+    {
+        id: "build",
+        word: "Build",
+        description: "Websites, mobile apps, storefronts and custom software, built to ship and easy to extend.",
+        titles: ["Web Development", "Mobile App Development", "Custom Software", "E-commerce"],
+    },
+    {
+        id: "design",
+        word: "Design",
+        description: "User research, prototypes and design systems, so the product makes sense the first time someone opens it.",
+        titles: ["UI/UX Design"],
+    },
+    {
+        id: "scale",
+        word: "Scale",
+        description: "Cloud infrastructure, databases and migrations that hold up as traffic, data and the team grow.",
+        titles: ["Cloud Solutions"],
+    },
+    {
+        id: "ai",
+        word: "AI",
+        description:
+            "n8n workflows, chatbots and agents that run the repeat work — plus predictive models and the pipelines to keep them in production.",
+        titles: ["AI Automation", "AI & Machine Learning"],
+    },
+];
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
-
-    const handleMouseMove = (e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
-        const xPct = (mouseX / width) - 0.5;
-        const yPct = (mouseY / height) - 0.5;
-
-        x.set(xPct);
-        y.set(yPct);
-    };
-
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
-
-    const Icon = service.icon;
-
-    const CardContent = (
-        <motion.div
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                rotateX,
-                rotateY,
-                transformStyle: "preserve-3d",
-            }}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileTap={{ scale: 0.98 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="relative h-[480px] w-full group overflow-hidden rounded-[32px] bg-white border border-brand-dark/5 shadow-sm transition-all duration-500 hover:border-brand-dark/10 cursor-pointer"
-        >
-            {/* Spotlight Gradient */}
-            <motion.div
-                style={{
-                    background: useTransform(
-                        [mouseXSpring, mouseYSpring],
-                        ([mx, my]) => `radial-gradient(600px circle at ${(mx + 0.5) * 100}% ${(my + 0.5) * 100}%, rgba(30, 27, 121, 0.06), transparent 40%)`
-                    ),
-                }}
-                className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            />
-
-            <div
-                style={{
-                    transform: "translateZ(50px)",
-                    transformStyle: "preserve-3d",
-                }}
-                className="relative z-10 h-full p-8 flex flex-col"
-            >
-                {/* Icon Section */}
-                <div className="">
-                    <div className="h-14 w-14 mb-6 rounded-xl bg-brand-dark text-white flex items-center justify-center  transition-all duration-500">
-                        <Icon size={24} />
-                    </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark transition-colors">
-                            {String(index + 1).padStart(2, "0")} / Service
-                        </span>
-                        <div className="h-[1px] w-8 bg-brand-dark/10 group-hover:bg-brand-dark/20 transition-colors" />
-                    </div>
-
-                    <h3 className="text-2xl font-black text-brand-dark mb-4 leading-none tracking-tight group-hover:translate-x-1 transition-transform duration-500">
-                        {service.title}
-                    </h3>
-
-                    <p className="text-brand-dark text-sm leading-relaxed mb-8">
-                        {service.desc}
-                    </p>
-
-                    <ul className="space-y-4">
-                        {service.points.map((point, idx) => (
-                            <li key={idx} className="flex items-center gap-4 text-[11px] font-bold text-brand-dark group-hover:translate-x-2 transition-all duration-500" style={{ transitionDelay: `${idx * 50}ms` }}>
-                                <div className="h-1 w-1 rounded-full bg-brand-dark group-hover:scale-150 transition-all duration-500" />
-                                <span className="uppercase tracking-widest">{point}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* Bottom Corner Detail */}
-                <div className="pt-6 border-t border-brand-dark flex justify-between items-center transition-all duration-500">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark">Read More</span>
-                    <ArrowRight size={16} className="text-brand-dark group-hover:translate-x-1 transition-transform" />
-                </div>
-            </div>
-
-            {/* Subtle Gradient Overlay on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 via-transparent to-brand-dark/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-        </motion.div>
-    );
-
-    if (service.path) {
-        return <Link to={service.path} className="block w-full">{CardContent}</Link>;
-    }
-
-    return CardContent;
+/** Marginal notes that tie a service line back to the three shipped apps. */
+const NOTES = {
+    "Mobile App Development": "↳ Swadeit, Upasthit and Goseva run on React Native",
+    "E-commerce": "↳ Swadeit and Goseva take orders in the app",
 };
 
-export default function Services() {
+const byTitle = new Map(services.map((service) => [service.title, service]));
+
+// One running index across all groups (Build 01–04, Design 05, Scale 06, AI 07–08).
+const GROUPS = GROUP_DEFS.reduce((groups, { titles, ...group }) => {
+    const offset = groups.reduce((sum, g) => sum + g.items.length, 0);
+    const items = titles
+        .map((title) => byTitle.get(title))
+        .filter(Boolean)
+        .map((service, i) => ({
+            ...service,
+            index: String(offset + i + 1).padStart(2, "0"),
+            note: NOTES[service.title],
+        }));
+    return [...groups, { ...group, items }];
+}, []);
+
+const TOTAL = GROUPS.reduce((sum, group) => sum + group.items.length, 0);
+
+const countLabel = (n) => `${n} ${n === 1 ? "service" : "services"}`;
+
+function ServiceRow({ group, open, reduced, onToggle }) {
+    const triggerId = `services-${group.id}-trigger`;
+    const panelId = `services-${group.id}-panel`;
+    const transition = reduced
+        ? { duration: 0 }
+        : {
+              height: { duration: 0.45, ease: EASE },
+              opacity: { duration: 0.3, ease: EASE },
+          };
+
     return (
-        <section id="services" className="py-20 md:py-32 bg-brand-bg relative overflow-hidden">
-            {/* Background Transitions / Grids */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(30, 27, 121, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(30, 27, 121, 0.05) 1px, transparent 1px)`,
-                    backgroundSize: '30px 30px'
-                }}
-            />
-
-            <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-
-                {/* Heading Block */}
-                {/* Heading Block */}
-                <div className="
-    relative
-    w-screen sm:w-full
-    left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0
-    bg-brand-dark
-    rounded-none sm:rounded-[40px] md:rounded-[60px]
-    px-2 sm:px-3 md:px-4
-    py-12 sm:py-16 md:py-20
-    mb-12 md:mb-16
-    overflow-hidden
-    border-0 sm:border sm:border-white/5
-    shadow-none sm:shadow-2xl
-">
-
-                    {/* Background Sparkle */}
-                    <div className="absolute top-0 right-0 
-        p-6 sm:p-8 md:p-10 
-        opacity-[0.04] text-white pointer-events-none">
-                        <Sparkles className="w-20 h-20 sm:w-32 sm:h-32 md:w-[200px] md:h-[200px]" />
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center max-w-3xl mx-auto"
+        <li className="border-t border-line">
+            <h3>
+                <button
+                    type="button"
+                    id={triggerId}
+                    aria-expanded={open}
+                    aria-controls={open ? panelId : undefined}
+                    onClick={onToggle}
+                    className="flex min-h-11 w-full cursor-pointer items-center justify-between gap-4 py-4 text-left md:py-6"
+                >
+                    <span
+                        className={cx(
+                            "type-display min-w-0 uppercase text-5xl text-ink md:text-7xl lg:text-[5.5rem]",
+                            open && "italic",
+                        )}
                     >
-                        {/* Badge */}
-                        <span className="
-            inline-block
-            mb-4 sm:mb-6
-            rounded-full
-            border border-white/10
-            bg-white/5
-            px-3 py-1 sm:px-4 sm:py-1.5
-            text-[10px] sm:text-xs
-            font-bold uppercase tracking-widest
-            text-brand-accent
-        ">
-                            Our Expertise
+                        {group.word}
+                    </span>
+                    <span className="flex shrink-0 items-center gap-4 md:gap-6">
+                        <span className="type-eyebrow text-muted">{countLabel(group.items.length)}</span>
+                        {/* A bare glyph, not a ringed button: the only rounded objects on the page are
+                            Button, PhoneFrame and Stamp. The 40px box keeps the rotation pivot steady. */}
+                        <span
+                            aria-hidden="true"
+                            className={cx(
+                                "flex h-10 w-10 items-center justify-center",
+                                "transition-[rotate,color] duration-500 ease-out-expo",
+                                open ? "rotate-45 text-ink" : "text-muted",
+                            )}
+                        >
+                            <Plus size={22} strokeWidth={1.5} />
                         </span>
+                    </span>
+                </button>
+            </h3>
 
-                        {/* Heading */}
-                        <h2 className="
-            text-3xl sm:text-4xl md:text-6xl lg:text-7xl
-            font-black text-white
-            leading-tight md:leading-[0.95]
-            tracking-tight
-        ">
-                            We build the{" "}
-                            <br className="hidden sm:block" />
-                            <span className="text-white/90 italic font-light">
-                                Future of Digital
-                            </span>
-                        </h2>
+            <AnimatePresence initial={false}>
+                {open && (
+                    <MotionDiv
+                        key={panelId}
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={triggerId}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={transition}
+                        // Horizontal breathing room so a row's focus ring is not clipped by overflow-hidden.
+                        className="-mx-2 overflow-hidden px-2"
+                    >
+                        <div className="flex flex-col gap-6 pb-8 lg:grid lg:grid-cols-[4fr_8fr] lg:gap-10 lg:pb-10">
+                            <p className="max-w-[56ch] text-base leading-relaxed text-muted lg:text-lg">
+                                {group.description}
+                            </p>
+                            <ol role="list" className="divide-y divide-line border-t border-line">
+                                {group.items.map((service) => (
+                                    <li key={service.title}>
+                                        <Link
+                                            to={service.path}
+                                            className="group/row grid min-h-11 grid-cols-[2.5rem_1fr_1.5rem] items-baseline gap-x-2 py-4 lg:grid-cols-[3rem_1fr_minmax(16rem,0.9fr)_1.5rem] lg:py-5"
+                                        >
+                                            <span className="type-mono text-xs text-muted">{service.index}</span>
+                                            <span className="flex flex-col gap-1">
+                                                <span className="font-sans text-lg font-semibold tracking-tight text-ink group-hover/row:underline group-hover/row:decoration-muted group-hover/row:underline-offset-4">
+                                                    {service.title}
+                                                </span>
+                                                <span className="text-sm text-muted">{service.desc}</span>
+                                                <span className="type-mono text-[11px] leading-snug text-muted lg:hidden">
+                                                    {service.points.join(" · ")}
+                                                </span>
+                                                {service.note && (
+                                                    <span className="type-mono mt-1 text-[11px] leading-snug text-muted">
+                                                        {service.note}
+                                                    </span>
+                                                )}
+                                            </span>
+                                            <span className="type-mono hidden text-[11px] leading-relaxed text-muted lg:block">
+                                                {service.points.join(" · ")}
+                                            </span>
+                                            <ArrowUpRight
+                                                size={16}
+                                                aria-hidden="true"
+                                                className="self-center justify-self-end text-muted"
+                                            />
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                    </MotionDiv>
+                )}
+            </AnimatePresence>
+        </li>
+    );
+}
 
-                        {/* Paragraph */}
-                        <p className="
-            mt-6 sm:mt-8
-            text-white/90
-            text-base sm:text-lg md:text-xl
-            leading-relaxed
-            max-w-xl sm:max-w-2xl mx-auto
-        ">
-                            From rapid MVP development to enterprise-level architecture,
-                            we deliver high-performance solutions tailored for growth.
-                        </p>
-                    </motion.div>
+export default function Services() {
+    const reduced = useReducedMotion();
+    // At most one group is open. Clicking the open row closes it.
+    // Desktop opens the first group so the list is visible; phones start collapsed so the
+    // four words read as an index and the page stays short until the reader taps one.
+    const [openId, setOpenId] = useState(() =>
+        typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches ? GROUPS[0].id : null,
+    );
+    const toggle = (id) => setOpenId((current) => (current === id ? null : id));
+
+    return (
+        <section
+            id="services"
+            aria-labelledby="services-heading"
+            className="band-light section-pad-tight border-b border-line"
+        >
+            <Container>
+                {/* Labelled hairline: the h2 is knocked out of the rule on the left, the count on the
+                    right. On phones the count drops under the rule because the italic h2 and the mono
+                    label do not both fit on a 342px line. */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-4">
+                    <h2 id="services-heading" className="type-display shrink-0 text-xl italic text-ink">
+                        Services, in four groups
+                    </h2>
+                    <span aria-hidden="true" className="h-px min-w-6 flex-1 bg-line" />
+                    <p className="type-eyebrow basis-full text-right text-muted sm:basis-auto">{TOTAL} in total</p>
                 </div>
 
-                {/* Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {services.map((service, i) => (
-                        <TiltCard key={i} service={service} index={i} />
+                <ul role="list" className="mt-10 flex flex-col border-b border-line sm:mt-12">
+                    {GROUPS.map((group) => (
+                        <ServiceRow
+                            key={group.id}
+                            group={group}
+                            open={openId === group.id}
+                            reduced={reduced}
+                            onToggle={() => toggle(group.id)}
+                        />
                     ))}
-                </div>
-            </div>
+                </ul>
+
+                <p className="type-display mt-8 max-w-[40ch] text-lg italic text-muted lg:ml-auto lg:text-right">
+                    Pick what you need now; the rest is there when you grow.
+                </p>
+            </Container>
         </section>
     );
 }

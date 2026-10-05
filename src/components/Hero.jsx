@@ -1,187 +1,309 @@
-import { motion } from "framer-motion";
-import { Layers, PenTool, Sparkles, Zap, ExternalLink } from "lucide-react";
+import { Component, lazy, Suspense, useEffect, useState, useSyncExternalStore } from "react";
+import { Link } from "react-router-dom";
+import { AnimatePresence, motion, MotionConfig, useReducedMotionConfig } from "framer-motion";
+import { ChevronRight } from "lucide-react";
+import Container from "./ui/Container";
+import Button from "./ui/Button";
+import { EASE } from "./motion/constants";
+import { scrollToTarget } from "../lib/scroll";
+import cx from "../lib/cx";
+import CubeFallback from "./hero/CubeFallback";
+import { stageEnabled } from "./hero/stage";
 
-const FloatingCard = ({ children, x, y, delay = 0, glowColor = "rgba(0, 0, 0, 0.05)", layoutId }) => (
-  <motion.div
-    layoutId={layoutId}
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{
-      opacity: 1,
-      scale: 1,
-      y: [0, -15, 0],
-      x: [0, 10, 0],
-      rotate: [0, 2, 0]
-    }}
-    transition={{
-      opacity: { duration: 0.8, delay },
-      scale: { duration: 0.8, delay },
-      y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay },
-      x: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 },
-      rotate: { duration: 6, repeat: Infinity, ease: "easeInOut", delay },
-      layout: { duration: 0.8, ease: "easeInOut" }
-    }}
-    style={{ position: 'absolute', left: x, top: y }}
-    whileHover={{ scale: 1.1, rotate: 0, transition: { duration: 0.2 } }}
-    className="z-20"
-  >
-    <div className="relative group">
-      <div
-        className="absolute -inset-4 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ backgroundColor: glowColor }}
-      />
-      <div className="relative bg-white p-5 rounded-2xl shadow-xl border border-slate-100 flex items-center justify-center">
-        {children}
-      </div>
-    </div>
-  </motion.div>
-);
+/* One import specifier, one chunk: warmed early by `loadHeroCube()`, rendered through `lazy`. */
+const loadHeroCube = () => import("./hero/HeroCube");
+const HeroCube = lazy(loadHeroCube);
 
-const FloatingIcon = ({ icon: Icon, x, y, delay = 0, color = "text-brand-dark/20", size = 24 }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.5 }}
-    animate={{
-      opacity: [0.4, 0.8, 0.4],
-      scale: [1, 1.2, 1],
-      y: [0, -20, 0],
-      x: [0, 10, 0],
-    }}
-    transition={{
-      duration: 5 + Math.random() * 2,
-      repeat: Infinity,
-      ease: "easeInOut",
-      delay
-    }}
-    style={{ position: 'absolute', left: x, top: y }}
-    className={`z-0 pointer-events-none ${color}`}
-  >
-    <Icon className="w-5 h-5 md:w-auto md:h-auto" />
-  </motion.div>
-);
+// PascalCase aliases: the project ESLint config only counts these as a use of `motion`.
+const MotionSection = motion.section;
+const MotionDiv = motion.div;
+const MotionH1 = motion.h1;
+const MotionP = motion.p;
+const MotionUl = motion.ul;
+const MotionSpan = motion.span;
 
+const WORDS = ["ship.", "scale.", "matter."];
+const WORD_INTERVAL_MS = 2400;
+const DISCIPLINES = ["Web", "Mobile", "AI", "Cloud"];
+const PRELOADER_EVENT = "dg:preloader-done";
+
+/** Entrance: fade + rise, delayed by `custom` x 0.1s. */
+const rise = {
+    hidden: { opacity: 0, y: 24 },
+    show: (order = 0) => ({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: EASE, delay: order * 0.1 },
+    }),
+};
+
+/** Entrance for decorative pieces: opacity only, delayed by `custom` seconds. */
+const fade = {
+    hidden: { opacity: 0 },
+    show: (delay = 0) => ({ opacity: 1, transition: { duration: 0.9, ease: EASE, delay } }),
+};
+
+/* ------------------------------------------------------------------ */
+/* Hooks                                                               */
+/* ------------------------------------------------------------------ */
+
+function subscribeVisibility(onChange) {
+    document.addEventListener("visibilitychange", onChange);
+    return () => document.removeEventListener("visibilitychange", onChange);
+}
+
+function readVisible() {
+    return document.visibilityState !== "hidden";
+}
+
+/** False while the tab is in the background. */
+function usePageVisible() {
+    return useSyncExternalStore(subscribeVisibility, readVisible, () => true);
+}
+
+/**
+ * True once the entrance may start. Checked from a passive effect so the Preloader,
+ * which flags <html data-preloading="1"> in its own layout effect, is seen when mounted
+ * in the same commit. With no preloader the sequence starts on the next frame.
+ */
+function usePreloaderDone() {
+    const [done, setDone] = useState(false);
+
+    useEffect(() => {
+        const start = () => setDone(true);
+        if (document.documentElement.dataset.preloading === "1") {
+            window.addEventListener(PRELOADER_EVENT, start, { once: true });
+            return () => window.removeEventListener(PRELOADER_EVENT, start);
+        }
+        const frame = window.requestAnimationFrame(start);
+        return () => window.cancelAnimationFrame(frame);
+    }, []);
+
+    return done;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pieces                                                              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Cycles through WORDS. Every word is laid out invisibly in the same grid cell so the
+ * headline never shifts width. Under reduced motion or in a background tab it settles
+ * on the last word; `active` holds the cycle until the entrance has started.
+ */
+function RotatingWord({ active, className }) {
+    const reduced = Boolean(useReducedMotionConfig());
+    const visible = usePageVisible();
+    const paused = reduced || !visible;
+    const cycling = active && !paused;
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        if (!cycling) return undefined;
+        const id = window.setInterval(() => setIndex((i) => (i + 1) % WORDS.length), WORD_INTERVAL_MS);
+        return () => window.clearInterval(id);
+    }, [cycling]);
+
+    const word = paused ? WORDS[WORDS.length - 1] : WORDS[index];
+
+    return (
+        <span className={cx("inline-grid", className)}>
+            {WORDS.map((w) => (
+                <span key={w} aria-hidden="true" className="invisible col-start-1 row-start-1">
+                    {w}
+                </span>
+            ))}
+            <AnimatePresence initial={false}>
+                <MotionSpan
+                    key={word}
+                    className="col-start-1 row-start-1"
+                    initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                >
+                    {word}
+                </MotionSpan>
+            </AnimatePresence>
+        </span>
+    );
+}
+
+/**
+ * Bottom-left "Scroll" cue: mono label over a static 24px hairline.
+ * Only from lg up, where the section is one viewport tall and the cue sits at the fold.
+ */
+function ScrollCue() {
+    return (
+        <Container className="pointer-events-none absolute inset-x-0 bottom-5 hidden lg:[@media(min-height:880px)]:block">
+            <MotionDiv aria-hidden="true" custom={0.6} variants={fade} className="flex flex-col items-start gap-2">
+                <span className="type-eyebrow text-muted-dark">Scroll</span>
+                <span aria-hidden="true" className="block h-6 w-px bg-muted-dark opacity-60" />
+            </MotionDiv>
+        </Container>
+    );
+}
+
+/** If the three.js chunk fails to load, show the SVG instead of unmounting the page. */
+class CubeBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { failed: false };
+    }
+
+    static getDerivedStateFromError() {
+        return { failed: true };
+    }
+
+    render() {
+        return this.state.failed ? this.props.fallback : this.props.children;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero                                                                */
+/* ------------------------------------------------------------------ */
+
+function HeroContent({ onBookClick }) {
+    const reduced = Boolean(useReducedMotionConfig());
+    const ready = usePreloaderDone();
+    /* On fine-pointer desktops the cube lives on the fixed CubeStage overlay (mounted by
+       Home): it assembles behind the preloader, glides into this column's empty square and
+       later drifts with the scroll. Everywhere else it renders in-flow here as before; the
+       SVG stands in under reduced motion, without WebGL, or while the chunk loads. */
+    const [stageOn] = useState(() => stageEnabled());
+    const wantsCube = !reduced && !stageOn;
+    const cubeClass = "h-full w-full";
+
+    // Fetch the chunk right away so it is cached by the time the entrance starts;
+    // the canvas itself mounts with the entrance so its assembly is not spent behind the preloader.
+    useEffect(() => {
+        if (reduced) return;
+        loadHeroCube().catch(() => {});
+    }, [reduced]);
+
+    const fallback = <CubeFallback className={cubeClass} />;
+
+    return (
+        <MotionSection
+            aria-labelledby="hero-title"
+            initial={reduced ? "show" : "hidden"}
+            animate={ready || reduced ? "show" : "hidden"}
+            className="band-dark relative flex items-center overflow-hidden border-b border-line-dark pt-28 pb-16 md:pt-32 md:pb-20 lg:min-h-[100svh] lg:pb-24 desk-short:pt-24 desk-short:pb-14"
+        >
+            <Container className="grid gap-10 md:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div className="flex flex-col items-start gap-5 md:gap-8 desk-short:gap-6">
+                    <MotionDiv custom={0} variants={rise}>
+                        <Link
+                            to="/case-studies"
+                            className="group relative inline-flex items-center gap-2 rounded-full border border-line-dark bg-ink-2 px-3.5 py-1.5 type-eyebrow text-muted-dark transition-colors duration-300 before:absolute before:inset-x-0 before:-inset-y-2.5 hover:border-muted-dark hover:text-paper"
+                        >
+                            <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-bright" />
+                            <span>Now scoping new projects</span>
+                            <ChevronRight
+                                size={12}
+                                aria-hidden="true"
+                                className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+                            />
+                        </Link>
+                    </MotionDiv>
+
+                    <MotionH1
+                        id="hero-title"
+                        custom={1}
+                        variants={rise}
+                        className="type-display text-5xl leading-[0.95] text-paper sm:text-6xl md:text-7xl lg:text-[6.5rem] xl:text-[7.25rem] desk-short:text-[4.75rem]"
+                    >
+                        <span className="sr-only">Engineering MVPs that matter.</span>
+                        <span aria-hidden="true">
+                            Engineering MVPs that
+                            <br />
+                            <RotatingWord active={ready} className="italic text-accent-bright" />
+                        </span>
+                    </MotionH1>
+
+                    <MotionP custom={2} variants={rise} className="max-w-[48ch] text-lg leading-relaxed text-muted-dark md:text-xl">
+                        Product engineering for founders and growing businesses. Scoped in a week, shipped in weeks, built
+                        to grow.
+                    </MotionP>
+
+                    {/* One booking CTA per viewport: the Navbar's "Book a call" from lg up, the
+                        ghost button here below lg where that navbar button is hidden. */}
+                    <MotionDiv
+                        custom={3}
+                        variants={rise}
+                        className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
+                    >
+                        <Button
+                            variant="accent"
+                            tone="dark"
+                            size="lg"
+                            arrow
+                            className="w-full sm:w-auto"
+                            onClick={() => scrollToTarget("#contact")}
+                        >
+                            Start a project
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            tone="dark"
+                            size="lg"
+                            className="w-full sm:w-auto lg:hidden"
+                            onClick={onBookClick}
+                        >
+                            Book a 30-min call
+                        </Button>
+                    </MotionDiv>
+
+                    <MotionUl
+                        custom={4}
+                        variants={rise}
+                        className="flex flex-wrap items-center gap-x-3 gap-y-2 type-eyebrow text-muted-dark"
+                    >
+                        {DISCIPLINES.map((item, i) => (
+                            <li key={item} className="flex items-center gap-3">
+                                {i > 0 && <span aria-hidden="true" className="h-1 w-1 rounded-full bg-muted-dark/60" />}
+                                {item}
+                            </li>
+                        ))}
+                    </MotionUl>
+                </div>
+
+                <MotionDiv
+                    aria-hidden="true"
+                    custom={0.2}
+                    variants={fade}
+                    className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[560px] desk-short:max-w-[400px]"
+                >
+                    <div className="relative h-full w-full">
+                        {stageOn ? (
+                            <div data-cube-dock="hero" className="h-full w-full" />
+                        ) : wantsCube && ready ? (
+                            <CubeBoundary fallback={fallback}>
+                                <Suspense fallback={fallback}>
+                                    <HeroCube className={cubeClass} />
+                                </Suspense>
+                            </CubeBoundary>
+                        ) : (
+                            fallback
+                        )}
+                    </div>
+                </MotionDiv>
+            </Container>
+
+            <ScrollCue />
+        </MotionSection>
+    );
+}
+
+/**
+ * Homepage hero. Wrapped in its own MotionConfig so reduced motion is honoured
+ * (transforms dropped, entrance skipped) even before the root provider is wired.
+ */
 export default function Hero({ onBookClick }) {
-  return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-brand-bg text-brand-dark flex items-center justify-center py-20 mt-8">
-
-      {/* Decorative Floating Icons */}
-      <div className="lg:block pointer-events-none">
-        <FloatingIcon icon={Sparkles} x="10vw" y="25vh" delay={0.1} size={32} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={Zap} x="85vw" y="20vh" delay={0.2} size={28} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={Layers} x="15vw" y="70vh" delay={0.3} size={36} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={PenTool} x="80vw" y="65vh" delay={0.15} size={30} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={Sparkles} x="50vw" y="15vh" delay={0.4} size={20} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={Zap} x="45vw" y="80vh" delay={0.25} size={24} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={Layers} x="90vw" y="45vh" delay={0.5} size={22} color="text-brand-dark/10 lg:text-brand-dark/20" />
-        <FloatingIcon icon={PenTool} x="5vw" y="50vh" delay={0.05} size={26} color="text-brand-dark/10 lg:text-brand-dark/20" />
-      </div>
-
-      {/* Background Grid Lines */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 blur-[1px] opacity-60">
-          {/* Vertical Lines */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(to right, #64748b4a 0.5px, transparent 0.5px)`,
-              backgroundSize: '60px 100%'
-            }}
-          />
-          {/* Horizontal Lines */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(to bottom, #64748b4a 0.5px, transparent 0.5px)`,
-              backgroundSize: '100% 60px'
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Radial Glow Center */}
-      <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full z-0 opacity-20 blur-[100px] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(79, 70, 229, 0.1) 20%, rgba(79, 70, 229, 0) 70%)"
-        }}
-      />
-
-      {/* Floating Cards - Hidden on Mobile */}
-      <div className="absolute inset-0 pointer-events-none hidden lg:block">
-        <FloatingCard x="5vw" y="18vh" layoutId="icon-Layers">
-          <Layers className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
-        </FloatingCard>
-
-        <FloatingCard x="8vw" y="75vh" layoutId="icon-PenTool">
-          <PenTool className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
-        </FloatingCard>
-
-        <FloatingCard x="82vw" y="12vh" layoutId="icon-Sparkles">
-          <Sparkles className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
-        </FloatingCard>
-
-        <FloatingCard x="85vw" y="70vh" layoutId="icon-Zap">
-          <Zap className="text-brand-dark w-5 h-5 md:w-8 md:h-8" />
-        </FloatingCard>
-      </div>
-
-      <div className="relative z-10 text-center px-4 md:px-6 max-w-6xl mx-auto">
-        {/* Blurry Background Circle for Emphasis */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-brand-accent/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
-
-        {/* Big Bold Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-[3.25rem] sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tighter text-brand-dark leading-[1.1] md:leading-[0.85] lg:leading-[0.8]"
-        >
-          Engineering MVPs<br />
-          <span className="text-brand-dark/90 text-[3.25rem] sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl">That Matter.</span>
-        </motion.h1>
-
-        {/* Description */}
-        <div className="mt-8 md:mt-12">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-brand-dark/70 text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed font-medium"
-          >
-            Develop. Grow. Dominate!
-          </motion.p>
-        </div>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              const el = document.getElementById("contact");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="group relative inline-flex items-center justify-center gap-3 bg-brand-dark text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-brand-dark/95 transition-all shadow-xl overflow-hidden cursor-pointer w-full sm:w-auto"
-          >
-            <span className="relative z-10">Get Started Today</span>
-            <ExternalLink size={16} className="relative z-10 text-brand-muted group-hover:text-white transition-colors" />
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onBookClick}
-            className="group relative inline-flex items-center justify-center gap-3 bg-white text-brand-dark border-2 border-brand-dark/10 px-6 py-4 rounded-xl font-bold text-base hover:border-brand-dark transition-all cursor-pointer w-full sm:w-auto shadow-sm"
-          >
-            <Sparkles size={16} className="text-brand-dark opacity-50 group-hover:opacity-100 transition-opacity" />
-            <span className="relative z-10">Book Consultation</span>
-          </motion.button>
-        </motion.div>
-      </div>
-    </section>
-  );
+    return (
+        <MotionConfig reducedMotion="user">
+            <HeroContent onBookClick={onBookClick} />
+        </MotionConfig>
+    );
 }

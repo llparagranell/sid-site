@@ -1,127 +1,106 @@
-import { motion } from "framer-motion";
-import {
-    FaReact,
-    FaHtml5,
-    FaCss3Alt,
-    FaJs,
-    FaNodeJs,
-    FaGitAlt,
-} from "react-icons/fa";
-import {
-    SiTailwindcss,
-    SiMongodb,
-    SiPostgresql,
-} from "react-icons/si";
+import Container from "./ui/Container";
+import HandUnderline from "./ui/HandUnderline";
 
-const skills = [
-    { name: "React", icon: FaReact },
-    { name: "HTML5", icon: FaHtml5 },
-    { name: "CSS3", icon: FaCss3Alt },
-    { name: "JavaScript", icon: FaJs },
-    { name: "Tailwind", icon: SiTailwindcss },
-    { name: "Node.js", icon: FaNodeJs },
-    { name: "MongoDB", icon: SiMongodb },
-    { name: "PostgreSQL", icon: SiPostgresql },
-    { name: "Git", icon: FaGitAlt },
+/**
+ * #stack — a table. The <caption> is the h2 (serif, hand-drawn accent underline under "not")
+ * with a mono annotation derived from the data; six rows follow with the category as a row
+ * header and the tools typeset as a sentence. Static: no reveal, no tabs, no chips.
+ *
+ * On a phone the note sits under the tools inside the same cell; from lg it moves to a third
+ * column so the row reads category | tools | note. The table and the closing aside share one
+ * 960px column at lg, so the right-aligned aside closes on the table's right edge rather than
+ * drifting to the wider Container edge.
+ */
+const CATEGORIES = [
+    {
+        id: "frontend",
+        label: "Frontend",
+        note: "Component-driven interfaces, server-rendered where it helps.",
+        items: ["React", "Next.js", "JavaScript", "Tailwind CSS", "HTML5", "CSS3"],
+    },
+    {
+        id: "backend",
+        label: "Backend",
+        note: "APIs and data layers that stay simple to run.",
+        items: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
+    },
+    {
+        id: "mobile",
+        label: "Mobile",
+        note: "One codebase for iOS and Android when the product allows it.",
+        items: ["React Native", "Flutter"],
+    },
+    {
+        id: "cloud",
+        label: "Cloud & DevOps",
+        note: "Managed services first, custom infrastructure only when needed.",
+        items: ["AWS", "Google Cloud", "Git"],
+    },
+    {
+        id: "platforms",
+        label: "Platforms",
+        note: "Where a proven platform beats a custom build.",
+        items: ["WordPress", "Shopify"],
+    },
+    {
+        id: "ai",
+        label: "AI & automation",
+        note: "n8n runs the workflows. LLM features wired into real product flows, Python for the data work.",
+        items: ["n8n", "LLM integrations", "Python"],
+    },
 ];
 
+const TOOL_COUNT = CATEGORIES.reduce((n, c) => n + c.items.length, 0); // 20
+
 export default function TechStack() {
-    const duplicated = [...skills, ...skills];
-
-    const Card = ({ skill }) => {
-        const Icon = skill.icon;
-
-        return (
-            <motion.div
-                whileHover={{ scale: 1.06 }}
-                className="
-          flex items-center gap-3
-          min-w-[150px] sm:min-w-[170px] md:min-w-[200px]
-          px-5 py-4
-          rounded-2xl
-          bg-brand-dark
-          border border-white/10
-          shadow-md
-          hover:shadow-xl
-          hover:border-white/20
-          transition-all duration-300
-          group
-        "
-            >
-                <Icon
-                    size={24}
-                    className="text-white/80 group-hover:text-white transition"
-                />
-                <span className="text-sm md:text-base font-semibold text-white/90 group-hover:text-white transition">
-                    {skill.name}
-                </span>
-            </motion.div>
-        );
-    };
-
     return (
-        <section className="w-full py-20 md:py-28 bg-brand-bg relative overflow-hidden">
+        <section
+            id="stack"
+            aria-labelledby="stack-heading"
+            className="band-light section-pad-tight border-b border-line"
+        >
+            <Container>
+                <div className="lg:max-w-[960px]">
+                    <table className="w-full border-collapse">
+                        <caption className="caption-top pb-6 text-left">
+                            <h2
+                                id="stack-heading"
+                                className="type-display max-w-[16ch] text-3xl text-ink md:text-4xl lg:text-5xl"
+                            >
+                                Chosen per project, <HandUnderline>not</HandUnderline> a fixed menu.
+                            </h2>
+                            <p className="type-mono mt-3 text-xs text-muted">
+                                {TOOL_COUNT} tools · {CATEGORIES.length} categories
+                            </p>
+                        </caption>
+                        <tbody>
+                            {CATEGORIES.map((c) => (
+                                <tr key={c.id} className="border-t border-line last:border-b">
+                                    <th
+                                        scope="row"
+                                        className="type-mono w-[6.5rem] py-4 pr-3 text-left align-top text-xs font-medium leading-relaxed text-muted lg:w-[12rem] lg:py-5"
+                                    >
+                                        {c.label}
+                                    </th>
+                                    <td className="py-4 align-top lg:py-5">
+                                        <p className="text-base leading-snug text-ink lg:text-lg">{c.items.join(", ")}</p>
+                                        <p className="type-display mt-1.5 text-[17px] italic leading-snug text-muted lg:hidden">
+                                            {c.note}
+                                        </p>
+                                    </td>
+                                    <td className="type-display hidden w-[22rem] py-5 pl-10 align-top text-lg italic leading-snug text-muted lg:table-cell">
+                                        {c.note}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
 
-            {/* Background Grid */}
-            <div
-                className="absolute inset-0 pointer-events-none opacity-20"
-                style={{
-                    backgroundImage: `
-            linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)
-          `,
-                    backgroundSize: "40px 40px",
-                }}
-            />
-
-            {/* Heading */}
-            <div className="text-center mb-14 px-6 md:px-12 relative z-10">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-dark">
-                    Technologies we work with
-                </h2>
-                <p className="mt-4 text-base md:text-lg text-brand-dark/60 font-medium">
-                    Modern, scalable, industry-proven tools
-                </p>
-            </div>
-
-            {/* Marquee Rows */}
-            <div className="relative flex flex-col gap-8 z-10">
-
-                {/* Row 1 */}
-                <div className="overflow-hidden w-full">
-                    <motion.div
-                        className="flex gap-6 w-max px-6 md:px-12"
-                        animate={{ x: ["0%", "-50%"] }}
-                        transition={{
-                            repeat: Infinity,
-                            duration: 25,
-                            ease: "linear",
-                        }}
-                    >
-                        {duplicated.map((skill, index) => (
-                            <Card key={index} skill={skill} />
-                        ))}
-                    </motion.div>
+                    <p className="type-display mt-8 max-w-[40ch] text-xl italic leading-snug text-muted lg:ml-auto lg:text-right">
+                        Boring where it should be boring, modern where it pays off. This is what we reach for most.
+                    </p>
                 </div>
-
-                {/* Row 2 */}
-                <div className="overflow-hidden w-full">
-                    <motion.div
-                        className="flex gap-6 w-max px-6 md:px-12"
-                        animate={{ x: ["-50%", "0%"] }}
-                        transition={{
-                            repeat: Infinity,
-                            duration: 30,
-                            ease: "linear",
-                        }}
-                    >
-                        {duplicated.map((skill, index) => (
-                            <Card key={index} skill={skill} />
-                        ))}
-                    </motion.div>
-                </div>
-
-            </div>
+            </Container>
         </section>
     );
 }

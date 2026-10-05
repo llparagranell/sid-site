@@ -1,53 +1,187 @@
-import { useState, useEffect } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, User, Phone, ChevronDown, Sparkles, CheckCircle2 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Check, ChevronDown, X } from "lucide-react";
 import { industries } from "../constants/industryData";
+import { EASE } from "./motion/constants";
+import Button from "./ui/Button";
+import Eyebrow from "./ui/Eyebrow";
+import cx from "../lib/cx";
 
+const WHATSAPP_NUMBER = "916260045626";
+const DEFAULT_INDUSTRY = industries[0]?.title || "Generic";
+const RESET_DELAY_MS = 300;
+const FOCUSABLE =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), ' +
+    'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+const fieldClass =
+    "w-full rounded-xl border border-line bg-paper px-4 py-3 text-base text-ink outline-none " +
+    "transition-colors placeholder:text-muted focus:border-accent";
+const labelClass = "type-eyebrow text-muted";
+
+// Aliased once at module scope: the project ESLint config does not count `<motion.x>`
+// member expressions as a use of `motion`, PascalCase identifiers it does.
+const MotionDiv = motion.div;
+const MotionForm = motion.form;
+
+const emptyForm = () => ({ name: "", mobile: "", industry: DEFAULT_INDUSTRY });
+
+/** The next 14 days, starting tomorrow. */
+function generateDates() {
+    const today = new Date();
+    return Array.from({ length: 14 }, (_, offset) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() + offset + 1);
+        return date;
+    });
+}
+
+function formatDate(date) {
+    if (!date) return "";
+    return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+}
+
+function isSameDate(a, b) {
+    return Boolean(a && b && a.toDateString() === b.toDateString());
+}
+
+/**
+ * Two-step booking dialog (pick a date → leave details) that hands off to WhatsApp.
+ *
+ *   <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+ */
 export default function BookingModal({ isOpen, onClose }) {
-    const [step, setStep] = useState(1); // 1: Date selection, 2: Form, 3: Success
+    const reduce = useReducedMotion();
+
+    const [step, setStep] = useState(1);
+    const [dates, setDates] = useState(generateDates);
     const [selectedDate, setSelectedDate] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        mobile: "",
-        industry: industries[0]?.title || "Generic",
-    });
+    const [formData, setFormData] = useState(emptyForm);
+    const [whatsappURL, setWhatsappURL] = useState("");
 
-    // Body Scroll Lock
+    const dialogRef = useRef(null);
+    const previouslyFocused = useRef(null);
+    const pressedOnOverlay = useRef(false);
+    const isOpenRef = useRef(isOpen);
+    const hasOpened = useRef(false);
+
+    const baseId = useId();
+    const titleId = `${baseId}-title`;
+    const stepLabelId = `${baseId}-step`;
+    const nameId = `${baseId}-name`;
+    const mobileId = `${baseId}-mobile`;
+    const industryId = `${baseId}-industry`;
+
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
+        isOpenRef.current = isOpen;
+        if (isOpen) hasOpened.current = true;
+    }, [isOpen]);
+
+    // Lock page scroll while open (native + Lenis). Only restart Lenis if this dialog stopped it,
+    // so a Lenis paused by something else (the preloader, a menu) is left alone.
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        const html = document.documentElement;
+        const previousOverflow = document.body.style.overflow;
+        html.classList.add("lenis-stopped");
+        document.body.style.overflow = "hidden";
+        const lenis = window.__lenis;
+        const stoppedLenis = Boolean(lenis && !lenis.isStopped);
+        if (stoppedLenis) lenis.stop();
         return () => {
-            document.body.style.overflow = "unset";
+            html.classList.remove("lenis-stopped");
+            document.body.style.overflow = previousOverflow;
+            if (stoppedLenis) window.__lenis?.start();
         };
     }, [isOpen]);
 
-    // Reset when modal opens/closes
+    // Remember what was focused before opening and hand focus back on close.
     useEffect(() => {
-        if (!isOpen) {
-            const timer = setTimeout(() => {
-                setStep(1);
-                setSelectedDate(null);
-                setFormData({
-                    name: "",
-                    mobile: "",
-                    industry: industries[0]?.title || "Generic",
-                });
-            }, 300);
-            return () => clearTimeout(timer);
-        }
+        if (!isOpen) return undefined;
+        previouslyFocused.current = document.activeElement;
+        return () => {
+            const el = previouslyFocused.current;
+            previouslyFocused.current = null;
+            if (el && typeof el.focus === "function") el.focus();
+        };
     }, [isOpen]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // Escape closes; Tab / Shift+Tab cycle inside the dialog. Listening on the document
+    // keeps the trap working even when focus has fallen to <body> (e.g. after the focused
+    // submit button becomes disabled while the hand-off is in flight).
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        const onKeyDown = (event) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                onClose();
+                return;
+            }
+            if (event.key !== "Tab") return;
+            const dialog = dialogRef.current;
+            if (!dialog) return;
+            const focusable = Array.from(dialog.querySelectorAll(FOCUSABLE));
+            if (focusable.length === 0) {
+                event.preventDefault();
+                dialog.focus();
+                return;
+            }
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            const active = document.activeElement;
+            const outside = !dialog.contains(active);
+            if (event.shiftKey) {
+                if (outside || active === first) {
+                    event.preventDefault();
+                    last.focus();
+                }
+            } else if (outside || active === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+        document.addEventListener("keydown", onKeyDown);
+        return () => document.removeEventListener("keydown", onKeyDown);
+    }, [isOpen, onClose]);
+
+    // Move focus to the first field when the dialog opens or the step changes.
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        const frame = requestAnimationFrame(() => {
+            const dialog = dialogRef.current;
+            if (!dialog) return;
+            const target = dialog.querySelector("[data-autofocus]") ?? dialog;
+            target.focus({ preventScroll: true });
+        });
+        return () => cancelAnimationFrame(frame);
+    }, [isOpen, step]);
+
+    // Reset once the exit animation has finished (skipped on first mount: nothing to reset).
+    useEffect(() => {
+        if (isOpen || !hasOpened.current) return undefined;
+        const timer = window.setTimeout(() => {
+            setStep(1);
+            setDates(generateDates());
+            setSelectedDate(null);
+            setIsSubmitting(false);
+            setFormData(emptyForm());
+            setWhatsappURL("");
+        }, RESET_DELAY_MS);
+        return () => window.clearTimeout(timer);
+    }, [isOpen]);
+
+    const updateField = (field) => (event) => {
+        const { value } = event.target;
+        setFormData((current) => ({ ...current, [field]: value }));
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (isSubmitting) return;
         setIsSubmitting(true);
 
-        // Format WhatsApp Message
-        const phoneNumber = "916260045626";
         const message = `
 New Consultation Booking:
 
@@ -56,266 +190,266 @@ Mobile: ${formData.mobile}
 Industry: ${formData.industry}
 Selected Date: ${formatDate(selectedDate)}
         `;
-        const encodedMessage = encodeURIComponent(message.trim());
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message.trim())}`;
 
-        // Simulate API call/processing delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        window.open(url, "_blank", "noopener,noreferrer");
 
-        // Open WhatsApp
-        window.open(whatsappURL, "_blank");
-
+        // Closed while the hand-off was in flight: the reset effect owns the state now.
+        if (!isOpenRef.current) return;
+        // Kept so the step-3 fallback link re-opens the same prefilled chat.
+        setWhatsappURL(url);
         setIsSubmitting(false);
-        setStep(3); // Go to success state
+        setStep(3);
     };
 
-    // Custom Simple Calendar Logic (Next 14 Days)
-    const generateDates = () => {
-        const dates = [];
-        const today = new Date();
-        for (let i = 1; i <= 14; i++) {
-            const date = new Date(today);
-            date.setDate(today.getDate() + i);
-            dates.push(date);
-        }
-        return dates;
+    // A click closes only when the press started on the overlay itself, so a drag that
+    // begins inside the dialog (selecting text) and ends outside does not dismiss it.
+    const handleOverlayPointerDown = (event) => {
+        pressedOnOverlay.current = event.target === event.currentTarget;
     };
 
-    const dates = generateDates();
-
-    const formatDate = (date) => {
-        if (!date) return "";
-        return date.toLocaleDateString("en-US", { weekday: 'short', month: 'short', day: 'numeric' });
+    const handleOverlayClick = (event) => {
+        const pressed = pressedOnOverlay.current;
+        pressedOnOverlay.current = false;
+        if (pressed && event.target === event.currentTarget) onClose();
     };
 
-    const isSameDate = (d1, d2) => {
-        return d1 && d2 && d1.toDateString() === d2.toDateString();
+    const exitTransition = { duration: reduce ? 0 : 0.25, ease: EASE };
+    const overlayMotion = {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0, transition: exitTransition },
+        transition: { duration: reduce ? 0 : 0.3, ease: EASE },
+    };
+    const dialogMotion = {
+        initial: { opacity: 0, y: reduce ? 0 : 16, scale: reduce ? 1 : 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: reduce ? 0 : 16, scale: reduce ? 1 : 0.98, transition: exitTransition },
+        transition: { duration: reduce ? 0 : 0.45, ease: EASE },
+    };
+    const stepMotion = {
+        initial: { opacity: 0, y: reduce ? 0 : 8 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: reduce ? 0 : 0.4, ease: EASE },
     };
 
     const modalContent = (
         <AnimatePresence>
             {isOpen && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center p-4 sm:p-6"
-                    style={{ zIndex: 9999999 }}
+                <MotionDiv
+                    key="booking-overlay"
+                    {...overlayMotion}
+                    onPointerDown={handleOverlayPointerDown}
+                    onClick={handleOverlayClick}
+                    className="fixed inset-0 z-[90] flex items-center justify-center bg-ink/70 backdrop-blur-sm"
                 >
-                    {/* Backdrop */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                        className="absolute inset-0 bg-brand-dark/80 backdrop-blur-md"
-                        style={{ zIndex: -1 }}
-                    />
-
-                    {/* Modal Content */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-xl bg-white rounded-[40px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] border border-brand-dark/5"
-                        style={{ zIndex: 1 }}
+                    <MotionDiv
+                        ref={dialogRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={titleId}
+                        tabIndex={-1}
+                        data-lenis-prevent=""
+                        {...dialogMotion}
+                        className="relative flex max-h-[90vh] w-[calc(100%-2rem)] max-w-[560px] flex-col gap-6 overflow-y-auto rounded-2xl border border-line bg-surface p-6 text-ink outline-none md:p-8"
                     >
-                        {/* Header */}
-                        <div className="p-8 pb-4 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-brand-accent rounded-2xl flex items-center justify-center text-brand-dark shadow-inner">
-                                    <Sparkles size={24} />
-                                </div>
-                                <div>
-                                    <h2 className="text-2xl font-black text-brand-dark tracking-tighter uppercase leading-none">
-                                        Book Your
-                                    </h2>
-                                    <p className="text-brand-dark italic font-light text-xl leading-none mt-1">
-                                        Consultation
-                                    </p>
-                                </div>
+                        <div className="flex items-start justify-between gap-6">
+                            <div className="flex flex-col gap-4">
+                                <Eyebrow>Book a call</Eyebrow>
+                                <h2 id={titleId} className="type-display text-3xl text-ink md:text-4xl">
+                                    Let&rsquo;s talk about your <em className="text-accent">product</em>.
+                                </h2>
                             </div>
                             <button
+                                type="button"
                                 onClick={onClose}
-                                className="w-10 h-10 flex items-center justify-center bg-brand-bg/50 hover:bg-brand-dark/5 rounded-full transition-all text-brand-dark/40 hover:text-brand-dark cursor-pointer shadow-sm"
+                                aria-label="Close"
+                                className="-mt-1 -mr-2 inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-paper hover:text-ink"
                             >
-                                <X size={20} />
+                                <X size={20} aria-hidden="true" />
                             </button>
                         </div>
 
-                        {/* Modal Body */}
-                        <div className="p-8 pt-4">
-                            {step === 1 && (
-                                <motion.div
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    className="space-y-6"
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-brand-dark/40">
-                                            <Calendar size={16} />
-                                            <span className="text-[10px] font-bold uppercase tracking-widest">Select a Date</span>
-                                        </div>
-                                        <span className="text-[10px] font-bold text-brand-dark/20 uppercase tracking-widest">Step 01/02</span>
-                                    </div>
+                        {step !== 3 && (
+                            <div className="flex items-center justify-between gap-4 border-t border-line pt-6">
+                                <span id={stepLabelId} className={labelClass}>
+                                    {step === 1 ? "Select a date" : `Details for ${formatDate(selectedDate)}`}
+                                </span>
+                                <span className={labelClass}>Step {String(step).padStart(2, "0")}/02</span>
+                            </div>
+                        )}
 
-                                    <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 max-h-[350px] overflow-y-auto pr-2 scrollbar-hide py-2">
-                                        {dates.map((date, idx) => (
+                        {step === 1 && (
+                            <MotionDiv key="step-date" {...stepMotion} className="flex flex-col gap-6">
+                                <div
+                                    role="group"
+                                    aria-labelledby={stepLabelId}
+                                    className="grid grid-cols-4 gap-2 sm:grid-cols-7"
+                                >
+                                    {dates.map((date, index) => {
+                                        const selected = isSameDate(selectedDate, date);
+                                        return (
                                             <button
-                                                key={idx}
+                                                key={date.toDateString()}
                                                 type="button"
+                                                aria-pressed={selected}
+                                                aria-label={formatDate(date)}
+                                                data-autofocus={index === 0 ? "" : undefined}
                                                 onClick={() => setSelectedDate(date)}
-                                                className={`aspect-square rounded-2xl border-2 transition-all text-center flex flex-col items-center justify-center gap-0.5 cursor-pointer group
-                                                    ${isSameDate(selectedDate, date)
-                                                        ? "border-brand-dark bg-brand-dark text-white shadow-xl scale-105"
-                                                        : "border-brand-dark/5 hover:border-brand-dark/20 text-brand-dark bg-brand-bg/40 hover:scale-105"
-                                                    }`}
+                                                className={cx(
+                                                    "flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border transition-colors",
+                                                    selected
+                                                        ? "border-ink bg-ink text-paper"
+                                                        : "border-line bg-paper text-ink hover:border-ink",
+                                                )}
                                             >
-                                                <span className={`text-[8px] uppercase font-black tracking-tighter ${isSameDate(selectedDate, date) ? "opacity-60" : "opacity-40"}`}>
-                                                    {date.toLocaleDateString("en-US", { weekday: 'short' })}
+                                                <span className={cx("type-eyebrow", selected ? "text-muted-dark" : "text-muted")}>
+                                                    {date.toLocaleDateString("en-US", { weekday: "short" })}
                                                 </span>
-                                                <span className="text-base font-black tracking-tighter leading-none">
-                                                    {date.getDate()}
-                                                </span>
-                                                <span className={`text-[8px] font-bold ${isSameDate(selectedDate, date) ? "opacity-60" : "opacity-40"}`}>
-                                                    {date.toLocaleDateString("en-US", { month: 'short' })}
+                                                <span className="type-mono text-lg leading-none">{date.getDate()}</span>
+                                                <span className={cx("type-eyebrow", selected ? "text-muted-dark" : "text-muted")}>
+                                                    {date.toLocaleDateString("en-US", { month: "short" })}
                                                 </span>
                                             </button>
-                                        ))}
-                                    </div>
+                                        );
+                                    })}
+                                </div>
 
-                                    <div className="pt-4 border-t border-brand-dark/5">
-                                        <button
-                                            type="button"
-                                            disabled={!selectedDate}
-                                            onClick={() => setStep(2)}
-                                            className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl
-                                                ${selectedDate
-                                                    ? "bg-brand-dark text-white hover:scale-[1.02] cursor-pointer"
-                                                    : "bg-brand-dark/5 text-brand-dark/10 cursor-not-allowed"
-                                                }`}
-                                        >
-                                            Next Step
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {step === 2 && (
-                                <motion.div
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    className="space-y-6"
+                                <Button
+                                    variant="primary"
+                                    arrow
+                                    disabled={!selectedDate}
+                                    onClick={() => setStep(2)}
+                                    className="w-full"
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-brand-dark/40">
-                                            <User size={16} />
-                                            <span className="text-[10px] font-bold uppercase tracking-widest">Personal Details</span>
-                                        </div>
-                                        <span className="text-[10px] font-bold text-brand-dark/20 uppercase tracking-widest">Step 02/02</span>
+                                    Next step
+                                </Button>
+                            </MotionDiv>
+                        )}
+
+                        {step === 2 && (
+                            <MotionForm
+                                key="step-details"
+                                {...stepMotion}
+                                onSubmit={handleSubmit}
+                                aria-busy={isSubmitting || undefined}
+                                className="flex flex-col gap-5"
+                            >
+                                <div className="flex flex-col gap-2">
+                                    <label htmlFor={nameId} className={labelClass}>
+                                        Full name
+                                    </label>
+                                    <input
+                                        id={nameId}
+                                        name="name"
+                                        type="text"
+                                        required
+                                        autoComplete="name"
+                                        placeholder="Your name"
+                                        data-autofocus=""
+                                        value={formData.name}
+                                        onChange={updateField("name")}
+                                        className={fieldClass}
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor={mobileId} className={labelClass}>
+                                            Mobile number
+                                        </label>
+                                        <input
+                                            id={mobileId}
+                                            name="mobile"
+                                            type="tel"
+                                            required
+                                            autoComplete="tel"
+                                            placeholder="+91"
+                                            value={formData.mobile}
+                                            onChange={updateField("mobile")}
+                                            className={fieldClass}
+                                        />
                                     </div>
 
-                                    <form onSubmit={handleSubmit} className="space-y-5">
-                                        <div className="space-y-1.5">
-                                            <label className="text-[10px] font-bold text-brand-dark/30 uppercase tracking-[0.2em] ml-1">Full Name</label>
-                                            <div className="relative group">
-                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-dark/20 group-focus-within:text-brand-dark transition-colors" size={18} />
-                                                <input
-                                                    required
-                                                    type="text"
-                                                    placeholder="Enter your name"
-                                                    className="w-full bg-brand-bg/50 border-2 border-brand-dark/5 rounded-2xl py-4 pl-12 pr-4 text-brand-dark font-bold placeholder:text-brand-dark/20 focus:border-brand-dark/20 focus:bg-white outline-none transition-all shadow-sm"
-                                                    value={formData.name}
-                                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold text-brand-dark/30 uppercase tracking-[0.2em] ml-1">Mobile Number</label>
-                                                <div className="relative group">
-                                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-dark/20 group-focus-within:text-brand-dark transition-colors" size={18} />
-                                                    <input
-                                                        required
-                                                        type="tel"
-                                                        placeholder="+91"
-                                                        className="w-full bg-brand-bg/50 border-2 border-brand-dark/5 rounded-2xl py-4 pl-12 pr-4 text-brand-dark font-bold placeholder:text-brand-dark/20 focus:border-brand-dark/20 focus:bg-white outline-none transition-all shadow-sm"
-                                                        value={formData.mobile}
-                                                        onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-1.5">
-                                                <label className="text-[10px] font-bold text-brand-dark uppercase tracking-[0.2em] ml-1">Industry</label>
-                                                <div className="relative group">
-                                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-dark pointer-events-none transition-colors" size={18} />
-                                                    <select
-                                                        className="w-full bg-brand-bg/50 border-2 border-brand-dark/5 rounded-2xl py-4 pl-4 pr-12 text-brand-dark font-bold focus:border-brand-dark/20 focus:bg-white outline-none transition-all appearance-none cursor-pointer shadow-sm"
-                                                        value={formData.industry}
-                                                        onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                                                    >
-                                                        {industries.map((ind, idx) => (
-                                                            <option key={idx} value={ind.title}>{ind.title}</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="pt-6 flex gap-4">
-                                            <button
-                                                type="button"
-                                                onClick={() => setStep(1)}
-                                                className="px-6 py-5 rounded-2xl font-bold uppercase tracking-widest text-brand-dark/30 hover:bg-brand-dark/5 transition-all text-sm cursor-pointer"
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor={industryId} className={labelClass}>
+                                            Industry
+                                        </label>
+                                        <div className="relative">
+                                            <select
+                                                id={industryId}
+                                                name="industry"
+                                                value={formData.industry}
+                                                onChange={updateField("industry")}
+                                                className={cx(fieldClass, "cursor-pointer appearance-none pr-11")}
                                             >
-                                                Back
-                                            </button>
-                                            <button
-                                                type="submit"
-                                                disabled={isSubmitting}
-                                                className={`flex-1 py-5 bg-brand-dark text-white rounded-2xl font-black uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3
-                                                    ${isSubmitting ? "opacity-70 cursor-not-allowed text-white/50" : "hover:scale-[1.02] cursor-pointer"}`}
-                                            >
-                                                {isSubmitting ? (
-                                                    <>
-                                                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                                                        Processing
-                                                    </>
-                                                ) : "Confirm Booking"}
-                                            </button>
+                                                {industries.map((industry) => (
+                                                    <option key={industry.title} value={industry.title}>
+                                                        {industry.title}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <ChevronDown
+                                                size={18}
+                                                aria-hidden="true"
+                                                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-muted"
+                                            />
                                         </div>
-                                    </form>
-                                </motion.div>
-                            )}
+                                    </div>
+                                </div>
 
-                            {step === 3 && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="py-12 flex flex-col items-center justify-center text-center space-y-6"
-                                >
-                                    <div className="w-24 h-24 bg-brand-accent rounded-3xl flex items-center justify-center text-brand-dark shadow-xl rotate-3">
-                                        <CheckCircle2 size={48} className="-rotate-3" />
-                                    </div>
-                                    <div className="space-y-3">
-                                        <h3 className="text-4xl font-black text-brand-dark uppercase tracking-tighter leading-tight">
-                                            You're all set!
-                                        </h3>
-                                        <p className="text-brand-dark/60 font-medium text-lg leading-relaxed max-w-sm">
-                                            We'll reach out shortly to discuss your project for <span className="text-brand-dark font-bold underline decoration-brand-accent underline-offset-4">{formatDate(selectedDate)}</span>.
-                                        </p>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={onClose}
-                                        className="mt-4 px-12 py-5 bg-brand-dark text-white rounded-2xl font-black uppercase tracking-widest shadow-xl hover:scale-[1.05] transition-all cursor-pointer"
+                                <div className="flex gap-3 pt-2">
+                                    <Button variant="ghost" onClick={() => setStep(1)} className="shrink-0">
+                                        Back
+                                    </Button>
+                                    <Button variant="accent" arrow type="submit" disabled={isSubmitting} className="w-full">
+                                        {isSubmitting ? "Opening WhatsApp" : "Continue on WhatsApp"}
+                                    </Button>
+                                </div>
+                            </MotionForm>
+                        )}
+
+                        {step === 3 && (
+                            <MotionDiv
+                                key="step-done"
+                                {...stepMotion}
+                                className="flex flex-col items-center gap-6 border-t border-line pt-8 pb-2 text-center"
+                            >
+                                <span className="flex size-14 items-center justify-center rounded-full bg-accent-soft text-accent">
+                                    <Check size={26} aria-hidden="true" />
+                                </span>
+                                <div className="flex flex-col gap-3">
+                                    {/* Focus lands here so the outcome is announced; Done is one Tab away. */}
+                                    <h3
+                                        tabIndex={-1}
+                                        data-autofocus=""
+                                        className="font-sans text-xl font-semibold tracking-tight md:text-2xl"
                                     >
-                                        Back to home
-                                    </button>
-                                </motion.div>
-                            )}
-                        </div>
-                    </motion.div>
-                </div>
+                                        One more step.
+                                    </h3>
+                                    <p className="max-w-[40ch] text-base leading-relaxed text-muted md:text-lg">
+                                        Send the WhatsApp message we just opened to confirm{" "}
+                                        <span className="font-semibold text-ink">{formatDate(selectedDate)}</span>. If it
+                                        did not open, message us on{" "}
+                                        <a
+                                            href={whatsappURL || `https://wa.me/${WHATSAPP_NUMBER}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="font-semibold text-ink underline underline-offset-4"
+                                        >
+                                            +91 62600 45626
+                                        </a>
+                                        .
+                                    </p>
+                                </div>
+                                <Button variant="primary" onClick={onClose}>
+                                    Done
+                                </Button>
+                            </MotionDiv>
+                        )}
+                    </MotionDiv>
+                </MotionDiv>
             )}
         </AnimatePresence>
     );
