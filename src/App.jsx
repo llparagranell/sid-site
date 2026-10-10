@@ -5,6 +5,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import SmoothScroll from "./components/motion/SmoothScroll";
 import Preloader from "./components/Preloader";
 import WhatsAppSticky from "./components/WhatsAppSticky";
+import Seo from "./components/Seo";
 import Home from "./pages/Home";
 
 // Every non-home route is code-split so the homepage bundle only carries Home.
@@ -37,6 +38,7 @@ export default function App() {
         <Preloader />
         <SmoothScroll />
         <ScrollToTop />
+        <Seo />
         {/* Only the route outlet suspends; the shell above and below stays mounted across chunk loads. */}
         <Suspense fallback={<div className="min-h-screen bg-paper" />}>
           <Routes>

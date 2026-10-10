@@ -3,21 +3,84 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevGrowth Solutions | Engineering MVPs That Matter</title>
+  <meta name="description"
+    content="DevGrowth Solutions engineers MVPs that ship, scale and matter — web, mobile, AI and cloud products for founders and growing businesses." />
+  <link rel="canonical" href="https://devgrowthsolutions.com/" />
+
+  <!-- Icons. Google takes the 192px PNG for the search-result favicon; browsers use the .ico / small PNGs. -->
   <link rel="icon" href="/favicon.ico" sizes="48x48" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b0b14" />
-  <meta name="description"
+
+  <!-- Social previews (WhatsApp, LinkedIn, X). src/components/Seo.jsx rewrites title, description and url per route. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DevGrowth Solutions" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://devgrowthsolutions.com/" />
+  <meta property="og:title" content="DevGrowth Solutions | Engineering MVPs That Matter" />
+  <meta property="og:description"
     content="DevGrowth Solutions engineers MVPs that ship, scale and matter — web, mobile, AI and cloud products for founders and growing businesses." />
+  <meta property="og:image" content="https://devgrowthsolutions.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="DevGrowth Solutions: Engineering MVPs that matter." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DevGrowth Solutions | Engineering MVPs That Matter" />
+  <meta name="twitter:description"
+    content="DevGrowth Solutions engineers MVPs that ship, scale and matter — web, mobile, AI and cloud products for founders and growing businesses." />
+  <meta name="twitter:image" content="https://devgrowthsolutions.com/og-image.png" />
+
+  <!-- Organization + WebSite structured data: lets Google show "DevGrowth Solutions" as the site name
+       instead of the bare domain, and attach the logo and profiles to the result. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://devgrowthsolutions.com/#organization",
+        "name": "DevGrowth Solutions",
+        "alternateName": "DevGrowth",
+        "url": "https://devgrowthsolutions.com/",
+        "logo": "https://devgrowthsolutions.com/icon-512.png",
+        "description": "Product engineering studio in Jabalpur, India. MVPs for founders and growing businesses: web, mobile, AI, cloud and custom software.",
+        "email": "contact@devgrowth.com",
+        "telephone": "+91-62600-45626",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Jabalpur",
+          "addressRegion": "Madhya Pradesh",
+          "addressCountry": "IN"
+        },
+        "sameAs": [
+          "https://www.instagram.com/devgrowthsolutions/",
+          "https://www.linkedin.com/company/devgrowth-solutions/"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://devgrowthsolutions.com/#website",
+        "name": "DevGrowth Solutions",
+        "alternateName": "DevGrowth",
+        "url": "https://devgrowthsolutions.com/",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://devgrowthsolutions.com/#organization" }
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
-  <title>DevGrowth Solutions | Engineering MVPs That Matter</title>
 </head>
 
 <body>
